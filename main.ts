@@ -59,13 +59,13 @@ enum RowEnum {
 }
 
 enum PinEnum {
-    //% block="A"
+    //% block="接口5"
     portA = 1,
-    //% block="B"
+    //% block="接口6"
     portB = 2,
-    //% block="C"
+    //% block="接口7"
     portC = 3,
-    //% block="D"
+    //% block="接口8"
     portD = 4,
 }
 
