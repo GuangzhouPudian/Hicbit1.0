@@ -257,4 +257,28 @@ namespace motor {
                 break;
         }
     }
+
+    //% weight=90 block="声音|端口%pin|值(0~255)"
+    //% group="声音"
+    //% color=#F5CD2F
+    export function GetSoundSensorValue(pin: PinEnum): number {
+        let ADCPin: AnalogPin;
+        switch (pin) {
+            case PinEnum.portA:
+                ADCPin = AnalogPin.P1;
+                break;
+            case PinEnum.portB:
+                ADCPin = AnalogPin.P2;
+                break;
+            case PinEnum.portC:
+                ADCPin = AnalogPin.P3;
+                break;
+            case PinEnum.portD:
+                ADCPin = AnalogPin.P4;
+                break;
+        }
+        let adValue = pins.analogReadPin(ADCPin);
+        adValue = adValue * 255 / 1023;
+        return Math.round(adValue);
+    }
 }
