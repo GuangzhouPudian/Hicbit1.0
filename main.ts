@@ -250,7 +250,7 @@ namespace motor {
                 break;
         }
     }
-    /*蜂鸣器待测试*/
+
     //% weight=80  block="蜂鸣器|端口%pin|停止"
     //% group="蜂鸣器"
     //% color=#B22222
