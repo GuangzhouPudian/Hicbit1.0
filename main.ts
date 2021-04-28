@@ -69,6 +69,13 @@ enum PinEnum {
     portD = 4,
 }
 
+enum OnOffEnum {
+    //% block="停止"
+    off = 0,
+    //% block="启动"
+    on = 1,
+}
+
 /**
  * Custom blocks
  */
@@ -231,42 +238,22 @@ namespace motor {
         return Math.round(adValue);
     }
 
-    //% weight=90 block="蜂鸣器|端口%pin|开启"
+    //% weight=90 block="蜂鸣器|端口%pin|%act"
     //% group="蜂鸣器"
     //% color=#B22222
-    export function StartBuzzer(pin: PinEnum): void {
+    export function StartBuzzer(pin: PinEnum, act: OnOffEnum): void {
         switch (pin) {
             case PinEnum.portA:
-                pins.digitalWritePin(DigitalPin.P15, 1);
+                pins.digitalWritePin(DigitalPin.P15, act);
                 break;
             case PinEnum.portB:
-                pins.digitalWritePin(DigitalPin.P13, 1);
+                pins.digitalWritePin(DigitalPin.P13, act);
                 break;
             case PinEnum.portC:
-                pins.digitalWritePin(DigitalPin.P14, 1);
+                pins.digitalWritePin(DigitalPin.P14, act);
                 break;
             case PinEnum.portD:
-                pins.digitalWritePin(DigitalPin.P10, 1);
-                break;
-        }
-    }
-
-    //% weight=80  block="蜂鸣器|端口%pin|停止"
-    //% group="蜂鸣器"
-    //% color=#B22222
-    export function StopBuzzer(pin: PinEnum): void {
-        switch (pin) {
-            case PinEnum.portA:
-                pins.digitalWritePin(DigitalPin.P15, 0);
-                break;
-            case PinEnum.portB:
-                pins.digitalWritePin(DigitalPin.P13, 0);
-                break;
-            case PinEnum.portC:
-                pins.digitalWritePin(DigitalPin.P14, 0);
-                break;
-            case PinEnum.portD:
-                pins.digitalWritePin(DigitalPin.P10, 0);
+                pins.digitalWritePin(DigitalPin.P10, act);
                 break;
         }
     }
