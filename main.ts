@@ -2,7 +2,7 @@
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
  */
- enum MotorEnum {
+enum MotorEnum {
     //% block="A"
     portA = 3,
     //% block="B"
@@ -74,6 +74,15 @@ enum OnOffEnum {
     off = 0,
     //% block="启动"
     on = 1,
+}
+
+enum LEDEnum {
+    //% block="彩灯1"
+    led1= 1,
+    //% block="彩灯2"
+    led2 = 2,
+    //% block="彩灯3"
+    led3 = 3,
 }
 
 /**
@@ -292,25 +301,41 @@ namespace motor {
             case PinEnum.portA:
                 pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P15);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P15);
+                    if (status == 0) return true;
+                } 
                 break;
             case PinEnum.portB:
                 pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P13);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P13);
+                    if (status == 0) return true;
+                } 
                 break;
             case PinEnum.portC:
                 pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P14);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P14);
+                    if (status == 0) return true;
+                } 
                 break;
             case PinEnum.portD:
                 pins.setPull(DigitalPin.P10, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P10);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P10);
+                    if (status == 0) return true;
+                } 
                 break;
         }
-        if (status == 1)
-            flag = false;
-        else
-            flag = true;
-        return flag;
+        return false;
     }
 
     //% weight=98 block="超声波|端口%pin|距离(mm)"
@@ -354,4 +379,44 @@ namespace motor {
         return Math.round(distance);
     }
 
+    //% weight=98 block="RGB彩灯|端口%pin|彩灯%led|红%r|绿%g|蓝%b"
+    //% group="RGB彩灯"
+    //% r.min=0 r.max=255
+    //% g.min=0 g.max=255
+    //% b.min=0 b.max=255
+    //% color=#CD9B9B
+    export function LedRGB(pin: PinEnum, led: LEDEnum, r: number, g: number, b: number): void {
+        let ledPin: DigitalPin;
+        let ledDat: number;
+        let i: number;
+        switch (pin) {
+            case PinEnum.portA:
+                ledPin = DigitalPin.P15;
+                break;
+            case PinEnum.portB:
+                ledPin = DigitalPin.P13;
+                break;
+            case PinEnum.portC:
+                ledPin = DigitalPin.P14;
+                break;
+            case PinEnum.portD:
+                ledPin = DigitalPin.P10;
+                break;
+        }
+        ledDat = ((g & 0xff) << 16) | ((r & 0xff) << 8) | (b & 0xff);
+        pins.digitalWritePin(ledPin, 0);
+        for (i = 23; i >= 0; i--) {
+            if (ledDat & (1 << i)) {
+                pins.digitalWritePin(ledPin, 1);
+                control.waitMicros(0.8);
+                pins.digitalWritePin(ledPin, 0);
+                control.waitMicros(0.45);
+            } else {
+                pins.digitalWritePin(ledPin, 1);
+                control.waitMicros(0.4);
+                pins.digitalWritePin(ledPin, 0);
+                control.waitMicros(0.85);
+            }
+        }
+    }
 }
