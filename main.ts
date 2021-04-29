@@ -312,4 +312,46 @@ namespace motor {
             flag = true;
         return flag;
     }
+
+    //% weight=98 block="超声波|端口%pin|距离(mm)"
+    //% group="超声波"
+    //% color=#8470FF
+    export function hicbit_ultrasonic(pin: PinEnum): number {
+        let echoPin: DigitalPin;
+        let trigPin: DigitalPin;
+        let distance = 0;
+        switch (pin) {
+            case PinEnum.portA:
+                echoPin = DigitalPin.P15;
+                trigPin = DigitalPin.P1;
+                break;
+            case PinEnum.portB:
+                echoPin = DigitalPin.P13;
+                trigPin = DigitalPin.P2;
+                break;
+            case PinEnum.portC:
+                echoPin = DigitalPin.P14;
+                trigPin = DigitalPin.P3;
+                break;
+            case PinEnum.portD:
+                echoPin = DigitalPin.P10;
+                trigPin = DigitalPin.P4;
+                break;
+        }
+        pins.setPull(echoPin, PinPullMode.PullNone);
+        pins.setPull(trigPin, PinPullMode.PullNone);
+
+        pins.digitalWritePin(trigPin, 0);
+        control.waitMicros(10);
+        pins.digitalWritePin(trigPin, 1);
+        control.waitMicros(50);
+        pins.digitalWritePin(trigPin, 0);
+        control.waitMicros(10);
+        let time_echo_us = pins.pulseIn(echoPin, PulseValue.High, 60000);
+        if ((time_echo_us < 60000) && (time_echo_us > 1)) {
+            distance = time_echo_us * 17 / 100;//time_echo_us*340/2/1000(mm)
+        }
+        return Math.round(distance);
+    }
+
 }
