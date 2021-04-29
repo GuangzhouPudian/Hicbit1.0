@@ -281,4 +281,35 @@ namespace motor {
         adValue = adValue * 255 / 1023;
         return Math.round(adValue);
     }
+
+    //% weight=90 block="碰撞|端口%pin|触发" 
+    //% group="碰撞"
+    //% color=#435493
+    export function CollisionHappen(pin: PinEnum): boolean {
+        let status = 0;
+        let flag: boolean = false;
+        switch (pin) {
+            case PinEnum.portA:
+                pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P15);
+                break;
+            case PinEnum.portB:
+                pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P13);
+                break;
+            case PinEnum.portC:
+                pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P14);
+                break;
+            case PinEnum.portD:
+                pins.setPull(DigitalPin.P10, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P10);
+                break;
+        }
+        if (status == 1)
+            flag = false;
+        else
+            flag = true;
+        return flag;
+    }
 }
