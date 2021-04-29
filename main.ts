@@ -304,7 +304,7 @@ namespace motor {
                 if (status == 0) {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P15);
-                    if (status == 0) return true;
+                    if (status == 0) flag = true;
                 } 
                 break;
             case PinEnum.portB:
@@ -313,7 +313,7 @@ namespace motor {
                 if (status == 0) {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P13);
-                    if (status == 0) return true;
+                    if (status == 0) flag = true;
                 } 
                 break;
             case PinEnum.portC:
@@ -322,7 +322,7 @@ namespace motor {
                 if (status == 0) {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P14);
-                    if (status == 0) return true;
+                    if (status == 0) flag = true;
                 } 
                 break;
             case PinEnum.portD:
@@ -331,11 +331,11 @@ namespace motor {
                 if (status == 0) {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P10);
-                    if (status == 0) return true;
+                    if (status == 0) flag = true;
                 } 
                 break;
         }
-        return false;
+        return flag;
     }
 
     //% weight=98 block="超声波|端口%pin|距离(mm)"
