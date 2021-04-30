@@ -11,7 +11,9 @@
     "files": [
         "README.md",
         "main.blocks",
-        "main.ts"
+        "main.ts",
+        "sendBuffer.asm",
+        "setBufferMode.asm"
     ],
     "testFiles": [
         "test.ts"
