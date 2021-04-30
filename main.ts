@@ -78,11 +78,14 @@ enum OnOffEnum {
 
 enum LEDEnum {
     //% block="彩灯1"
-    led1= 1,
+    led1 = 0,
     //% block="彩灯2"
-    led2 = 2,
+    led2 = 1,
     //% block="彩灯3"
-    led3 = 3,
+    led3 = 2,
+    //% block="全部"
+    all = 3,
+
 }
 
 /**
@@ -341,7 +344,7 @@ namespace motor {
     //% weight=98 block="超声波|端口%pin|距离(mm)"
     //% group="超声波"
     //% color=#8470FF
-    export function hicbit_ultrasonic(pin: PinEnum): number {
+    export function GetUltrasonicDistance(pin: PinEnum): number {
         let echoPin: DigitalPin;
         let trigPin: DigitalPin;
         let distance = 0;
@@ -367,11 +370,10 @@ namespace motor {
         pins.setPull(trigPin, PinPullMode.PullNone);
 
         pins.digitalWritePin(trigPin, 0);
-        control.waitMicros(10);
+        control.waitMicros(2);
         pins.digitalWritePin(trigPin, 1);
-        control.waitMicros(50);
-        pins.digitalWritePin(trigPin, 0);
         control.waitMicros(10);
+        pins.digitalWritePin(trigPin, 0);
         let time_echo_us = pins.pulseIn(echoPin, PulseValue.High, 60000);
         if ((time_echo_us < 60000) && (time_echo_us > 1)) {
             distance = time_echo_us * 17 / 100;//time_echo_us*340/2/1000(mm)
@@ -379,44 +381,129 @@ namespace motor {
         return Math.round(distance);
     }
 
-    //% weight=98 block="RGB彩灯|端口%pin|彩灯%led|红%r|绿%g|蓝%b"
-    //% group="RGB彩灯"
-    //% r.min=0 r.max=255
-    //% g.min=0 g.max=255
-    //% b.min=0 b.max=255
-    //% color=#CD9B9B
-    export function LedRGB(pin: PinEnum, led: LEDEnum, r: number, g: number, b: number): void {
-        let ledPin: DigitalPin;
-        let ledDat: number;
-        let i: number;
-        switch (pin) {
-            case PinEnum.portA:
-                ledPin = DigitalPin.P15;
-                break;
-            case PinEnum.portB:
-                ledPin = DigitalPin.P13;
-                break;
-            case PinEnum.portC:
-                ledPin = DigitalPin.P14;
-                break;
-            case PinEnum.portD:
-                ledPin = DigitalPin.P10;
-                break;
-        }
-        ledDat = ((g & 0xff) << 16) | ((r & 0xff) << 8) | (b & 0xff);
-        pins.digitalWritePin(ledPin, 0);
-        for (i = 23; i >= 0; i--) {
-            if (ledDat & (1 << i)) {
-                pins.digitalWritePin(ledPin, 1);
-                control.waitMicros(0.8);
-                pins.digitalWritePin(ledPin, 0);
-                control.waitMicros(0.45);
-            } else {
-                pins.digitalWritePin(ledPin, 1);
-                control.waitMicros(0.4);
-                pins.digitalWritePin(ledPin, 0);
-                control.waitMicros(0.85);
+    function signal_dht11(pin: DigitalPin): void {
+        pins.digitalWritePin(pin, 0);
+        basic.pause(18);
+        let i = pins.digitalReadPin(pin);
+        pins.setPull(pin, PinPullMode.PullUp);
+    }
+
+    function dht11_read(pin: DigitalPin): number {
+        signal_dht11(pin);
+
+        // Wait for response header to finish
+        while (pins.digitalReadPin(pin) == 1);
+        while (pins.digitalReadPin(pin) == 0);
+        while (pins.digitalReadPin(pin) == 1);
+
+        let value = 0;
+        let counter = 0;
+
+        for (let i = 0; i <= 32 - 1; i++) {
+            while (pins.digitalReadPin(pin) == 0);
+            counter = 0
+            while (pins.digitalReadPin(pin) == 1) {
+                counter += 1;
+            }
+            if (counter > 4) {
+                value = value + (1 << (31 - i));
             }
         }
+        return value;
     }
+
+    export enum Dht11Result {
+        //% block="摄氏度"
+        Celsius,
+        //% block="华氏度"
+        Fahrenheit,
+        //% block="湿度"
+        humidity
+    }
+
+    //% weight=98 block="温湿度|端口%pin|值%dhtResult"
+    //% group="温湿度"
+    //% pin_arg.fieldEditor="gridpicker" pin_arg.fieldOptions.columns=4
+    //% pin_arg.fieldOptions.tooltips="false" pin_arg.fieldOptions.width="300"
+    //% color=#E29B3F
+    export function Get_DHT11_value(pin: PinEnum, dhtResult: Dht11Result): number {
+        let pin_arg: DigitalPin;
+        switch (pin) {
+            case PinEnum.portA:
+                pin_arg = DigitalPin.P1;
+                break;
+            case PinEnum.portB:
+                pin_arg = DigitalPin.P2;
+                break;
+            case PinEnum.portC:
+                pin_arg = DigitalPin.P3;
+                break;
+            case PinEnum.portD:0;
+                pin_arg = DigitalPin.P4;
+                break;
+        }
+        switch (dhtResult) {
+            case Dht11Result.Celsius: return (dht11_read(pin_arg) & 0x0000ff00) >> 8;
+            case Dht11Result.Fahrenheit: return ((dht11_read(pin_arg) & 0x0000ff00) >> 8) * 9 / 5 + 32;
+            case Dht11Result.humidity: return dht11_read(pin_arg) >> 24;
+            default: return 0;
+        }
+    }
+
+    /*
+    let lhRGBLight: neopixel.Strip;
+    //% weight=98 block="RGB彩灯|端口%pin|彩灯%lightoffset|红%red|绿%green|蓝%blue"
+    //% group="RGB彩灯"
+    //% red.min=0 red.max=255
+    //% green.min=0 green.max=255
+    //% blue.min=0 blue.max=255
+    //% color=#CD9B9B
+    export function SetRGBLight(pin: PinEnum, lightoffset: LEDEnum, red: number, green: number, blue: number) {
+        switch (pin) {
+            case PinEnum.portA:
+                if (!lhRGBLight) {
+                    lhRGBLight = neopixel.create(DigitalPin.P15, 3, NeoPixelMode.RGB);
+                }
+                break;
+            case PinEnum.portB:
+                if (!lhRGBLight) {
+                    lhRGBLight = neopixel.create(DigitalPin.P13, 3, NeoPixelMode.RGB);
+                }
+                break;
+            case PinEnum.portC:
+                if (!lhRGBLight) {
+                    lhRGBLight = neopixel.create(DigitalPin.P14, 3, NeoPixelMode.RGB);
+                }
+                break;
+            case PinEnum.portD:
+                if (!lhRGBLight) {
+                    lhRGBLight = neopixel.create(DigitalPin.P10, 3, NeoPixelMode.RGB);
+                }
+                break;
+        }
+        lhRGBLight.clear();
+
+        if (lightoffset == lhRGBLight._length)//全部
+        {
+            for (let i = 0; i < lhRGBLight._length; i++)
+            {
+                lhRGBLight.setBufferRGB(i, red, green, blue);     
+            }
+        }
+        else
+        {
+            lhRGBLight.RGB(lightoffset, red, green, blue); 
+        }
+    }
+
+    //% weight=98 blockId=hicbit_showLight block="Show light belt"
+    export function hicbit_showLight() {
+        lhRGBLight.show();
+    }
+
+    //% weight=97 blockGap=20 blockId=hicbit_clearLight block="Clear light"
+    export function hicbit_clearLight() {
+        lhRGBLight.clear();
+    }*/
+
 }
