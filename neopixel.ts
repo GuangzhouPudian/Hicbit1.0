@@ -452,7 +452,8 @@ namespace neopixel {
                 buf[ledoffset + 3] = white;
             }
         }
-        private setPixelRGB(pixeloffset: number, rgb: number): void {
+        
+        setPixelRGB(pixeloffset: number, rgb: number): void {
             if (pixeloffset < 0
                 || pixeloffset >= this._length)
                 return;

@@ -108,18 +108,10 @@ namespace motor {
             BaudRate.BaudRate115200);
         basic.pause(3000);
         let i: number;
-        let buf = pins.createBuffer(10);
         for (i = 1; i <= 4; i++){
-            buf[0] = 0xfe;
-            buf[1] = 0xa0;
-            buf[2] = i;
-            buf[3] = 0;
-            buf[4] = 0;
-            buf[5] = 0xef;
-            serial.writeBuffer(buf);
+            SetMotorSpeed(i, 0, 0);
         }
         ClearLCD(2, 8);
-        basic.pause(1000);
     }
 
     //% sn.defl=RowEnum.row2
@@ -138,6 +130,7 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
+        basic.pause(1000);
     }
 
     //% sn.defl=RowEnum.row2
@@ -158,6 +151,7 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
+        basic.pause(1000);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -173,6 +167,7 @@ namespace motor {
         buf[3] = sn1;
         buf[4] = 0xef;
         serial.writeBuffer(buf);
+        basic.pause(1000);
     }
     
     //% direct.defl=DirectEnum.direct1
@@ -189,6 +184,7 @@ namespace motor {
         buf[4] = speed;
         buf[5] = 0xef;
         serial.writeBuffer(buf);
+        basic.pause(100);
     }
 
     //% direct.defl=DirectEnum.direct1
@@ -204,6 +200,7 @@ namespace motor {
         buf[4] = angle;
         buf[5] = 0xef;
         serial.writeBuffer(buf);
+        basic.pause(100);
     }
 
     //% weight=90 block="光敏|端口%pin|值(0~255)"
@@ -378,20 +375,20 @@ namespace motor {
         let distance = 0;
         switch (pin) {
             case PinEnum.portA:
-                echoPin = DigitalPin.P15;
-                trigPin = DigitalPin.P1;
+                echoPin = DigitalPin.P1;
+                trigPin = DigitalPin.P15;
                 break;
             case PinEnum.portB:
-                echoPin = DigitalPin.P13;
-                trigPin = DigitalPin.P2;
+                echoPin = DigitalPin.P2;
+                trigPin = DigitalPin.P13;
                 break;
             case PinEnum.portC:
-                echoPin = DigitalPin.P14;
-                trigPin = DigitalPin.P3;
+                echoPin = DigitalPin.P3;
+                trigPin = DigitalPin.P14;
                 break;
             case PinEnum.portD:
-                echoPin = DigitalPin.P10;
-                trigPin = DigitalPin.P4;
+                echoPin = DigitalPin.P4;
+                trigPin = DigitalPin.P10;
                 break;
         }
         pins.setPull(echoPin, PinPullMode.PullNone);
@@ -458,16 +455,16 @@ namespace motor {
         let pin_arg: DigitalPin;
         switch (pin) {
             case PinEnum.portA:
-                pin_arg = DigitalPin.P1;
+                pin_arg = DigitalPin.P15;
                 break;
             case PinEnum.portB:
-                pin_arg = DigitalPin.P2;
+                pin_arg = DigitalPin.P13;
                 break;
             case PinEnum.portC:
-                pin_arg = DigitalPin.P3;
+                pin_arg = DigitalPin.P14;
                 break;
             case PinEnum.portD:0;
-                pin_arg = DigitalPin.P4;
+                pin_arg = DigitalPin.P10;
                 break;
         }
         switch (dhtResult) {
