@@ -392,9 +392,9 @@ namespace motor {
         pins.setPull(trigPin, PinPullMode.PullNone);
 
         pins.digitalWritePin(trigPin, 0);
-        control.waitMicros(2);
+        control.waitMicros(100);
         pins.digitalWritePin(trigPin, 1);
-        control.waitMicros(10);
+        control.waitMicros(20);
         pins.digitalWritePin(trigPin, 0);
         let time_echo_us = pins.pulseIn(echoPin, PulseValue.High, 60000);
         if ((time_echo_us < 60000) && (time_echo_us > 1)) {
