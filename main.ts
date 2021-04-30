@@ -107,6 +107,17 @@ namespace motor {
             SerialPin.P12,
             BaudRate.BaudRate115200);
         basic.pause(3000);
+        let i: number;
+        let buf = pins.createBuffer(10);
+        for (i = 1; i <= 4; i++){
+            buf[0] = 0xfe;
+            buf[1] = 0xa0;
+            buf[2] = i;
+            buf[3] = 0;
+            buf[4] = 0;
+            buf[5] = 0xef;
+            serial.writeBuffer(buf);
+        }  
     }
 
     //% sn.defl=RowEnum.row2
