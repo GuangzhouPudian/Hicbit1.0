@@ -162,7 +162,7 @@ namespace motor {
 
     //% sn1.defl=RowEnum.row2
     //% sn2.defl=RowEnum.row8
-    //% weight=70 block="清屏|第%sn1行至|第%sn2行"
+    //% weight=70 block="清屏|第%sn1行至第%sn2行"
     //% group="LCD"
     //% color=#B22222
     export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
