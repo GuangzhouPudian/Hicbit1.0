@@ -472,17 +472,17 @@ namespace motor {
         }
     }
 
-    let strip: Buffer;
-    //% weight=98 block="RGB彩灯|端口%pin|彩灯%lightoffset|红%red|绿%green|蓝%blue"
+    let strip = pins.createBuffer(3);
+    //% weight=98 block="RGB彩灯|端口%pin|彩灯%light|红%red|绿%green|蓝%blue"
     //% group="RGB彩灯"
     //% red.min=0 red.max=255
     //% green.min=0 green.max=255
     //% blue.min=0 blue.max=255
     //% color=#CD9B9B
-    export function SetRGBLight(pin: PinEnum, led: LEDEnum, red: number, green: number, blue: number) {
+    export function SetRGBLight(pin: PinEnum, light: LEDEnum, red: number, green: number, blue: number) {
         let grb: number;
         grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
-        strip[led] = grb;
+        strip[light] = grb;
         switch (pin) {
             case PinEnum.portA:
                 sendBuffer(strip, DigitalPin.P15);
