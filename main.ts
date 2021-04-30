@@ -117,7 +117,9 @@ namespace motor {
             buf[4] = 0;
             buf[5] = 0xef;
             serial.writeBuffer(buf);
-        }  
+        }
+        ClearLCD(2, 8);
+        basic.pause(1000);
     }
 
     //% sn.defl=RowEnum.row2
@@ -155,6 +157,21 @@ namespace motor {
         for(i=0;i<len;i++)
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
+        serial.writeBuffer(buf);
+    }
+
+    //% sn1.defl=RowEnum.row2
+    //% sn2.defl=RowEnum.row8
+    //% weight=70 block="清屏|第%sn1行至|第%sn2行"
+    //% group="LCD"
+    //% color=#B22222
+    export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
+        let buf = pins.createBuffer(10);
+        buf[0] = 0xfe;
+        buf[1] = 0xd0;
+        buf[2] = sn1;
+        buf[3] = sn1;
+        buf[4] = 0xef;
         serial.writeBuffer(buf);
     }
     
