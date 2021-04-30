@@ -83,9 +83,6 @@ enum LEDEnum {
     led2 = 1,
     //% block="彩灯3"
     led3 = 2,
-    //% block="全部"
-    all = 3,
-
 }
 
 /**
@@ -475,60 +472,37 @@ namespace motor {
         }
     }
 
-    /*
-    let lhRGBLight: neopixel.Strip;
+    let strip: Buffer;
     //% weight=98 block="RGB彩灯|端口%pin|彩灯%lightoffset|红%red|绿%green|蓝%blue"
     //% group="RGB彩灯"
     //% red.min=0 red.max=255
     //% green.min=0 green.max=255
     //% blue.min=0 blue.max=255
     //% color=#CD9B9B
-    export function SetRGBLight(pin: PinEnum, lightoffset: LEDEnum, red: number, green: number, blue: number) {
+    export function SetRGBLight(pin: PinEnum, led: LEDEnum, red: number, green: number, blue: number) {
+        let grb: number;
+        grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
+        strip[led] = grb;
         switch (pin) {
             case PinEnum.portA:
-                if (!lhRGBLight) {
-                    lhRGBLight = neopixel.create(DigitalPin.P15, 3, NeoPixelMode.RGB);
-                }
+                sendBuffer(strip, DigitalPin.P15);
                 break;
             case PinEnum.portB:
-                if (!lhRGBLight) {
-                    lhRGBLight = neopixel.create(DigitalPin.P13, 3, NeoPixelMode.RGB);
-                }
+                sendBuffer(strip, DigitalPin.P13);
                 break;
             case PinEnum.portC:
-                if (!lhRGBLight) {
-                    lhRGBLight = neopixel.create(DigitalPin.P14, 3, NeoPixelMode.RGB);
-                }
+                sendBuffer(strip, DigitalPin.P14);
                 break;
             case PinEnum.portD:
-                if (!lhRGBLight) {
-                    lhRGBLight = neopixel.create(DigitalPin.P10, 3, NeoPixelMode.RGB);
-                }
+                sendBuffer(strip, DigitalPin.P10);
                 break;
         }
-        lhRGBLight.clear();
-
-        if (lightoffset == lhRGBLight._length)//全部
-        {
-            for (let i = 0; i < lhRGBLight._length; i++)
-            {
-                lhRGBLight.setBufferRGB(i, red, green, blue);     
-            }
-        }
-        else
-        {
-            lhRGBLight.RGB(lightoffset, red, green, blue); 
-        }
     }
 
-    //% weight=98 blockId=hicbit_showLight block="Show light belt"
-    export function hicbit_showLight() {
-        lhRGBLight.show();
+    //% shim=sendBufferAsm
+    function sendBuffer(buf: Buffer, pin: DigitalPin) {
     }
-
-    //% weight=97 blockGap=20 blockId=hicbit_clearLight block="Clear light"
-    export function hicbit_clearLight() {
-        lhRGBLight.clear();
-    }*/
-
+    //% shim=setBufferMode
+    function setBufferMode(pin: DigitalPin, mode: number) {
+    }
 }
