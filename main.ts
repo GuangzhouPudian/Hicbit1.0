@@ -121,13 +121,15 @@ namespace motor {
             SerialPin.P8,
             SerialPin.P12,
             BaudRate.BaudRate115200);
-        basic.pause(3000);
+        basic.pause(1000);
         let i: number;
         for (i = 1; i <= 4; i++){
             SetMotorSpeed(i, 0);
         }
         ClearLCD(2, 8);
         SetLCDString(8, "Loading Success!");
+        basic.pause(1000);
+        ClearLCD(8, 8);
     }
 
     //% sn.defl=RowEnum.row2
@@ -147,7 +149,6 @@ namespace motor {
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
-        //control.waitMicros(200);
     }
 
     //% sn.defl=RowEnum.row2
@@ -169,7 +170,6 @@ namespace motor {
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
-        //control.waitMicros(200);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -179,14 +179,14 @@ namespace motor {
     //% color=#7CCD7C
     export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
         let buf = pins.createBuffer(10);
+        if (sn1 > sn2) sn2 = sn1;
         buf[0] = 0xfe;
         buf[1] = 0xd0;
         buf[2] = sn1;
-        buf[3] = sn1;
+        buf[3] = sn2;
         buf[4] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
-        //control.waitMicros(200);
     }
 
     //% weight=50 block="方向键|%directkey按下"
@@ -501,7 +501,6 @@ namespace motor {
         buf[5] = (angle & 0xff);
         buf[6] = 0xef;
         serial.writeBuffer(buf);
-        serial.writeNumbers([buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]]);
         basic.pause(100);
     }
 
