@@ -178,7 +178,7 @@ namespace motor {
         basic.pause(1000);
     }
 
-    //% weight=50 block="方向键|%keydat"
+    //% weight=50 block="方向键|%keydat按下"
     //% group="主机"
     //% color=#7CCD7C
     export function GetDirectKey(keydat: KeyEnum): boolean {
@@ -222,6 +222,46 @@ namespace motor {
                 break;
         }
         return KeyPress;
+    }
+
+    //% weight=40 block="方向键|%keydat按下"
+    //% group="主机"
+    //% color=#7CCD7C
+    export function GetKeyPress(keydat: KeyEnum): void {
+        switch(keydat){
+            case KeyEnum.up:
+                if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+                        while (pins.digitalReadPin(DigitalPin.P5) == 0);
+                    }
+                }
+                break;
+            case KeyEnum.down:
+                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
+                    }
+                }
+                break;
+            case KeyEnum.left:
+                if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+                        while (pins.digitalReadPin(DigitalPin.P11) == 0);
+                    }
+                }
+                break;
+            case KeyEnum.down:
+                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
+                    }
+                }
+                break;
+        }
     }
     
     //% direct.defl=DirectEnum.direct1
