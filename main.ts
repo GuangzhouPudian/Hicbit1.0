@@ -218,7 +218,7 @@ namespace motor {
                     }
                 }
                 break;
-            case DirectKeyEnum.down:
+            case DirectKeyEnum.right:
                 if (pins.digitalReadPin(DigitalPin.P9) == 0) {
                     basic.pause(10);
                     if (pins.digitalReadPin(DigitalPin.P9) == 0) {
@@ -263,7 +263,7 @@ namespace motor {
                     }
                 }
                 break;
-            case DirectKeyEnum.down:
+            case DirectKeyEnum.right:
                 if (pins.digitalReadPin(DigitalPin.P9) == 0) {
                     basic.pause(10);
                     if (pins.digitalReadPin(DigitalPin.P9) == 0) {
