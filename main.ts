@@ -124,9 +124,10 @@ namespace motor {
         basic.pause(3000);
         let i: number;
         for (i = 1; i <= 4; i++){
-            SetMotorSpeed(i, 0, 0);
+            SetMotorSpeed(i, 0);
         }
         ClearLCD(2, 8);
+        SetLCDString(8, "Loading Success!");
     }
 
     //% sn.defl=RowEnum.row2
@@ -145,7 +146,8 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(1000);
+        basic.pause(100);
+        //control.waitMicros(200);
     }
 
     //% sn.defl=RowEnum.row2
@@ -166,7 +168,8 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(1000);
+        basic.pause(100);
+        //control.waitMicros(200);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -182,7 +185,8 @@ namespace motor {
         buf[3] = sn1;
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(1000);
+        basic.pause(100);
+        //control.waitMicros(200);
     }
 
     //% weight=50 block="方向键|%directkey按下"
@@ -193,7 +197,7 @@ namespace motor {
         switch(directkey){
             case DirectKeyEnum.up:
                 if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(200);
                     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
                         IsKeyPress = true;
                         while (pins.digitalReadPin(DigitalPin.P5) == 0);
@@ -201,17 +205,17 @@ namespace motor {
                 }
                 break;
             case DirectKeyEnum.down:
-                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                    basic.pause(10);
-                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                    control.waitMicros(200);
+                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
                         IsKeyPress = true;
-                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
+                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
                     }
                 }
                 break;
             case DirectKeyEnum.left:
                 if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(200);
                     if (pins.digitalReadPin(DigitalPin.P11) == 0) {
                         IsKeyPress = true;
                         while (pins.digitalReadPin(DigitalPin.P11) == 0);
@@ -219,11 +223,11 @@ namespace motor {
                 }
                 break;
             case DirectKeyEnum.right:
-                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                    basic.pause(10);
-                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                    control.waitMicros(200);
+                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
                         IsKeyPress = true;
-                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
+                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
                     }
                 }
                 break;
@@ -238,7 +242,7 @@ namespace motor {
         switch(directkey){
             case DirectKeyEnum.up:
                 if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(200);
                     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
                         body();
                         while (pins.digitalReadPin(DigitalPin.P5) == 0);
@@ -247,7 +251,7 @@ namespace motor {
                 break;
             case DirectKeyEnum.down:
                 if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(200);
                     if (pins.digitalReadPin(DigitalPin.P7) == 0) {
                         body();
                         while (pins.digitalReadPin(DigitalPin.P7) == 0);
@@ -256,7 +260,7 @@ namespace motor {
                 break;
             case DirectKeyEnum.left:
                 if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(200);
                     if (pins.digitalReadPin(DigitalPin.P11) == 0) {
                         body();
                         while (pins.digitalReadPin(DigitalPin.P11) == 0);
@@ -265,7 +269,7 @@ namespace motor {
                 break;
             case DirectKeyEnum.right:
                 if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(200);
                     if (pins.digitalReadPin(DigitalPin.P9) == 0) {
                         body();
                         while (pins.digitalReadPin(DigitalPin.P9) == 0);
@@ -284,7 +288,7 @@ namespace motor {
             case PinEnum.portA:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P1) == 0);
@@ -293,7 +297,7 @@ namespace motor {
                 }
                 else if (presskey == KeyEnum.keyb) {
                     if (pins.digitalReadPin(DigitalPin.P15) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P15) == 0);
@@ -304,7 +308,7 @@ namespace motor {
             case PinEnum.portB:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P2) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P2) == 0);
@@ -313,7 +317,7 @@ namespace motor {
                 }
                 else if (presskey == KeyEnum.keyb) {
                     if (pins.digitalReadPin(DigitalPin.P13) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P13) == 0);
@@ -324,7 +328,7 @@ namespace motor {
             case PinEnum.portC:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P3) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P3) == 0);
@@ -333,7 +337,7 @@ namespace motor {
                 }
                 else if (presskey == KeyEnum.keyb) {
                     if (pins.digitalReadPin(DigitalPin.P14) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P14) == 0);
@@ -344,7 +348,7 @@ namespace motor {
             case PinEnum.portD:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P4) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P4) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P4) == 0);
@@ -353,7 +357,7 @@ namespace motor {
                 }
                 else if (presskey == KeyEnum.keyb) {
                     if (pins.digitalReadPin(DigitalPin.P10) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P10) == 0);
@@ -373,7 +377,7 @@ namespace motor {
                 case PinEnum.portA:
                     if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P1) == 0);
@@ -382,7 +386,7 @@ namespace motor {
                     }
                     else if (presskey == KeyEnum.keyb) {
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P15) == 0);
@@ -393,7 +397,7 @@ namespace motor {
                 case PinEnum.portB:
                     if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P2) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P2) == 0);
@@ -402,7 +406,7 @@ namespace motor {
                     }
                     else if (presskey == KeyEnum.keyb) {
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P13) == 0);
@@ -413,7 +417,7 @@ namespace motor {
                 case PinEnum.portC:
                     if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P3) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P3) == 0);
@@ -422,7 +426,7 @@ namespace motor {
                     }
                     else if (presskey == KeyEnum.keyb) {
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P14) == 0);
@@ -433,7 +437,7 @@ namespace motor {
                 case PinEnum.portD:
                     if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P4) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P4) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P4) == 0);
@@ -442,7 +446,7 @@ namespace motor {
                     }
                     else if (presskey == KeyEnum.keyb) {
                         if (pins.digitalReadPin(DigitalPin.P10) == 0) {
-                            basic.pause(10);
+                            control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P10) == 0);
@@ -454,12 +458,18 @@ namespace motor {
         }
 
     //% direct.defl=DirectEnum.direct1
-    //% speed.min=0 speed.max=100
-    //% weight=90 block="电机|端口%sn|方向%direct|速度%speed"
+    //% speed.min=-100 speed.max=100
+    //% weight=90 block="电机|端口%sn|速度%speed"
     //% group="电机"
     //% color=#5E9B9D
-    export function SetMotorSpeed(sn: MotorEnum, direct: DirectEnum, speed: number): void {
+    export function SetMotorSpeed(sn: MotorEnum, speed: number): void {
+        let direct: number = 0;
         let buf = pins.createBuffer(10);
+        if (speed > 0) direct = 1;
+        else if (speed < 0) {
+            direct = 2;
+            speed = Math.abs(speed);
+        }
         buf[0] = 0xfe;
         buf[1] = 0xa0;
         buf[2] = sn;
@@ -471,17 +481,25 @@ namespace motor {
     }
 
     //% direct.defl=DirectEnum.direct1
-    //% weight=80 block="电机|端口%sn|方向%direct|角度%anelg"
+    //% angle.min=-360 angle.max=360
+    //% weight=80 block="电机|端口%sn|角度%anelg"
     //% group="电机"
     //% color=#5E9B9D
-    export function SetMotorAngle(sn: MotorEnum, direct: DirectEnum, angle: AngleEnum): void {
+    export function SetMotorAngle(sn: MotorEnum, angle: number): void {
+        let direct: number = 0;
         let buf = pins.createBuffer(10);
+        if (angle > 0) direct = 1;
+        else if (angle < 0) {
+            direct = 2;
+            angle = Math.abs(angle);
+        } 
         buf[0] = 0xfe;
         buf[1] = 0xb0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = angle;
-        buf[5] = 0xef;
+        buf[4] = ((angle >> 8) | 0xff);
+        buf[5] = (angle & 0xff);
+        buf[6] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
     }
@@ -758,7 +776,7 @@ namespace motor {
             default: return 0;
         }
     }
-
+    /*
     let strip = pins.createBuffer(3);
     //% weight=98 block="RGB彩灯|端口%pin|彩灯%light|红%red|绿%green|蓝%blue"
     //% group="RGB彩灯"
@@ -791,5 +809,5 @@ namespace motor {
     }
     //% shim=setBufferMode
     function setBufferMode(pin: DigitalPin, mode: number) {
-    }
+    }*/
 }
