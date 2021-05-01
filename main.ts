@@ -76,6 +76,17 @@ enum OnOffEnum {
     on = 1,
 }
 
+enum KeyEnum {
+    //% block="上"
+    up = 0,
+    //% block="下"
+    down = 1,
+    //% block="左"
+    left = 2,
+    //% block="右"
+    right = 3,
+}
+
 enum LEDEnum {
     //% block="彩灯1"
     led1 = 0,
@@ -89,7 +100,7 @@ enum LEDEnum {
  * Custom blocks
  */
 //% weight=100 color=#7CCD7C icon="" block="海客智能套件"
-//% groups='["主机", "LCD", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外测距", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外收发"]'
+//% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外测距", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外收发"]'
 namespace motor {
     /*
     * hicbit initialization, please execute at boot time
@@ -112,9 +123,9 @@ namespace motor {
     }
 
     //% sn.defl=RowEnum.row2
-    //% weight=90 block="LCD|行数%sn|文本%str"
-    //% group="LCD"
-    //% color=#B22222
+    //% weight=80 block="LCD|行数%sn|文本%str"
+    //% group="主机"
+    //% color=#7CCD7C
     export function SetLCDString(sn: RowEnum, str: string): void {
         let i:number=0;
         let len:number=0;
@@ -131,9 +142,9 @@ namespace motor {
     }
 
     //% sn.defl=RowEnum.row2
-    //% weight=80 block="LCD|行数%sn|数值%dat"
-    //% group="LCD"
-    //% color=#B22222
+    //% weight=70 block="LCD|行数%sn|数值%dat"
+    //% group="主机"
+    //% color=#7CCD7C
     export function SetLCDData(sn: RowEnum, dat: number): void {
         let i:number=0;
         let len:number=0;
@@ -153,9 +164,9 @@ namespace motor {
 
     //% sn1.defl=RowEnum.row2
     //% sn2.defl=RowEnum.row8
-    //% weight=70 block="清屏|第%sn1行至第%sn2行"
-    //% group="LCD"
-    //% color=#B22222
+    //% weight=60 block="清屏|第%sn1行至第%sn2行"
+    //% group="主机"
+    //% color=#7CCD7C
     export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
         let buf = pins.createBuffer(10);
         buf[0] = 0xfe;
@@ -165,6 +176,52 @@ namespace motor {
         buf[4] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(1000);
+    }
+
+    //% weight=50 block="方向键|%keydat"
+    //% group="主机"
+    //% color=#7CCD7C
+    export function GetDirectKey(keydat: KeyEnum): boolean {
+        let KeyPress: boolean = false;
+        switch(keydat){
+            case KeyEnum.up:
+                if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+                        KeyPress = true;
+                        while (pins.digitalReadPin(DigitalPin.P5) == 0);
+                    }
+                }
+                break;
+            case KeyEnum.down:
+                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                        KeyPress = true;
+                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
+                    }
+                }
+                break;
+            case KeyEnum.left:
+                if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+                        KeyPress = true;
+                        while (pins.digitalReadPin(DigitalPin.P11) == 0);
+                    }
+                }
+                break;
+            case KeyEnum.down:
+                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                    basic.pause(10);
+                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                        KeyPress = true;
+                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
+                    }
+                }
+                break;
+        }
+        return KeyPress;
     }
     
     //% direct.defl=DirectEnum.direct1
@@ -399,6 +456,7 @@ namespace motor {
         let time_echo_us = pins.pulseIn(echoPin, PulseValue.High, 60000);
         if ((time_echo_us < 60000) && (time_echo_us > 1)) {
             distance = time_echo_us * 17 / 100;//time_echo_us*340/2/1000(mm)
+            //distance = Math.idiv(time_echo_us, 58)
         }
         return Math.round(distance);
     }
