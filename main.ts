@@ -3,13 +3,13 @@
  * Read more at https://makecode.microbit.org/blocks/custom
  */
 enum MotorEnum {
-    //% block="A"
+    //% block="接口1"
     portA = 3,
-    //% block="B"
+    //% block="接口2"
     portB = 4,
-    //% block="C"
+    //% block="接口3"
     portC = 1,
-    //% block="D"
+    //% block="接口4"
     portD = 2,
 }
 
@@ -497,10 +497,11 @@ namespace motor {
         buf[1] = 0xb0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = ((angle >> 8) | 0xff);
+        buf[4] = ((angle >> 8) & 0xff);
         buf[5] = (angle & 0xff);
         buf[6] = 0xef;
         serial.writeBuffer(buf);
+        serial.writeNumbers([buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]]);
         basic.pause(100);
     }
 
