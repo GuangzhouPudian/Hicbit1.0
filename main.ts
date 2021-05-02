@@ -121,7 +121,7 @@ namespace motor {
             SerialPin.P8,
             SerialPin.P12,
             BaudRate.BaudRate115200);
-        basic.pause(1000);
+        basic.pause(1500);
         let i: number;
         for (i = 1; i <= 4; i++){
             SetMotorSpeed(i, 0);
