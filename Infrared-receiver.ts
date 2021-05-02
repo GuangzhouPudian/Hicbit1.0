@@ -166,7 +166,8 @@ namespace HicbitIr {
   //% pin.fieldOptions.columns=4
   //% pin.fieldOptions.tooltips="false"
   //% weight=90
-  export function connectIrReceiver(
+  function connectIrReceiver(
+  //export function connectIrReceiver(
     pin: DigitalPin,
     protocol: IrProtocol
   ): void {
@@ -261,7 +262,8 @@ namespace HicbitIr {
   //% button.fieldOptions.columns=3
   //% button.fieldOptions.tooltips="false"
   //% weight=50
-  export function onIrButton(
+  function onIrButton(
+  //export function onIrButton(
     button: IrButton,
     action: IrButtonAction,
     handler: () => void
@@ -284,7 +286,8 @@ namespace HicbitIr {
   //% blockId=HicbitIr_infrared_ir_button_pressed
   //% block="IR button"
   //% weight=70
-  export function irButton(): number {
+  function irButton(): number {
+  //export function irButton(): number {
     basic.pause(0); // Yield to support background processing when called in tight loops
     if (!irState) {
       return IrButton.Any;
