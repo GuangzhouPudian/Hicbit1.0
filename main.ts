@@ -287,15 +287,6 @@ namespace motor {
         switch(pin){
             case PinEnum.portA:
                 if (presskey == KeyEnum.keya) {
-                    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                        control.waitMicros(200);
-                        if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                            IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P1) == 0);
-                        }
-                    }
-                }
-                else if (presskey == KeyEnum.keyb) {
                     if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                         control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
@@ -304,18 +295,18 @@ namespace motor {
                         }
                     }
                 }
-                break;
-            case PinEnum.portB:
-                if (presskey == KeyEnum.keya) {
-                    if (pins.digitalReadPin(DigitalPin.P2) == 0) {
+                else if (presskey == KeyEnum.keyb) {
+                    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                         control.waitMicros(200);
-                        if (pins.digitalReadPin(DigitalPin.P2) == 0) {
+                        if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P2) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P1) == 0);
                         }
                     }
                 }
-                else if (presskey == KeyEnum.keyb) {
+                break;
+            case PinEnum.portB:
+                if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                         control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
@@ -324,18 +315,18 @@ namespace motor {
                         }
                     }
                 }
-                break;
-            case PinEnum.portC:
-                if (presskey == KeyEnum.keya) {
-                    if (pins.digitalReadPin(DigitalPin.P3) == 0) {
+                else if (presskey == KeyEnum.keyb) {
+                    if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                         control.waitMicros(200);
-                        if (pins.digitalReadPin(DigitalPin.P3) == 0) {
+                        if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P3) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P2) == 0);
                         }
                     }
                 }
-                else if (presskey == KeyEnum.keyb) {
+                break;
+            case PinEnum.portC:
+                if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                         control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
@@ -344,23 +335,32 @@ namespace motor {
                         }
                     }
                 }
-                break;
-            case PinEnum.portD:
-                if (presskey == KeyEnum.keya) {
-                    if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                else if (presskey == KeyEnum.keyb) {
+                    if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                         control.waitMicros(200);
-                        if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                        if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P4) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P3) == 0);
                         }
                     }
                 }
-                else if (presskey == KeyEnum.keyb) {
+                break;
+            case PinEnum.portD:
+                if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                         control.waitMicros(200);
                         if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P10) == 0);
+                        }
+                    }
+                }
+                else if (presskey == KeyEnum.keyb) {
+                    if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                        control.waitMicros(200);
+                        if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                            IsKeyPress = true;
+                            while (pins.digitalReadPin(DigitalPin.P4) == 0);
                         }
                     }
                 }
@@ -376,15 +376,6 @@ namespace motor {
             switch(pin){
                 case PinEnum.portA:
                     if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P1) == 0);
-                            }
-                        }
-                    }
-                    else if (presskey == KeyEnum.keyb) {
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                             control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P15) == 0) {
@@ -393,18 +384,18 @@ namespace motor {
                             }
                         }
                     }
-                    break;
-                case PinEnum.portB:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P2) == 0) {
+                    else if (presskey == KeyEnum.keyb) {
+                        if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                             control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P2) == 0) {
+                            if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                                 body();
-                                while (pins.digitalReadPin(DigitalPin.P2) == 0);
+                                while (pins.digitalReadPin(DigitalPin.P1) == 0);
                             }
                         }
                     }
-                    else if (presskey == KeyEnum.keyb) {
+                    break;
+                case PinEnum.portB:
+                    if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                             control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P13) == 0) {
@@ -413,18 +404,18 @@ namespace motor {
                             }
                         }
                     }
-                    break;
-                case PinEnum.portC:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P3) == 0) {
+                    else if (presskey == KeyEnum.keyb) {
+                        if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                             control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P3) == 0) {
+                            if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                                 body();
-                                while (pins.digitalReadPin(DigitalPin.P3) == 0);
+                                while (pins.digitalReadPin(DigitalPin.P2) == 0);
                             }
                         }
                     }
-                    else if (presskey == KeyEnum.keyb) {
+                    break;
+                case PinEnum.portC:
+                    if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                             control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P14) == 0) {
@@ -433,23 +424,32 @@ namespace motor {
                             }
                         }
                     }
-                    break;
-                case PinEnum.portD:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                    else if (presskey == KeyEnum.keyb) {
+                        if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                             control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                            if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                                 body();
-                                while (pins.digitalReadPin(DigitalPin.P4) == 0);
+                                while (pins.digitalReadPin(DigitalPin.P3) == 0);
                             }
                         }
                     }
-                    else if (presskey == KeyEnum.keyb) {
+                    break;
+                case PinEnum.portD:
+                    if (presskey == KeyEnum.keya) {
                         if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                             control.waitMicros(200);
                             if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                                 body();
                                 while (pins.digitalReadPin(DigitalPin.P10) == 0);
+                            }
+                        }
+                    }
+                    else if (presskey == KeyEnum.keyb) {
+                        if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                            control.waitMicros(200);
+                            if (pins.digitalReadPin(DigitalPin.P4) == 0) {
+                                body();
+                                while (pins.digitalReadPin(DigitalPin.P4) == 0);
                             }
                         }
                     }
@@ -819,7 +819,20 @@ namespace motor {
         pin: PinEnum,
         protocol: IrProtocol
     ): void {
-        connectIrReceiver(pin, protocol);
+        switch (pin) {
+            case PinEnum.portA:
+                connectIrReceiver(DigitalPin.P1, protocol);
+                break;
+            case PinEnum.portB:
+                connectIrReceiver(DigitalPin.P2, protocol);
+                break;
+            case PinEnum.portC:
+                connectIrReceiver(DigitalPin.P3, protocol);
+                break;
+            case PinEnum.portD:
+                connectIrReceiver(DigitalPin.P4, protocol);
+                break;
+        }
     }
 
 
@@ -842,10 +855,10 @@ namespace motor {
       );
     }
   
-    //% weight=70 block="红外收发|按键值"
+    //% weight=70 block="红外收发|接口%pin|按键值"
     //% group="红外收发"
     //% color=#A5995B
-    export function irButton(): number {
+    export function irButton(pin: PinEnum,): number {
       basic.pause(0); // Yield to support background processing when called in tight loops
       if (!irState) {
         return IrButton.Any;
