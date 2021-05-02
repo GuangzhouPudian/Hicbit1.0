@@ -262,7 +262,7 @@ const enum IrProtocol {
   //% button.fieldOptions.columns=3
   //% button.fieldOptions.tooltips="false"
   //% weight=50
-  function onIrButton(
+  /*function onIrButton(
   //export function onIrButton(
     button: IrButton,
     action: IrButtonAction,
@@ -277,7 +277,7 @@ const enum IrProtocol {
         handler();
       }
     );
-  }
+  }*/
 
   /**
    * Returns the code of the IR button that was pressed last. Returns -1 (IrButton.Any) if no button has been pressed yet.
@@ -286,14 +286,14 @@ const enum IrProtocol {
   //% blockId=HicbitIr_infrared_ir_button_pressed
   //% block="IR button"
   //% weight=70
-  function irButton(): number {
+  /*function irButton(): number {
   //export function irButton(): number {
     basic.pause(0); // Yield to support background processing when called in tight loops
     if (!irState) {
       return IrButton.Any;
     }
     return irState.commandSectionBits >> 8;
-  }
+  }*/
 
   /**
    * Do something when an IR datagram is received.

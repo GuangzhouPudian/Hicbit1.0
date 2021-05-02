@@ -811,40 +811,46 @@ namespace motor {
     function setBufferMode(pin: DigitalPin, mode: number) {
     }*/
 
-    //% subcategory="IR Receiver"
-    //% blockId="HicbitIr_infrared_connect_receiver"
-    //% block="connect IR receiver at pin %pin and decode %protocol"
-    //% pin.fieldEditor="gridpicker"
-    //% pin.fieldOptions.columns=4
-    //% pin.fieldOptions.tooltips="false"
-    //% weight=90
-    export function connectIrReceiver(
+    //% weight=90 block="红外收发|端口%pin|协议%protocol"
+    //% group="红外收发"
+    //% color=#A5995B
+    export function HicbitconnectIrReceiver(
         //export function connectIrReceiver(
         pin: DigitalPin,
         protocol: IrProtocol
     ): void {
+        connectIrReceiver(pin, protocol);
     }
 
-    //% subcategory="IR Receiver"
-    //% blockId=HicbitIr_infrared_ir_button_pressed
-    //% block="IR button"
-    //% weight=70
-    export function irButton(): number {
-        return 0;
-    }
 
-    //% subcategory="IR Receiver"
-    //% blockId=HicbitIr_infrared_on_ir_button
-    //% block="on IR button | %button | %action"
-    //% button.fieldEditor="gridpicker"
-    //% button.fieldOptions.columns=3
-    //% button.fieldOptions.tooltips="false"
-    //% weight=50
+    //% weight=80 block="红外收发|当按键%button|%action"
+    //% group="红外收发"
+    //% color=#A5995B
     export function onIrButton(
-        button: IrButton,
-        action: IrButtonAction,
-        handler: () => void
+      button: IrButton,
+      action: IrButtonAction,
+      handler: () => void
     ) {
+      control.onEvent(
+        action === IrButtonAction.Pressed
+          ? MICROBIT_HicbitIr_IR_BUTTON_PRESSED_ID
+          : MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
+        button === IrButton.Any ? EventBusValue.MICROBIT_EVT_ANY : button,
+        () => {
+          handler();
+        }
+      );
+    }
+  
+    //% weight=70 block="红外收发|按键值"
+    //% group="红外收发"
+    //% color=#A5995B
+    export function irButton(): number {
+      basic.pause(0); // Yield to support background processing when called in tight loops
+      if (!irState) {
+        return IrButton.Any;
+      }
+      return irState.commandSectionBits >> 8;
     }
 
 }
