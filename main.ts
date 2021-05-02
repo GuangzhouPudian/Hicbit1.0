@@ -816,7 +816,7 @@ namespace motor {
     //% color=#A5995B
     export function HicbitconnectIrReceiver(
         //export function connectIrReceiver(
-        pin: DigitalPin,
+        pin: PinEnum,
         protocol: IrProtocol
     ): void {
         connectIrReceiver(pin, protocol);
