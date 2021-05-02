@@ -62,7 +62,7 @@ const enum IrProtocol {
 
 //% color=#0fbc11 icon="\u272a" block="HicbitIr"
 //% category="HicbitIr"
-namespace HicbitIr {
+//namespace HicbitIr {
   let irState: IrState;
 
   const MICROBIT_HicbitIr_IR_NEC = 777;
@@ -386,4 +386,4 @@ namespace HicbitIr {
     }
     return hex;
   }
-}
+//}
