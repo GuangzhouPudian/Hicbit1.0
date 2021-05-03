@@ -811,9 +811,100 @@ namespace motor {
     function setBufferMode(pin: DigitalPin, mode: number) {
     }*/
 
-    //% weight=90 block="红外收发|端口%pin|协议%protocol"
+    /*//% weight=90 block="红外收发|端口%pin|协议%protocol"
     //% group="红外收发"
     //% color=#A5995B
+    //% subcategory="IR Receiver"*/
+  //% blockId="HicbitIr_infrared_connect_receiver"
+  //% block="connect IR receiver at pin %pin and decode %protocol"
+  //% pin.fieldEditor="gridpicker"
+  //% pin.fieldOptions.columns=4
+  //% pin.fieldOptions.tooltips="false"
+  //% weight=90
+  //function connectIrReceiver(
+    export function connectIrReceiver(
+      pin: DigitalPin,
+      protocol: IrProtocol
+    ): void {
+      if (irState) {
+        return;
+      }
+  
+      irState = {
+        protocol: protocol,
+        bitsReceived: 0,
+        hasNewDatagram: false,
+        addressSectionBits: 0,
+        commandSectionBits: 0,
+        hiword: 0, // TODO replace with uint32
+        loword: 0,
+      };
+  
+      enableIrMarkSpaceDetection(pin);
+  
+      let activeCommand = -1;
+      let repeatTimeout = 0;
+      const REPEAT_TIMEOUT_MS = 120;
+  
+      control.onEvent(
+        MICROBIT_HicbitIr_IR_NEC,
+        EventBusValue.MICROBIT_EVT_ANY,
+        () => {
+          const irEvent = control.eventValue();
+  
+          // Refresh repeat timer
+          if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
+            repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
+          }
+  
+          if (irEvent === IR_DATAGRAM) {
+            irState.hasNewDatagram = true;
+            control.raiseEvent(MICROBIT_HicbitIr_IR_DATAGRAM, 0);
+  
+            const newCommand = irState.commandSectionBits >> 8;
+  
+            // Process a new command
+            if (newCommand !== activeCommand) {
+              if (activeCommand >= 0) {
+                control.raiseEvent(
+                  MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
+                  activeCommand
+                );
+              }
+  
+              activeCommand = newCommand;
+              control.raiseEvent(
+                MICROBIT_HicbitIr_IR_BUTTON_PRESSED_ID,
+                newCommand
+              );
+            }
+          }
+        }
+      );
+  
+      control.inBackground(() => {
+        while (true) {
+          if (activeCommand === -1) {
+            // sleep to save CPU cylces
+            basic.pause(2 * REPEAT_TIMEOUT_MS);
+          } else {
+            const now = input.runningTime();
+            if (now > repeatTimeout) {
+              // repeat timed out
+              control.raiseEvent(
+                MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
+                activeCommand
+              );
+              activeCommand = -1;
+            } else {
+              basic.pause(REPEAT_TIMEOUT_MS);
+            }
+          }
+        }
+      });
+    }
+  
+/*
     export function HicbitconnectIrReceiver(
         //export function connectIrReceiver(
         pin: PinEnum,
@@ -834,7 +925,7 @@ namespace motor {
                 break;
         }
     }
-
+*/
 
     //% weight=80 block="红外收发|当按键%button|%action"
     //% group="红外收发"
