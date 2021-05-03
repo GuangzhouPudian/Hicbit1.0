@@ -946,10 +946,10 @@ namespace motor {
       );
     }
   
-    //% weight=70 block="红外收发|接口%pin|按键值"
+    //% weight=70 block="红外收发|按键值"
     //% group="红外收发"
     //% color=#A5995B
-    export function irButton(pin: PinEnum,): number {
+    export function irButton(): number {
       basic.pause(0); // Yield to support background processing when called in tight loops
       if (!irState) {
         return IrButton.Any;
