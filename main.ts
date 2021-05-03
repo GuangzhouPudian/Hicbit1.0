@@ -95,11 +95,11 @@ enum KeyEnum {
 }
 
 enum LEDEnum {
-    //% block="彩灯1"
+    //% block="1"
     led1 = 0,
-    //% block="彩灯2"
+    //% block="2"
     led2 = 1,
-    //% block="彩灯3"
+    //% block="3"
     led3 = 2,
 }
 
@@ -1149,7 +1149,8 @@ namespace motor {
         return hex;
     }
 
-    let strip = pins.createBuffer(3);
+    //let strip = pins.createBuffer(3);
+    let strip: Buffer;
     //% weight=98 block="RGB彩灯|接口%pin|彩灯%light|红%red|绿%green|蓝%blue"
     //% group="RGB彩灯"
     //% red.min=0 red.max=255
@@ -1159,7 +1160,8 @@ namespace motor {
     export function SetRGBLight(pin: PinEnum, light: LEDEnum, red: number, green: number, blue: number) {
         let grb: number;
         grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
-        strip[light] = grb;
+        //strip[light] = grb;
+        strip.fill(grb,light,1);
         switch (pin) {
             case PinEnum.portA:
                 sendBuffer(strip, DigitalPin.P15);
