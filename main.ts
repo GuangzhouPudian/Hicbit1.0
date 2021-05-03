@@ -811,150 +811,216 @@ namespace motor {
     function setBufferMode(pin: DigitalPin, mode: number) {
     }*/
 
-    /*//% weight=90 block="红外收发|端口%pin|协议%protocol"
-    //% group="红外收发"
-    //% color=#A5995B
-    //% subcategory="IR Receiver"*/
-  //% blockId="HicbitIr_infrared_connect_receiver"
+     /**
+   * Connects to the IR receiver module at the specified pin and configures the IR protocol.
+   * @param pin IR receiver pin, eg: DigitalPin.P0
+   * @param protocol IR protocol, eg: IrProtocol.Keyestudio
+   */
+  //% subcategory="IR Receiver"
+  //% blockId="makerbit_infrared_connect_receiver"
   //% block="connect IR receiver at pin %pin and decode %protocol"
   //% pin.fieldEditor="gridpicker"
   //% pin.fieldOptions.columns=4
   //% pin.fieldOptions.tooltips="false"
   //% weight=90
-  //function connectIrReceiver(
-    export function connectIrReceiver(
-      pin: DigitalPin,
-      protocol: IrProtocol
-    ): void {
-      if (irState) {
-        return;
-      }
-  
-      irState = {
-        protocol: protocol,
-        bitsReceived: 0,
-        hasNewDatagram: false,
-        addressSectionBits: 0,
-        commandSectionBits: 0,
-        hiword: 0, // TODO replace with uint32
-        loword: 0,
-      };
-  
-      enableIrMarkSpaceDetection(pin);
-  
-      let activeCommand = -1;
-      let repeatTimeout = 0;
-      const REPEAT_TIMEOUT_MS = 120;
-  
-      control.onEvent(
-        MICROBIT_HicbitIr_IR_NEC,
-        EventBusValue.MICROBIT_EVT_ANY,
-        () => {
-          const irEvent = control.eventValue();
-  
-          // Refresh repeat timer
-          if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
-            repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
-          }
-  
-          if (irEvent === IR_DATAGRAM) {
-            irState.hasNewDatagram = true;
-            control.raiseEvent(MICROBIT_HicbitIr_IR_DATAGRAM, 0);
-  
-            const newCommand = irState.commandSectionBits >> 8;
-  
-            // Process a new command
-            if (newCommand !== activeCommand) {
-              if (activeCommand >= 0) {
-                control.raiseEvent(
-                  MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
-                  activeCommand
-                );
-              }
-  
-              activeCommand = newCommand;
-              control.raiseEvent(
-                MICROBIT_HicbitIr_IR_BUTTON_PRESSED_ID,
-                newCommand
-              );
-            }
-          }
+  export function connectIrReceiver(
+    pin: DigitalPin,
+    protocol: IrProtocol
+  ): void {
+    if (irState) {
+      return;
+    }
+
+    irState = {
+      protocol: protocol,
+      bitsReceived: 0,
+      hasNewDatagram: false,
+      addressSectionBits: 0,
+      commandSectionBits: 0,
+      hiword: 0, // TODO replace with uint32
+      loword: 0,
+    };
+
+    enableIrMarkSpaceDetection(pin);
+
+    let activeCommand = -1;
+    let repeatTimeout = 0;
+    const REPEAT_TIMEOUT_MS = 120;
+
+    control.onEvent(
+      MICROBIT_MAKERBIT_IR_NEC,
+      EventBusValue.MICROBIT_EVT_ANY,
+      () => {
+        const irEvent = control.eventValue();
+
+        // Refresh repeat timer
+        if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
+          repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
         }
-      );
-  
-      control.inBackground(() => {
-        while (true) {
-          if (activeCommand === -1) {
-            // sleep to save CPU cylces
-            basic.pause(2 * REPEAT_TIMEOUT_MS);
-          } else {
-            const now = input.runningTime();
-            if (now > repeatTimeout) {
-              // repeat timed out
+
+        if (irEvent === IR_DATAGRAM) {
+          irState.hasNewDatagram = true;
+          control.raiseEvent(MICROBIT_MAKERBIT_IR_DATAGRAM, 0);
+
+          const newCommand = irState.commandSectionBits >> 8;
+
+          // Process a new command
+          if (newCommand !== activeCommand) {
+            if (activeCommand >= 0) {
               control.raiseEvent(
-                MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
+                MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
                 activeCommand
               );
-              activeCommand = -1;
-            } else {
-              basic.pause(REPEAT_TIMEOUT_MS);
             }
+
+            activeCommand = newCommand;
+            control.raiseEvent(
+              MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID,
+              newCommand
+            );
           }
         }
-      });
-    }
-  
-/*
-    export function HicbitconnectIrReceiver(
-        //export function connectIrReceiver(
-        pin: PinEnum,
-        protocol: IrProtocol
-    ): void {
-        switch (pin) {
-            case PinEnum.portA:
-                connectIrReceiver(DigitalPin.P15, protocol);
-                break;
-            case PinEnum.portB:
-                connectIrReceiver(DigitalPin.P14, protocol);
-                break;
-            case PinEnum.portC:
-                connectIrReceiver(DigitalPin.P13, protocol);
-                break;
-            case PinEnum.portD:
-                connectIrReceiver(DigitalPin.P10, protocol);
-                break;
-        }
-    }
-*/
-
-    //% weight=80 block="红外收发|当按键%button|%action"
-    //% group="红外收发"
-    //% color=#A5995B
-    export function onIrButton(
-      button: IrButton,
-      action: IrButtonAction,
-      handler: () => void
-    ) {
-      control.onEvent(
-        action === IrButtonAction.Pressed
-          ? MICROBIT_HicbitIr_IR_BUTTON_PRESSED_ID
-          : MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
-        button === IrButton.Any ? EventBusValue.MICROBIT_EVT_ANY : button,
-        () => {
-          handler();
-        }
-      );
-    }
-  
-    //% weight=70 block="红外收发|按键值"
-    //% group="红外收发"
-    //% color=#A5995B
-    export function irButton(): number {
-      basic.pause(0); // Yield to support background processing when called in tight loops
-      if (!irState) {
-        return IrButton.Any;
       }
-      return irState.commandSectionBits >> 8;
+    );
+
+    control.inBackground(() => {
+      while (true) {
+        if (activeCommand === -1) {
+          // sleep to save CPU cylces
+          basic.pause(2 * REPEAT_TIMEOUT_MS);
+        } else {
+          const now = input.runningTime();
+          if (now > repeatTimeout) {
+            // repeat timed out
+            control.raiseEvent(
+              MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
+              activeCommand
+            );
+            activeCommand = -1;
+          } else {
+            basic.pause(REPEAT_TIMEOUT_MS);
+          }
+        }
+      }
+    });
+  }
+
+  /**
+   * Do something when a specific button is pressed or released on the remote control.
+   * @param button the button to be checked
+   * @param action the trigger action
+   * @param handler body code to run when the event is raised
+   */
+  //% subcategory="IR Receiver"
+  //% blockId=makerbit_infrared_on_ir_button
+  //% block="on IR button | %button | %action"
+  //% button.fieldEditor="gridpicker"
+  //% button.fieldOptions.columns=3
+  //% button.fieldOptions.tooltips="false"
+  //% weight=50
+  export function onIrButton(
+    button: IrButton,
+    action: IrButtonAction,
+    handler: () => void
+  ) {
+    control.onEvent(
+      action === IrButtonAction.Pressed
+        ? MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID
+        : MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
+      button === IrButton.Any ? EventBusValue.MICROBIT_EVT_ANY : button,
+      () => {
+        handler();
+      }
+    );
+  }
+
+  /**
+   * Returns the code of the IR button that was pressed last. Returns -1 (IrButton.Any) if no button has been pressed yet.
+   */
+  //% subcategory="IR Receiver"
+  //% blockId=makerbit_infrared_ir_button_pressed
+  //% block="IR button"
+  //% weight=70
+  export function irButton(): number {
+    basic.pause(0); // Yield to support background processing when called in tight loops
+    if (!irState) {
+      return IrButton.Any;
     }
+    return irState.commandSectionBits >> 8;
+  }
+
+  /**
+   * Do something when an IR datagram is received.
+   * @param handler body code to run when the event is raised
+   */
+  //% subcategory="IR Receiver"
+  //% blockId=makerbit_infrared_on_ir_datagram
+  //% block="on IR datagram received"
+  //% weight=40
+  export function onIrDatagram(handler: () => void) {
+    control.onEvent(
+      MICROBIT_MAKERBIT_IR_DATAGRAM,
+      EventBusValue.MICROBIT_EVT_ANY,
+      () => {
+        handler();
+      }
+    );
+  }
+
+  /**
+   * Returns the IR datagram as 32-bit hexadecimal string.
+   * The last received datagram is returned or "0x00000000" if no data has been received yet.
+   */
+  //% subcategory="IR Receiver"
+  //% blockId=makerbit_infrared_ir_datagram
+  //% block="IR datagram"
+  //% weight=30
+  export function irDatagram(): string {
+    basic.pause(0); // Yield to support background processing when called in tight loops
+    if (!irState) {
+      return "0x00000000";
+    }
+    return (
+      "0x" +
+      ir_rec_to16BitHex(irState.addressSectionBits) +
+      ir_rec_to16BitHex(irState.commandSectionBits)
+    );
+  }
+
+  /**
+   * Returns true if any IR data was received since the last call of this function. False otherwise.
+   */
+  //% subcategory="IR Receiver"
+  //% blockId=makerbit_infrared_was_any_ir_datagram_received
+  //% block="IR data was received"
+  //% weight=80
+  export function wasIrDataReceived(): boolean {
+    basic.pause(0); // Yield to support background processing when called in tight loops
+    if (!irState) {
+      return false;
+    }
+    if (irState.hasNewDatagram) {
+      irState.hasNewDatagram = false;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Returns the command code of a specific IR button.
+   * @param button the button
+   */
+  //% subcategory="IR Receiver"
+  //% blockId=makerbit_infrared_button_code
+  //% button.fieldEditor="gridpicker"
+  //% button.fieldOptions.columns=3
+  //% button.fieldOptions.tooltips="false"
+  //% block="IR button code %button"
+  //% weight=60
+  export function irButtonCode(button: IrButton): number {
+    basic.pause(0); // Yield to support background processing when called in tight loops
+    return button as number;
+  }
 
 }

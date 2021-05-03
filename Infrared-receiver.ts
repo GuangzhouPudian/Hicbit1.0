@@ -1,4 +1,4 @@
-// HicbitIr blocks supporting a Keyestudio Infrared Wireless Module Kit
+// MakerBit blocks supporting a Keyestudio Infrared Wireless Module Kit
 // (receiver module+remote controller)
 
 const enum IrButton {
@@ -60,15 +60,15 @@ const enum IrProtocol {
   NEC = 1,
 }
 
-//% color=#0fbc11 icon="\u272a" block="HicbitIr"
-//% category="HicbitIr"
-//namespace HicbitIr {
+//% color=#0fbc11 icon="\u272a" block="MakerBit"
+//% category="MakerBit"
+//namespace makerbit {
   let irState: IrState;
 
-  const MICROBIT_HicbitIr_IR_NEC = 777;
-  const MICROBIT_HicbitIr_IR_DATAGRAM = 778;
-  const MICROBIT_HicbitIr_IR_BUTTON_PRESSED_ID = 789;
-  const MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID = 790;
+  const MICROBIT_MAKERBIT_IR_NEC = 777;
+  const MICROBIT_MAKERBIT_IR_DATAGRAM = 778;
+  const MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID = 789;
+  const MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID = 790;
   const IR_REPEAT = 256;
   const IR_INCOMPLETE = 257;
   const IR_DATAGRAM = 258;
@@ -149,139 +149,9 @@ const enum IrProtocol {
       const status = decode(mark + space);
 
       if (status !== IR_INCOMPLETE) {
-        control.raiseEvent(MICROBIT_HicbitIr_IR_NEC, status);
+        control.raiseEvent(MICROBIT_MAKERBIT_IR_NEC, status);
       }
     });
-  }
-
-  /**
-   * Connects to the IR receiver module at the specified pin and configures the IR protocol.
-   * @param pin IR receiver pin, eg: DigitalPin.P0
-   * @param protocol IR protocol, eg: IrProtocol.Keyestudio
-   */
-  
-  /**
-   * Do something when a specific button is pressed or released on the remote control.
-   * @param button the button to be checked
-   * @param action the trigger action
-   * @param handler body code to run when the event is raised
-   */
-  //% subcategory="IR Receiver"
-  //% blockId=HicbitIr_infrared_on_ir_button
-  //% block="on IR button | %button | %action"
-  //% button.fieldEditor="gridpicker"
-  //% button.fieldOptions.columns=3
-  //% button.fieldOptions.tooltips="false"
-  //% weight=50
-  /*function onIrButton(
-  //export function onIrButton(
-    button: IrButton,
-    action: IrButtonAction,
-    handler: () => void
-  ) {
-    control.onEvent(
-      action === IrButtonAction.Pressed
-        ? MICROBIT_HicbitIr_IR_BUTTON_PRESSED_ID
-        : MICROBIT_HicbitIr_IR_BUTTON_RELEASED_ID,
-      button === IrButton.Any ? EventBusValue.MICROBIT_EVT_ANY : button,
-      () => {
-        handler();
-      }
-    );
-  }*/
-
-  /**
-   * Returns the code of the IR button that was pressed last. Returns -1 (IrButton.Any) if no button has been pressed yet.
-   */
-  //% subcategory="IR Receiver"
-  //% blockId=HicbitIr_infrared_ir_button_pressed
-  //% block="IR button"
-  //% weight=70
-  /*function irButton(): number {
-  //export function irButton(): number {
-    basic.pause(0); // Yield to support background processing when called in tight loops
-    if (!irState) {
-      return IrButton.Any;
-    }
-    return irState.commandSectionBits >> 8;
-  }*/
-
-  /**
-   * Do something when an IR datagram is received.
-   * @param handler body code to run when the event is raised
-   */
-  //% subcategory="IR Receiver"
-  //% blockId=HicbitIr_infrared_on_ir_datagram
-  //% block="on IR datagram received"
-  //% weight=40
-  function onIrDatagram(handler: () => void) {
-  //export function onIrDatagram(handler: () => void) {
-    control.onEvent(
-      MICROBIT_HicbitIr_IR_DATAGRAM,
-      EventBusValue.MICROBIT_EVT_ANY,
-      () => {
-        handler();
-      }
-    );
-  }
-
-  /**
-   * Returns the IR datagram as 32-bit hexadecimal string.
-   * The last received datagram is returned or "0x00000000" if no data has been received yet.
-   */
-  //% subcategory="IR Receiver"
-  //% blockId=HicbitIr_infrared_ir_datagram
-  //% block="IR datagram"
-  //% weight=30
-  function irDatagram(): string {
-  //export function irDatagram(): string {
-    basic.pause(0); // Yield to support background processing when called in tight loops
-    if (!irState) {
-      return "0x00000000";
-    }
-    return (
-      "0x" +
-      ir_rec_to16BitHex(irState.addressSectionBits) +
-      ir_rec_to16BitHex(irState.commandSectionBits)
-    );
-  }
-
-  /**
-   * Returns true if any IR data was received since the last call of this function. False otherwise.
-   */
-  //% subcategory="IR Receiver"
-  //% blockId=HicbitIr_infrared_was_any_ir_datagram_received
-  //% block="IR data was received"
-  //% weight=80
-  function wasIrDataReceived(): boolean {
-  //export function wasIrDataReceived(): boolean {
-    basic.pause(0); // Yield to support background processing when called in tight loops
-    if (!irState) {
-      return false;
-    }
-    if (irState.hasNewDatagram) {
-      irState.hasNewDatagram = false;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Returns the command code of a specific IR button.
-   * @param button the button
-   */
-  //% subcategory="IR Receiver"
-  //% blockId=HicbitIr_infrared_button_code
-  //% button.fieldEditor="gridpicker"
-  //% button.fieldOptions.columns=3
-  //% button.fieldOptions.tooltips="false"
-  //% block="IR button code %button"
-  //% weight=60
-  function irButtonCode(button: IrButton): number {
-  //export function irButtonCode(button: IrButton): number {
-    basic.pause(0); // Yield to support background processing when called in tight loops
-    return button as number;
   }
 
   function ir_rec_to16BitHex(value: number): string {
