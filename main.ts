@@ -2,7 +2,7 @@
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
  */
-enum MotorEnum {
+ enum MotorEnum {
     //% block="1"
     portA = 3,
     //% block="2"
@@ -166,7 +166,7 @@ enum IrProtocol {
  * Custom blocks
  */
 //% weight=100 color=#7CCD7C icon="" block="海客智能套件"
-//% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外测距", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外接收"]'
+//% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外避障", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外接收"]'
 namespace motor {
     /*
     * hicbit initialization, please execute at boot time
@@ -835,42 +835,31 @@ namespace motor {
             default: return 0;
         }
     }
-    /*
-    let strip = pins.createBuffer(3);
-    //% weight=98 block="RGB彩灯|接口%pin|彩灯%light|红%red|绿%green|蓝%blue"
-    //% group="RGB彩灯"
-    //% red.min=0 red.max=255
-    //% green.min=0 green.max=255
-    //% blue.min=0 blue.max=255
-    //% color=#CD9B9B
-    export function SetRGBLight(pin: PinEnum, light: LEDEnum, red: number, green: number, blue: number) {
-        let grb: number;
-        grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
-        strip[light] = grb;
+  
+    //% weight=90 block="红外避障|接口%pin|值(0~1023)"
+    //% group="红外避障"
+    //% color=#DA8540
+    export function GetIrValue(pin: PinEnum): number {
+        let ADCPin: AnalogPin;
         switch (pin) {
             case PinEnum.portA:
-                sendBuffer(strip, DigitalPin.P15);
+                ADCPin = AnalogPin.P1;
                 break;
             case PinEnum.portB:
-                sendBuffer(strip, DigitalPin.P13);
+                ADCPin = AnalogPin.P2;
                 break;
             case PinEnum.portC:
-                sendBuffer(strip, DigitalPin.P14);
+                ADCPin = AnalogPin.P3;
                 break;
             case PinEnum.portD:
-                sendBuffer(strip, DigitalPin.P10);
+                ADCPin = AnalogPin.P4;
                 break;
         }
+        let adValue = pins.analogReadPin(ADCPin);
+        //adValue = adValue * 255 / 1023;
+        //return Math.round(adValue);
+        return adValue;
     }
-
-    //% shim=sendBufferAsm
-    function sendBuffer(buf: Buffer, pin: DigitalPin) {
-    }
-    //% shim=setBufferMode
-    function setBufferMode(pin: DigitalPin, mode: number) {
-    }*/
-  
-
 
     const MICROBIT_MAKERBIT_IR_NEC = 777;
     const MICROBIT_MAKERBIT_IR_DATAGRAM = 778;
@@ -948,7 +937,6 @@ namespace motor {
         let space = 0;
 
         pins.onPulsed(pin, PulseValue.Low, () => {
-        // HIGH, see https://github.com/microsoft/pxt-microbit/issues/1416
         mark = pins.pulseDuration();
         });
 
@@ -1159,5 +1147,39 @@ namespace motor {
         value = Math.idiv(value, 16);
         }
         return hex;
+    }
+
+    let strip = pins.createBuffer(3);
+    //% weight=98 block="RGB彩灯|接口%pin|彩灯%light|红%red|绿%green|蓝%blue"
+    //% group="RGB彩灯"
+    //% red.min=0 red.max=255
+    //% green.min=0 green.max=255
+    //% blue.min=0 blue.max=255
+    //% color=#CD9B9B
+    export function SetRGBLight(pin: PinEnum, light: LEDEnum, red: number, green: number, blue: number) {
+        let grb: number;
+        grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
+        strip[light] = grb;
+        switch (pin) {
+            case PinEnum.portA:
+                sendBuffer(strip, DigitalPin.P15);
+                break;
+            case PinEnum.portB:
+                sendBuffer(strip, DigitalPin.P13);
+                break;
+            case PinEnum.portC:
+                sendBuffer(strip, DigitalPin.P14);
+                break;
+            case PinEnum.portD:
+                sendBuffer(strip, DigitalPin.P10);
+                break;
+        }
+    }
+
+    //% shim=sendBufferAsm
+    function sendBuffer(buf: Buffer, pin: DigitalPin) {
+    }
+    //% shim=setBufferMode
+    function setBufferMode(pin: DigitalPin, mode: number) {
     }
 }
