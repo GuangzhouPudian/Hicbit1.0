@@ -14,7 +14,6 @@
         "main.ts",
         "sendBuffer.asm",
         "setBufferMode.asm",
-        "Infrared-receiver.ts"
     ],
     "testFiles": [
         "test.ts"
