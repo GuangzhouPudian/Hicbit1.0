@@ -3,13 +3,13 @@
  * Read more at https://makecode.microbit.org/blocks/custom
  */
 enum MotorEnum {
-    //% block="接口1"
+    //% block="1"
     portA = 3,
-    //% block="接口2"
+    //% block="2"
     portB = 4,
-    //% block="接口3"
+    //% block="3"
     portC = 1,
-    //% block="接口4"
+    //% block="4"
     portD = 2,
 }
 
@@ -59,13 +59,13 @@ enum RowEnum {
 }
 
 enum PinEnum {
-    //% block="接口5"
+    //% block="5"
     portA = 1,
-    //% block="接口6"
+    //% block="6"
     portB = 2,
-    //% block="接口7"
+    //% block="7"
     portC = 3,
-    //% block="接口8"
+    //% block="8"
     portD = 4,
 }
 
@@ -103,11 +103,70 @@ enum LEDEnum {
     led3 = 2,
 }
 
+enum IrButton {
+    //% block="any"
+    Any = -1,
+    //% block="▲"
+    Up = 0x62,
+    //% block=" "
+    Unused_2 = -2,
+    //% block="◀"
+    Left = 0x22,
+    //% block="OK"
+    Ok = 0x02,
+    //% block="▶"
+    Right = 0xc2,
+    //% block=" "
+    Unused_3 = -3,
+    //% block="▼"
+    Down = 0xa8,
+    //% block=" "
+    Unused_4 = -4,
+    //% block="1"
+    Number_1 = 0x68,
+    //% block="2"
+    Number_2 = 0x98,
+    //% block="3"
+    Number_3 = 0xb0,
+    //% block="4"
+    Number_4 = 0x30,
+    //% block="5"
+    Number_5 = 0x18,
+    //% block="6"
+    Number_6 = 0x7a,
+    //% block="7"
+    Number_7 = 0x10,
+    //% block="8"
+    Number_8 = 0x38,
+    //% block="9"
+    Number_9 = 0x5a,
+    //% block="*"
+    Star = 0x42,
+    //% block="0"
+    Number_0 = 0x4a,
+    //% block="#"
+    Hash = 0x52,
+    }
+    
+ enum IrButtonAction {
+    //% block="按下"
+    Pressed = 0,
+    //% block="松开"
+    Released = 1,
+}
+    
+enum IrProtocol {
+    //% block="Keyestudio"
+    Keyestudio = 0,
+    //% block="NEC"
+    NEC = 1,
+}
+
 /**
  * Custom blocks
  */
 //% weight=100 color=#7CCD7C icon="" block="海客智能套件"
-//% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外测距", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外收发"]'
+//% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外测距", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外接收"]'
 namespace motor {
     /*
     * hicbit initialization, please execute at boot time
@@ -133,7 +192,7 @@ namespace motor {
     }
 
     //% sn.defl=RowEnum.row2
-    //% weight=80 block="LCD|行数%sn|文本%str"
+    //% weight=80 block="LCD|第%sn行|文本%str"
     //% group="主机"
     //% color=#7CCD7C
     export function SetLCDString(sn: RowEnum, str: string): void {
@@ -152,7 +211,7 @@ namespace motor {
     }
 
     //% sn.defl=RowEnum.row2
-    //% weight=70 block="LCD|行数%sn|数值%dat"
+    //% weight=70 block="LCD|第%sn行|数值%dat"
     //% group="主机"
     //% color=#7CCD7C
     export function SetLCDData(sn: RowEnum, dat: number): void {
@@ -279,7 +338,7 @@ namespace motor {
         }
     }
 
-    //% weight=90 block="按键|端口%pin|%keypress按下"
+    //% weight=90 block="按键|接口%pin|%keypress按下"
     //% group="按键"
     //% color=#C4281B     
     export function IsKeyPress(pin: PinEnum, presskey: KeyEnum): boolean {
@@ -369,7 +428,7 @@ namespace motor {
         return IsKeyPress;
     }
     
-    //% weight=90 block="按键|当端口%pin|%keypress按下时"
+    //% weight=90 block="按键|当接口%pin|%keypress按下时"
     //% group="按键"
     //% color=#C4281B  
     export function WhenKeyPress(pin: PinEnum, presskey: KeyEnum, body: () => void): void {
@@ -459,7 +518,7 @@ namespace motor {
 
     //% direct.defl=DirectEnum.direct1
     //% speed.min=-100 speed.max=100
-    //% weight=90 block="电机|端口%sn|速度%speed"
+    //% weight=90 block="电机|接口%sn|速度%speed"
     //% group="电机"
     //% color=#5E9B9D
     export function SetMotorSpeed(sn: MotorEnum, speed: number): void {
@@ -482,7 +541,7 @@ namespace motor {
 
     //% direct.defl=DirectEnum.direct1
     //% angle.min=-360 angle.max=360
-    //% weight=80 block="电机|端口%sn|角度%anelg"
+    //% weight=80 block="电机|接口%sn|角度%anelg"
     //% group="电机"
     //% color=#5E9B9D
     export function SetMotorAngle(sn: MotorEnum, angle: number): void {
@@ -504,7 +563,7 @@ namespace motor {
         basic.pause(100);
     }
 
-    //% weight=90 block="光敏|端口%pin|值(0~255)"
+    //% weight=90 block="光敏|接口%pin|值(0~255)"
     //% group="光敏"
     //% color=#4B974A
     export function GetPhotoSensitiveValue(pin: PinEnum): number {
@@ -528,7 +587,7 @@ namespace motor {
         return 255 - Math.round(adValue);
     }
 
-    //% weight=90 block="循迹|端口%pin|值(0~255)"
+    //% weight=90 block="循迹|接口%pin|值(0~255)"
     //% group="循迹"
     //% color=#D7C599
     export function GetLineSensorValue(pin: PinEnum): number {
@@ -552,7 +611,7 @@ namespace motor {
         return Math.round(adValue);
     }
 
-    //% weight=90  block="旋钮|端口%pin|值(0~255)"
+    //% weight=90  block="旋钮|接口%pin|值(0~255)"
     //% group="旋钮"
     //% color=#923978
     export function GetKnobValue(pin: PinEnum): number {
@@ -576,7 +635,7 @@ namespace motor {
         return Math.round(adValue);
     }
 
-    //% weight=90 block="蜂鸣器|端口%pin|%act"
+    //% weight=90 block="蜂鸣器|接口%pin|%act"
     //% group="蜂鸣器"
     //% color=#B22222
     export function StartBuzzer(pin: PinEnum, act: OnOffEnum): void {
@@ -596,7 +655,7 @@ namespace motor {
         }
     }
 
-    //% weight=90 block="声音|端口%pin|值(0~255)"
+    //% weight=90 block="声音|接口%pin|值(0~255)"
     //% group="声音"
     //% color=#F5CD2F
     export function GetSoundSensorValue(pin: PinEnum): number {
@@ -620,7 +679,7 @@ namespace motor {
         return Math.round(adValue);
     }
 
-    //% weight=90 block="碰撞|端口%pin|触发" 
+    //% weight=90 block="碰撞|接口%pin|触发" 
     //% group="碰撞"
     //% color=#435493
     export function CollisionHappen(pin: PinEnum): boolean {
@@ -667,7 +726,7 @@ namespace motor {
         return flag;
     }
 
-    //% weight=98 block="超声波|端口%pin|距离(mm)"
+    //% weight=98 block="超声波|接口%pin|距离(mm)"
     //% group="超声波"
     //% color=#8470FF
     export function GetUltrasonicDistance(pin: PinEnum): number {
@@ -748,7 +807,7 @@ namespace motor {
         humidity
     }
 
-    //% weight=98 block="温湿度|端口%pin|值%dhtResult"
+    //% weight=98 block="温湿度|接口%pin|值%dhtResult"
     //% group="温湿度"
     //% pin_arg.fieldEditor="gridpicker" pin_arg.fieldOptions.columns=4
     //% pin_arg.fieldOptions.tooltips="false" pin_arg.fieldOptions.width="300"
@@ -778,7 +837,7 @@ namespace motor {
     }
     /*
     let strip = pins.createBuffer(3);
-    //% weight=98 block="RGB彩灯|端口%pin|彩灯%light|红%red|绿%green|蓝%blue"
+    //% weight=98 block="RGB彩灯|接口%pin|彩灯%light|红%red|绿%green|蓝%blue"
     //% group="RGB彩灯"
     //% red.min=0 red.max=255
     //% green.min=0 green.max=255
@@ -810,69 +869,8 @@ namespace motor {
     //% shim=setBufferMode
     function setBufferMode(pin: DigitalPin, mode: number) {
     }*/
+  
 
-    const enum IrButton {
-    //% block="any"
-    Any = -1,
-    //% block="▲"
-    Up = 0x62,
-    //% block=" "
-    Unused_2 = -2,
-    //% block="◀"
-    Left = 0x22,
-    //% block="OK"
-    Ok = 0x02,
-    //% block="▶"
-    Right = 0xc2,
-    //% block=" "
-    Unused_3 = -3,
-    //% block="▼"
-    Down = 0xa8,
-    //% block=" "
-    Unused_4 = -4,
-    //% block="1"
-    Number_1 = 0x68,
-    //% block="2"
-    Number_2 = 0x98,
-    //% block="3"
-    Number_3 = 0xb0,
-    //% block="4"
-    Number_4 = 0x30,
-    //% block="5"
-    Number_5 = 0x18,
-    //% block="6"
-    Number_6 = 0x7a,
-    //% block="7"
-    Number_7 = 0x10,
-    //% block="8"
-    Number_8 = 0x38,
-    //% block="9"
-    Number_9 = 0x5a,
-    //% block="*"
-    Star = 0x42,
-    //% block="0"
-    Number_0 = 0x4a,
-    //% block="#"
-    Hash = 0x52,
-  }
-  
-  const enum IrButtonAction {
-    //% block="pressed"
-    Pressed = 0,
-    //% block="released"
-    Released = 1,
-  }
-  
-  const enum IrProtocol {
-    //% block="Keyestudio"
-    Keyestudio = 0,
-    //% block="NEC"
-    NEC = 1,
-  }
-  
-  //% color=#0fbc11 icon="\u272a" block="MakerBit"
-  //% category="MakerBit"
-    let irState: IrState;
 
     const MICROBIT_MAKERBIT_IR_NEC = 777;
     const MICROBIT_MAKERBIT_IR_DATAGRAM = 778;
@@ -891,6 +889,8 @@ namespace motor {
         hiword: uint16;
         loword: uint16;
     }
+
+    let irState: IrState;
 
     function appendBitToDatagram(bit: number): number {
         irState.bitsReceived += 1;
@@ -963,24 +963,31 @@ namespace motor {
         });
     }
 
-    /**
-     * Connects to the IR receiver module at the specified pin and configures the IR protocol.
-     * @param pin IR receiver pin, eg: DigitalPin.P0
-     * @param protocol IR protocol, eg: IrProtocol.Keyestudio
-     */
-    //% subcategory="IR Receiver"
-    //% blockId="makerbit_infrared_connect_receiver"
-    //% block="connect IR receiver at pin %pin and decode %protocol"
-    //% pin.fieldEditor="gridpicker"
-    //% pin.fieldOptions.columns=4
-    //% pin.fieldOptions.tooltips="false"
-    //% weight=90
+    //% weight=90 block="红外|接口%port|协议%protocol"
+    //% group="红外接收"
+    //% color=#A5995B
     export function connectIrReceiver(
-        pin: DigitalPin,
+        port: PinEnum,
         protocol: IrProtocol
     ): void {
+        let pin: DigitalPin;
         if (irState) {
         return;
+        }
+
+        switch(port){
+            case PinEnum.portA:
+                pin = DigitalPin.P15;
+                break;
+            case PinEnum.portB:
+                pin = DigitalPin.P13;
+                break;
+            case PinEnum.portC:
+                pin = DigitalPin.P14;
+            break;
+            case PinEnum.portD:
+                pin = DigitalPin.P10;
+                break;
         }
 
         irState = {
@@ -1057,19 +1064,9 @@ namespace motor {
         });
     }
 
-    /**
-     * Do something when a specific button is pressed or released on the remote control.
-     * @param button the button to be checked
-     * @param action the trigger action
-     * @param handler body code to run when the event is raised
-     */
-    //% subcategory="IR Receiver"
-    //% blockId=makerbit_infrared_on_ir_button
-    //% block="on IR button | %button | %action"
-    //% button.fieldEditor="gridpicker"
-    //% button.fieldOptions.columns=3
-    //% button.fieldOptions.tooltips="false"
-    //% weight=50
+    //% weight=80 block="红外|当按键%button|%action时"
+    //% group="红外接收"
+    //% color=#A5995B
     export function onIrButton(
         button: IrButton,
         action: IrButtonAction,
@@ -1086,13 +1083,10 @@ namespace motor {
         );
     }
 
-    /**
-     * Returns the code of the IR button that was pressed last. Returns -1 (IrButton.Any) if no button has been pressed yet.
-     */
-    //% subcategory="IR Receiver"
-    //% blockId=makerbit_infrared_ir_button_pressed
-    //% block="IR button"
-    //% weight=70
+
+    //% weight=70 block="红外|接收值"
+    //% group="红外接收"
+    //% color=#A5995B
     export function irButton(): number {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
@@ -1101,15 +1095,10 @@ namespace motor {
         return irState.commandSectionBits >> 8;
     }
 
-    /**
-     * Do something when an IR datagram is received.
-     * @param handler body code to run when the event is raised
-     */
-    //% subcategory="IR Receiver"
-    //% blockId=makerbit_infrared_on_ir_datagram
-    //% block="on IR datagram received"
-    //% weight=40
-    export function onIrDatagram(handler: () => void) {
+    /*//% block="on IR datagram received"
+    //% group="红外接收"
+    //% weight=60*/
+    function onIrDatagram(handler: () => void) {
         control.onEvent(
         MICROBIT_MAKERBIT_IR_DATAGRAM,
         EventBusValue.MICROBIT_EVT_ANY,
@@ -1119,15 +1108,10 @@ namespace motor {
         );
     }
 
-    /**
-     * Returns the IR datagram as 32-bit hexadecimal string.
-     * The last received datagram is returned or "0x00000000" if no data has been received yet.
-     */
-    //% subcategory="IR Receiver"
-    //% blockId=makerbit_infrared_ir_datagram
-    //% block="IR datagram"
-    //% weight=30
-    export function irDatagram(): string {
+    /*//% block="IR datagram"
+    //% group="红外接收"
+    //% weight=50*/
+    function irDatagram(): string {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
         return "0x00000000";
@@ -1139,14 +1123,10 @@ namespace motor {
         );
     }
 
-    /**
-     * Returns true if any IR data was received since the last call of this function. False otherwise.
-     */
-    //% subcategory="IR Receiver"
-    //% blockId=makerbit_infrared_was_any_ir_datagram_received
-    //% block="IR data was received"
-    //% weight=80
-    export function wasIrDataReceived(): boolean {
+    /*//% block="IR data was received"
+    //% group="红外接收"
+    //% weight=40*/
+    function wasIrDataReceived(): boolean {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
         return false;
@@ -1159,18 +1139,10 @@ namespace motor {
         }
     }
 
-    /**
-     * Returns the command code of a specific IR button.
-     * @param button the button
-     */
-    //% subcategory="IR Receiver"
-    //% blockId=makerbit_infrared_button_code
-    //% button.fieldEditor="gridpicker"
-    //% button.fieldOptions.columns=3
-    //% button.fieldOptions.tooltips="false"
-    //% block="IR button code %button"
-    //% weight=60
-    export function irButtonCode(button: IrButton): number {
+    /*//% block="IR button code %button"
+    //% group="红外接收"
+    //% weight=30*/
+    function irButtonCode(button: IrButton): number {
         basic.pause(0); // Yield to support background processing when called in tight loops
         return button as number;
     }
