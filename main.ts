@@ -821,16 +821,16 @@ namespace motor {
     ): void {
         switch (pin) {
             case PinEnum.portA:
-                connectIrReceiver(DigitalPin.P1, protocol);
+                connectIrReceiver(DigitalPin.P15, protocol);
                 break;
             case PinEnum.portB:
-                connectIrReceiver(DigitalPin.P2, protocol);
+                connectIrReceiver(DigitalPin.P14, protocol);
                 break;
             case PinEnum.portC:
-                connectIrReceiver(DigitalPin.P3, protocol);
+                connectIrReceiver(DigitalPin.P13, protocol);
                 break;
             case PinEnum.portD:
-                connectIrReceiver(DigitalPin.P4, protocol);
+                connectIrReceiver(DigitalPin.P10, protocol);
                 break;
         }
     }
