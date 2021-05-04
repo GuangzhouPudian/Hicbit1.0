@@ -187,7 +187,6 @@ namespace motor {
         }
         ClearLCD(2, 8);
         SetLCDString(8, "Loading Success!");
-        basic.pause(1000);
         ClearLCD(8, 8);
     }
 
@@ -207,7 +206,7 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(1000);
     }
 
     //% sn.defl=RowEnum.row2
@@ -228,7 +227,7 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(1000);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -245,7 +244,7 @@ namespace motor {
         buf[3] = sn2;
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(1000);
     }
 
     //% weight=50 block="方向键|%directkey按下"
