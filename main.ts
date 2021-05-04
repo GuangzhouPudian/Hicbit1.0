@@ -297,45 +297,15 @@ namespace motor {
     //% weight=40 block="当方向键|%directkey按下时"
     //% group="主机"
     //% color=#7CCD7C
-    export function whenDirectKeyPress(directkey: DirectKeyEnum, body: () => void): void {
-        switch(directkey){
-            case DirectKeyEnum.up:
-                if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                        body();
-                        while (pins.digitalReadPin(DigitalPin.P5) == 0);
-                    }
+    export function OnDirectKeyPress(directkey: DirectKeyEnum, body: () => void) {
+        control.inBackground(function () {
+            while(true){
+                if(IsDirectKeyPress(directkey)){
+                    body();
                 }
-                break;
-            case DirectKeyEnum.down:
-                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                        body();
-                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
-                    }
-                }
-                break;
-            case DirectKeyEnum.left:
-                if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                        body();
-                        while (pins.digitalReadPin(DigitalPin.P11) == 0);
-                    }
-                }
-                break;
-            case DirectKeyEnum.right:
-                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                        body();
-                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
-                    }
-                }
-                break;
-        }
+                basic.pause(100);
+            }
+        })
     }
 
     //% weight=90 block="按键|接口%pin|%keypress按下"
@@ -431,90 +401,16 @@ namespace motor {
     //% weight=90 block="按键|当接口%pin|%keypress按下时"
     //% group="按键"
     //% color=#C4281B  
-    export function WhenKeyPress(pin: PinEnum, presskey: KeyEnum, body: () => void): void {
-            switch(pin){
-                case PinEnum.portA:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P15) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P15) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P15) == 0);
-                            }
-                        }
-                    }
-                    else if (presskey == KeyEnum.keyb) {
-                        if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P1) == 0);
-                            }
-                        }
-                    }
-                    break;
-                case PinEnum.portB:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P13) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P13) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P13) == 0);
-                            }
-                        }
-                    }
-                    else if (presskey == KeyEnum.keyb) {
-                        if (pins.digitalReadPin(DigitalPin.P2) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P2) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P2) == 0);
-                            }
-                        }
-                    }
-                    break;
-                case PinEnum.portC:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P14) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P14) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P14) == 0);
-                            }
-                        }
-                    }
-                    else if (presskey == KeyEnum.keyb) {
-                        if (pins.digitalReadPin(DigitalPin.P3) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P3) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P3) == 0);
-                            }
-                        }
-                    }
-                    break;
-                case PinEnum.portD:
-                    if (presskey == KeyEnum.keya) {
-                        if (pins.digitalReadPin(DigitalPin.P10) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P10) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P10) == 0);
-                            }
-                        }
-                    }
-                    else if (presskey == KeyEnum.keyb) {
-                        if (pins.digitalReadPin(DigitalPin.P4) == 0) {
-                            control.waitMicros(200);
-                            if (pins.digitalReadPin(DigitalPin.P4) == 0) {
-                                body();
-                                while (pins.digitalReadPin(DigitalPin.P4) == 0);
-                            }
-                        }
-                    }
-                    break;
+    export function OnKeyPress(pin: PinEnum, presskey: KeyEnum, body: () => void) {
+        control.inBackground(function () {
+            while(true){
+                if(IsKeyPress(pin, presskey)){
+                    body();
+                }
+                basic.pause(100);
             }
-        }
+        })
+    }
 
     //% direct.defl=DirectEnum.direct1
     //% speed.min=-100 speed.max=100
