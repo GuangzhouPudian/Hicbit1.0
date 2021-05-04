@@ -58,7 +58,7 @@ enum RowEnum {
     row8 = 8,
 }
 
-enum PinEnum {
+enum SensorEnum {
     //% block="5"
     portA = 1,
     //% block="6"
@@ -310,10 +310,10 @@ namespace motor {
     //% weight=90 block="按键|接口%pin|%keypress按下"
     //% group="按键"
     //% color=#C4281B     
-    export function IsKeyPress(pin: PinEnum, presskey: KeyEnum): boolean {
+    export function IsKeyPress(pin: SensorEnum, presskey: KeyEnum): boolean {
         let IsKeyPress: boolean = false;
         switch(pin){
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                         control.waitMicros(200);
@@ -333,7 +333,7 @@ namespace motor {
                     }
                 }
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                         control.waitMicros(200);
@@ -353,7 +353,7 @@ namespace motor {
                     }
                 }
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                         control.waitMicros(200);
@@ -373,7 +373,7 @@ namespace motor {
                     }
                 }
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 if (presskey == KeyEnum.keya) {
                     if (pins.digitalReadPin(DigitalPin.P10) == 0) {
                         control.waitMicros(200);
@@ -400,7 +400,7 @@ namespace motor {
     //% weight=90 block="按键|当接口%pin|%keypress按下时"
     //% group="按键"
     //% color=#C4281B  
-    export function OnKeyPress(pin: PinEnum, presskey: KeyEnum, body: () => void) {
+    export function OnKeyPress(pin: SensorEnum, presskey: KeyEnum, body: () => void) {
         control.inBackground(function () {
             while(true){
                 if(IsKeyPress(pin, presskey)){
@@ -461,19 +461,19 @@ namespace motor {
     //% weight=90 block="光敏|接口%pin|值(0~255)"
     //% group="光敏"
     //% color=#4B974A
-    export function GetPhotoSensitiveValue(pin: PinEnum): number {
+    export function GetPhotoSensitiveValue(pin: SensorEnum): number {
         let ADCPin: AnalogPin;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 ADCPin = AnalogPin.P1;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 ADCPin = AnalogPin.P2;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 ADCPin = AnalogPin.P3;
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 ADCPin = AnalogPin.P4;
                 break;
         }
@@ -485,19 +485,19 @@ namespace motor {
     //% weight=90 block="循迹|接口%pin|值(0~255)"
     //% group="循迹"
     //% color=#D7C599
-    export function GetLineSensorValue(pin: PinEnum): number {
+    export function GetLineSensorValue(pin: SensorEnum): number {
         let ADCPin: AnalogPin;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 ADCPin = AnalogPin.P1;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 ADCPin = AnalogPin.P2;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 ADCPin = AnalogPin.P3;
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 ADCPin = AnalogPin.P4;
                 break;
         }
@@ -509,19 +509,19 @@ namespace motor {
     //% weight=90  block="旋钮|接口%pin|值(0~255)"
     //% group="旋钮"
     //% color=#923978
-    export function GetKnobValue(pin: PinEnum): number {
+    export function GetKnobValue(pin: SensorEnum): number {
         let ADCPin: AnalogPin;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 ADCPin = AnalogPin.P1;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 ADCPin = AnalogPin.P2;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 ADCPin = AnalogPin.P3;
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 ADCPin = AnalogPin.P4;
                 break;
         }
@@ -533,18 +533,18 @@ namespace motor {
     //% weight=90 block="蜂鸣器|接口%pin|%act"
     //% group="蜂鸣器"
     //% color=#B22222
-    export function StartBuzzer(pin: PinEnum, act: OnOffEnum): void {
+    export function StartBuzzer(pin: SensorEnum, act: OnOffEnum): void {
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 pins.digitalWritePin(DigitalPin.P15, act);
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 pins.digitalWritePin(DigitalPin.P13, act);
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 pins.digitalWritePin(DigitalPin.P14, act);
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 pins.digitalWritePin(DigitalPin.P10, act);
                 break;
         }
@@ -553,19 +553,19 @@ namespace motor {
     //% weight=90 block="声音|接口%pin|值(0~255)"
     //% group="声音"
     //% color=#F5CD2F
-    export function GetSoundSensorValue(pin: PinEnum): number {
+    export function GetSoundSensorValue(pin: SensorEnum): number {
         let ADCPin: AnalogPin;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 ADCPin = AnalogPin.P1;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 ADCPin = AnalogPin.P2;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 ADCPin = AnalogPin.P3;
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 ADCPin = AnalogPin.P4;
                 break;
         }
@@ -577,11 +577,11 @@ namespace motor {
     //% weight=90 block="碰撞|接口%pin|触发" 
     //% group="碰撞"
     //% color=#435493
-    export function CollisionHappen(pin: PinEnum): boolean {
+    export function CollisionHappen(pin: SensorEnum): boolean {
         let status = 0;
         let flag: boolean = false;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P15);
                 if (status == 0) {
@@ -590,7 +590,7 @@ namespace motor {
                     if (status == 0) flag = true;
                 } 
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P13);
                 if (status == 0) {
@@ -599,7 +599,7 @@ namespace motor {
                     if (status == 0) flag = true;
                 } 
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P14);
                 if (status == 0) {
@@ -608,7 +608,7 @@ namespace motor {
                     if (status == 0) flag = true;
                 } 
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 pins.setPull(DigitalPin.P10, PinPullMode.PullUp);
                 status = pins.digitalReadPin(DigitalPin.P10);
                 if (status == 0) {
@@ -624,24 +624,24 @@ namespace motor {
     //% weight=98 block="超声波|接口%pin|距离(mm)"
     //% group="超声波"
     //% color=#8470FF
-    export function GetUltrasonicDistance(pin: PinEnum): number {
+    export function GetUltrasonicDistance(pin: SensorEnum): number {
         let echoPin: DigitalPin;
         let trigPin: DigitalPin;
         let distance = 0;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 echoPin = DigitalPin.P1;
                 trigPin = DigitalPin.P15;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 echoPin = DigitalPin.P2;
                 trigPin = DigitalPin.P13;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 echoPin = DigitalPin.P3;
                 trigPin = DigitalPin.P14;
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 echoPin = DigitalPin.P4;
                 trigPin = DigitalPin.P10;
                 break;
@@ -707,19 +707,19 @@ namespace motor {
     //% pin_arg.fieldEditor="gridpicker" pin_arg.fieldOptions.columns=4
     //% pin_arg.fieldOptions.tooltips="false" pin_arg.fieldOptions.width="300"
     //% color=#E29B3F
-    export function Get_DHT11_value(pin: PinEnum, dhtResult: Dht11Result): number {
+    export function Get_DHT11_value(pin: SensorEnum, dhtResult: Dht11Result): number {
         let pin_arg: DigitalPin;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 pin_arg = DigitalPin.P15;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 pin_arg = DigitalPin.P13;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 pin_arg = DigitalPin.P14;
                 break;
-            case PinEnum.portD:0;
+            case SensorEnum.portD:0;
                 pin_arg = DigitalPin.P10;
                 break;
         }
@@ -734,19 +734,19 @@ namespace motor {
     //% weight=90 block="红外避障|接口%pin|值(0~1023)"
     //% group="红外避障"
     //% color=#DA8540
-    export function GetIrValue(pin: PinEnum): number {
+    export function GetIrValue(pin: SensorEnum): number {
         let ADCPin: AnalogPin;
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 ADCPin = AnalogPin.P1;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 ADCPin = AnalogPin.P2;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 ADCPin = AnalogPin.P3;
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 ADCPin = AnalogPin.P4;
                 break;
         }
@@ -850,7 +850,7 @@ namespace motor {
     //% group="红外接收"
     //% color=#A5995B
     export function connectIrReceiver(
-        port: PinEnum,
+        port: SensorEnum,
         protocol: IrProtocol
     ): void {
         let pin: DigitalPin;
@@ -859,16 +859,16 @@ namespace motor {
         }
 
         switch(port){
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 pin = DigitalPin.P15;
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 pin = DigitalPin.P13;
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 pin = DigitalPin.P14;
             break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 pin = DigitalPin.P10;
                 break;
         }
@@ -1045,7 +1045,7 @@ namespace motor {
     }
 
     //let strip = pins.createBuffer(3);
-    let strip: Buffer;
+    let strip: Buffer=hex`000000 000000 000000`;
     //% weight=98 block="RGB彩灯|接口%pin|彩灯%light|红%red|绿%green|蓝%blue"
     //% inlineInputMode=inline
     //% group="RGB彩灯"
@@ -1053,22 +1053,22 @@ namespace motor {
     //% green.min=0 green.max=255
     //% blue.min=0 blue.max=255
     //% color=#CD9B9B
-    export function SetRGBLight(pin: PinEnum, light: LEDEnum, red: number, green: number, blue: number) {
+    export function SetRGBLight(pin: SensorEnum, light: LEDEnum, red: number, green: number, blue: number) {
         let grb: number;
         grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
         //strip[light] = grb;
-        strip.fill(grb,light,1);
+        strip.fill(grb, light*3, 3);
         switch (pin) {
-            case PinEnum.portA:
+            case SensorEnum.portA:
                 sendBuffer(strip, DigitalPin.P15);
                 break;
-            case PinEnum.portB:
+            case SensorEnum.portB:
                 sendBuffer(strip, DigitalPin.P13);
                 break;
-            case PinEnum.portC:
+            case SensorEnum.portC:
                 sendBuffer(strip, DigitalPin.P14);
                 break;
-            case PinEnum.portD:
+            case SensorEnum.portD:
                 sendBuffer(strip, DigitalPin.P10);
                 break;
         }
