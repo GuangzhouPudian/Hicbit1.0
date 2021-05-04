@@ -180,7 +180,7 @@ namespace motor {
             SerialPin.P8,
             SerialPin.P12,
             BaudRate.BaudRate115200);
-        basic.pause(1500);
+        basic.pause(2000);
         let i: number;
         for (i = 1; i <= 4; i++){
             SetMotorSpeed(i, 0);
@@ -206,7 +206,7 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(1000);
+        basic.pause(500);
     }
 
     //% sn.defl=RowEnum.row2
@@ -227,7 +227,7 @@ namespace motor {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(1000);
+        basic.pause(500);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -244,7 +244,7 @@ namespace motor {
         buf[3] = sn2;
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(1000);
+        basic.pause(500);
     }
 
     //% weight=50 block="方向键|%directkey按下"
