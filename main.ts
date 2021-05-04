@@ -1044,8 +1044,8 @@ namespace motor {
         return hex;
     }
 
-    //let strip = pins.createBuffer(3);
-    let strip: Buffer=hex`000000 000000 000000`;
+    let strip = pins.createBuffer(9);
+    //let strip: Buffer=hex`000000 000000 000000`;
     //% weight=98 block="RGB彩灯|接口%pin|彩灯%light|红%red|绿%green|蓝%blue"
     //% inlineInputMode=inline
     //% group="RGB彩灯"
@@ -1054,10 +1054,9 @@ namespace motor {
     //% blue.min=0 blue.max=255
     //% color=#CD9B9B
     export function SetRGBLight(pin: SensorEnum, light: LEDEnum, red: number, green: number, blue: number) {
-        let grb: number;
-        grb = ((green & 0xFF) << 16) | ((red & 0xFF) << 8) | (blue & 0xFF);
-        //strip[light] = grb;
-        strip.fill(grb, light*3, 3);
+        strip[light * 3 + 0] = red;
+        strip[light * 3 + 1] = green;
+        strip[light * 3 + 2] = blue;
         switch (pin) {
             case SensorEnum.portA:
                 sendBuffer(strip, DigitalPin.P15);
