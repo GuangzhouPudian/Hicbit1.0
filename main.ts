@@ -237,11 +237,14 @@ namespace hicbit {
     //% color=#7CCD7C
     export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
         let buf = pins.createBuffer(10);
-        if (sn1 > sn2) sn2 = sn1;
         buf[0] = 0xfe;
         buf[1] = 0xd0;
         buf[2] = sn1;
         buf[3] = sn2;
+        if (sn1 > sn2) {
+            buf[2] = sn2;
+            buf[3] = sn1;
+        }
         buf[4] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(500);
