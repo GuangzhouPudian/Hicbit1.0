@@ -167,7 +167,7 @@ enum IrProtocol {
  */
 //% weight=100 color=#7CCD7C icon="" block="海客智能套件"
 //% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外避障", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外接收"]'
-namespace motor {
+namespace hicbit {
     /*
     * hicbit initialization, please execute at boot time
     */
