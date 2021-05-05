@@ -197,7 +197,7 @@ namespace motor {
     export function SetLCDString(sn: RowEnum, str: string): void {
         let i:number=0;
         let len:number=0;
-        let buf = pins.createBuffer(20);
+        let buf = pins.createBuffer(25);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = sn;
@@ -217,7 +217,7 @@ namespace motor {
         let i:number=0;
         let len:number=0;
         let str:string='';
-        let buf = pins.createBuffer(20);
+        let buf = pins.createBuffer(10);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = sn;
@@ -1054,8 +1054,8 @@ namespace motor {
     //% blue.min=0 blue.max=255
     //% color=#CD9B9B
     export function SetRGBLight(pin: SensorEnum, light: LEDEnum, red: number, green: number, blue: number) {
-        strip[light * 3 + 0] = red;
-        strip[light * 3 + 1] = green;
+        strip[light * 3 + 0] = green;
+        strip[light * 3 + 1] = red;
         strip[light * 3 + 2] = blue;
         switch (pin) {
             case SensorEnum.portA:
@@ -1071,6 +1071,7 @@ namespace motor {
                 sendBuffer(strip, DigitalPin.P10);
                 break;
         }
+        basic.pause(100);
     }
 
     //% shim=sendBufferAsm
