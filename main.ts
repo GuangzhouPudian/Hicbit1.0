@@ -744,10 +744,8 @@ namespace hicbit {
         humidity
     }
 
-    //% weight=98 block="温湿度|接口%pin|值%dhtResult"
+    //% weight=90 block="温湿度|接口%pin|值%dhtResult"
     //% group="温湿度"
-    //% pin_arg.fieldEditor="gridpicker" pin_arg.fieldOptions.columns=4
-    //% pin_arg.fieldOptions.tooltips="false" pin_arg.fieldOptions.width="300"
     //% color=#E29B3F
     export function Get_DHT11_value(pin: SensorEnum, dhtResult: Dht11Result): number {
         let Dht11Pin: DigitalPin;
@@ -765,16 +763,15 @@ namespace hicbit {
                 Dht11Pin = DigitalPin.P10;
                 break;
         }
-        let value = 0;
         let dataArray: boolean[] = []
         let resultArray: number[] = []
-        for (let index = 0; index < 40; index++) dataArray.push(false)
-        for (let index = 0; index < 5; index++) resultArray.push(0)
+        for (let i = 0; i < 40; i++) dataArray.push(false);
+        for (let i = 0; i < 5; i++) resultArray.push(0);
         pins.digitalWritePin(Dht11Pin, 0); //begin protocol, pull down pin
         basic.pause(18);
         pins.digitalReadPin(Dht11Pin); //pull up pin
-        pins.setPull(Dht11Pin, PinPullMode.PullUp) //pull up data pin if needed
-        control.waitMicros(40)
+        pins.setPull(Dht11Pin, PinPullMode.PullUp); //pull up data pin if needed
+        control.waitMicros(40);
         while (pins.digitalReadPin(Dht11Pin) == 1);
         while (pins.digitalReadPin(Dht11Pin) == 0); //sensor response
         while (pins.digitalReadPin(Dht11Pin) == 1); //sensor response
@@ -783,22 +780,21 @@ namespace hicbit {
         for (let i = 0; i < 40; i++) {
             while (pins.digitalReadPin(Dht11Pin) == 1);
             while (pins.digitalReadPin(Dht11Pin) == 0);
-            control.waitMicros(28)
+            control.waitMicros(28);
             //if sensor still pull up data pin after 28 us it means 1, otherwise 0
             if (pins.digitalReadPin(Dht11Pin) == 1) dataArray[i] = true;
         }
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 8; j++)
                 if (dataArray[8 * i + j]) resultArray[i] += 2 ** (7 - j);
-        let humidity = resultArray[0] + resultArray[1] / 100
-        let temperature = resultArray[2] + resultArray[3] / 100
-        let fahrenheit = temperature * 9 / 5 + 32
-        basic.pause(100);
+        let humidity = resultArray[0] + resultArray[1] / 100;
+        let temperature = resultArray[2] + resultArray[3] / 100;
+        let fahrenheit = temperature * 9 / 5 + 32;
+        basic.pause(1000);
         switch (dhtResult) {
             case Dht11Result.Celsius: return temperature;
             case Dht11Result.Fahrenheit: return fahrenheit;
             case Dht11Result.humidity: return humidity;
-            default: return 0;
         }
     }
   
