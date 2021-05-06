@@ -171,7 +171,7 @@ namespace hicbit {
     /*
     * hicbit initialization, please execute at boot time
     */
-    //% weight=90 block="初始化Hicbit设备（需更新驱动）"
+    //% weight=95 block="初始化Hicbit设备（需更新驱动）"
     //% group="主机"
     //% color=#7CCD7C
     export function HicbitInit() {
