@@ -735,58 +735,6 @@ namespace hicbit {
         return Math.round(distance);
     }
 
-    /*function signal_dht11(pin: DigitalPin): void {
-        pins.digitalWritePin(pin, 0);
-        basic.pause(18);
-        let i = pins.digitalReadPin(pin);
-        pins.setPull(pin, PinPullMode.PullUp);
-    }
-    function dht11_read(pin: DigitalPin): number {
-        signal_dht11(pin);
-
-        // Wait for response header to finish
-        while (pins.digitalReadPin(pin) == 1);
-        while (pins.digitalReadPin(pin) == 0);
-        while (pins.digitalReadPin(pin) == 1);
-
-        let value = 0;
-        let counter = 0;
-
-        for (let i = 0; i <= 32 - 1; i++) {
-            while (pins.digitalReadPin(pin) == 0);
-            counter = 0
-            while (pins.digitalReadPin(pin) == 1) {
-                counter += 1;
-            }
-            if (counter > 4) {
-                value = value + (1 << (31 - i));
-            }
-        }
-        return value;
-    }*/
-    function dht11_read(pin: DigitalPin): number {
-        let value = 0;
-        pins.digitalWritePin(pin, 0); //begin protocol, pull down pin
-        basic.pause(18);
-        pins.digitalReadPin(pin); //pull up pin
-        pins.setPull(pin, PinPullMode.PullUp) //pull up data pin if needed
-        control.waitMicros(40)
-        while (pins.digitalReadPin(pin) == 1);
-        while (pins.digitalReadPin(pin) == 0); //sensor response
-        while (pins.digitalReadPin(pin) == 1); //sensor response
-
-        //read data (5 bytes)
-        for (let i = 0; i < 32; i++) {
-            while (pins.digitalReadPin(pin) == 1);
-            while (pins.digitalReadPin(pin) == 0);
-            control.waitMicros(28)
-            //if sensor still pull up data pin after 28 us it means 1, otherwise 0
-            if (pins.digitalReadPin(pin) == 1) value = value + (1 << (31 - i));
-        }
-        basic.pause(100);
-        return value;
-    }
-
     export enum Dht11Result {
         //% block="摄氏度"
         Celsius,
@@ -814,13 +762,42 @@ namespace hicbit {
                 Dht11Pin = DigitalPin.P14;
                 break;
             case SensorEnum.portD:0;
-            Dht11Pin = DigitalPin.P10;
+                Dht11Pin = DigitalPin.P10;
                 break;
         }
+        let value = 0;
+        let dataArray: boolean[] = []
+        let resultArray: number[] = []
+        for (let index = 0; index < 40; index++) dataArray.push(false)
+        for (let index = 0; index < 5; index++) resultArray.push(0)
+        pins.digitalWritePin(Dht11Pin, 0); //begin protocol, pull down pin
+        basic.pause(18);
+        pins.digitalReadPin(Dht11Pin); //pull up pin
+        pins.setPull(Dht11Pin, PinPullMode.PullUp) //pull up data pin if needed
+        control.waitMicros(40)
+        while (pins.digitalReadPin(Dht11Pin) == 1);
+        while (pins.digitalReadPin(Dht11Pin) == 0); //sensor response
+        while (pins.digitalReadPin(Dht11Pin) == 1); //sensor response
+
+        //read data (5 bytes)
+        for (let i = 0; i < 40; i++) {
+            while (pins.digitalReadPin(Dht11Pin) == 1);
+            while (pins.digitalReadPin(Dht11Pin) == 0);
+            control.waitMicros(28)
+            //if sensor still pull up data pin after 28 us it means 1, otherwise 0
+            if (pins.digitalReadPin(Dht11Pin) == 1) dataArray[i] = true;
+        }
+        for (let i = 0; i < 5; i++)
+            for (let j = 0; j < 8; j++)
+                if (dataArray[8 * i + j]) resultArray[i] += 2 ** (7 - j);
+        let humidity = resultArray[0] + resultArray[1] / 100
+        let temperature = resultArray[2] + resultArray[3] / 100
+        let fahrenheit = temperature * 9 / 5 + 32
+        basic.pause(100);
         switch (dhtResult) {
-            case Dht11Result.Celsius: return (dht11_read(Dht11Pin) & 0x0000ff00) >> 8;
-            case Dht11Result.Fahrenheit: return ((dht11_read(Dht11Pin) & 0x0000ff00) >> 8) * 9 / 5 + 32;
-            case Dht11Result.humidity: return dht11_read(Dht11Pin) >> 24;
+            case Dht11Result.Celsius: return temperature;
+            case Dht11Result.Fahrenheit: return fahrenheit;
+            case Dht11Result.humidity: return humidity;
             default: return 0;
         }
     }
