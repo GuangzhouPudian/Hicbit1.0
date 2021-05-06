@@ -671,13 +671,12 @@ namespace hicbit {
         return Math.round(distance);
     }
 
-    function signal_dht11(pin: DigitalPin): void {
+    /*function signal_dht11(pin: DigitalPin): void {
         pins.digitalWritePin(pin, 0);
         basic.pause(18);
         let i = pins.digitalReadPin(pin);
         pins.setPull(pin, PinPullMode.PullUp);
     }
-
     function dht11_read(pin: DigitalPin): number {
         signal_dht11(pin);
 
@@ -700,6 +699,28 @@ namespace hicbit {
             }
         }
         return value;
+    }*/
+    function dht11_read(pin: DigitalPin): number {
+        let value = 0;
+        pins.digitalWritePin(pin, 0); //begin protocol, pull down pin
+        basic.pause(18);
+        pins.digitalReadPin(pin); //pull up pin
+        pins.setPull(pin, PinPullMode.PullUp) //pull up data pin if needed
+        control.waitMicros(40)
+        while (pins.digitalReadPin(pin) == 1);
+        while (pins.digitalReadPin(pin) == 0); //sensor response
+        while (pins.digitalReadPin(pin) == 1); //sensor response
+
+        //read data (5 bytes)
+        for (let i = 0; i < 32; i++) {
+            while (pins.digitalReadPin(pin) == 1);
+            while (pins.digitalReadPin(pin) == 0);
+            control.waitMicros(28)
+            //if sensor still pull up data pin after 28 us it means 1, otherwise 0
+            if (pins.digitalReadPin(pin) == 1) value = value + (1 << (31 - i));
+        }
+        basic.pause(100);
+        return value;
     }
 
     export enum Dht11Result {
@@ -717,25 +738,25 @@ namespace hicbit {
     //% pin_arg.fieldOptions.tooltips="false" pin_arg.fieldOptions.width="300"
     //% color=#E29B3F
     export function Get_DHT11_value(pin: SensorEnum, dhtResult: Dht11Result): number {
-        let pin_arg: DigitalPin;
+        let Dht11Pin: DigitalPin;
         switch (pin) {
             case SensorEnum.portA:
-                pin_arg = DigitalPin.P15;
+                Dht11Pin = DigitalPin.P15;
                 break;
             case SensorEnum.portB:
-                pin_arg = DigitalPin.P13;
+                Dht11Pin = DigitalPin.P13;
                 break;
             case SensorEnum.portC:
-                pin_arg = DigitalPin.P14;
+                Dht11Pin = DigitalPin.P14;
                 break;
             case SensorEnum.portD:0;
-                pin_arg = DigitalPin.P10;
+            Dht11Pin = DigitalPin.P10;
                 break;
         }
         switch (dhtResult) {
-            case Dht11Result.Celsius: return (dht11_read(pin_arg) & 0x0000ff00) >> 8;
-            case Dht11Result.Fahrenheit: return ((dht11_read(pin_arg) & 0x0000ff00) >> 8) * 9 / 5 + 32;
-            case Dht11Result.humidity: return dht11_read(pin_arg) >> 24;
+            case Dht11Result.Celsius: return (dht11_read(Dht11Pin) & 0x0000ff00) >> 8;
+            case Dht11Result.Fahrenheit: return ((dht11_read(Dht11Pin) & 0x0000ff00) >> 8) * 9 / 5 + 32;
+            case Dht11Result.humidity: return dht11_read(Dht11Pin) >> 24;
             default: return 0;
         }
     }
