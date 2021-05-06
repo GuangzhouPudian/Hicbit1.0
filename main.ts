@@ -231,7 +231,9 @@ namespace hicbit {
     }
 
     //% row.min=2 row.max=8
+    //% row.defl=2
     //% col.min=1 col.max=20
+    //% col.defl=1
     //% weight=10 block="LCD|第%row行|第%col列|内容%str|数值%dat"
     //% inlineInputMode=inline
     //% group="主机"
