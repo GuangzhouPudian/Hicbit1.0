@@ -270,7 +270,7 @@ namespace hicbit {
         }
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(500);
+        basic.pause(100);
     }
 
     //% weight=50 block="方向键|%directkey按下"
