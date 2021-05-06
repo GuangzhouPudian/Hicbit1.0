@@ -186,7 +186,8 @@ namespace hicbit {
             SetMotorSpeed(i, 0);
         }
         ClearLCD(2, 8);
-        SetLCD(8,1, "Loading Success!",0);
+        SetLCDString(8, 1, "Loading Success!");
+        basic.pause(200);
         ClearLCD(8, 8);
     }
 
@@ -205,15 +206,29 @@ namespace hicbit {
             SetMotorSpeed(i, 0);
         }
         ClearLCD(2, 8);
-        SetLCDString(8, "Loading Success!");
+        SetLCDString2(8, "Loading Success!");
         ClearLCD(8, 8);
+    }
+
+    function SetLCDString(row: number, col:number, str:string): void {
+        let len = str.length;
+        let buf = pins.createBuffer(len+5);
+        buf[0] = 0xfe;
+        buf[1] = 0xc0;
+        buf[2] = row;
+        buf[3] = col;
+        for(let i=0;i<len;i++)
+            buf[i+4] = str.charCodeAt(i);
+        buf[len+4] = 0xef;
+        serial.writeBuffer(buf);
+        basic.pause(100);
     }
 
     //% sn.defl=RowEnum.row2
     //% weight=80 block="LCD|第%sn行|文本%str"
     //% group="主机"
     //% color=#7CCD7C
-    export function SetLCDString(sn: RowEnum, str: string): void {
+    export function SetLCDStringOld(sn: RowEnum, str: string): void {
         let i:number=0;
         let len:number=0;
         len = str.length;
