@@ -171,10 +171,29 @@ namespace hicbit {
     /*
     * hicbit initialization, please execute at boot time
     */
-    //% weight=90 block="初始化Hicbit设备"
+    //% weight=90 block="初始化Hicbit设备（需更新驱动）"
     //% group="主机"
     //% color=#7CCD7C
     export function HicbitInit() {
+        led.enable(false);
+        serial.redirect(
+            SerialPin.P8,
+            SerialPin.P12,
+            BaudRate.BaudRate115200);
+        basic.pause(2000);
+        let i: number;
+        for (i = 1; i <= 4; i++){
+            SetMotorSpeed(i, 0);
+        }
+        ClearLCD(2, 8);
+        SetLCD(8,1, "Loading Success!",0);
+        ClearLCD(8, 8);
+    }
+
+    //% weight=90 block="初始化Hicbit设备"
+    //% group="主机"
+    //% color=#7CCD7C
+    export function HicbitInitOld() {
         led.enable(false);
         serial.redirect(
             SerialPin.P8,
