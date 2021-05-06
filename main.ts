@@ -206,7 +206,7 @@ namespace hicbit {
             SetMotorSpeed(i, 0);
         }
         ClearLCD(2, 8);
-        SetLCDString2(8, "Loading Success!");
+        SetLCDStringOld(8, "Loading Success!");
         ClearLCD(8, 8);
     }
 
