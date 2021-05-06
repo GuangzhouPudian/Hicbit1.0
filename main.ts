@@ -230,6 +230,27 @@ namespace hicbit {
         basic.pause(500);
     }
 
+    //% row.min=2 row.max=8
+    //% col.min=1 col.max=20
+    //% weight=10 block="LCD|第%row行|第%col列|内容%str|数值%dat"
+    //% group="主机"
+    //% color=#7CCD7C
+    export function SetLCD(row: number, col:number, str:string, dat: number): void {
+        let buf = pins.createBuffer(25);
+        buf[0] = 0xfe;
+        buf[1] = 0xc0;
+        buf[2] = row;
+        buf[3] = col;
+        let s = dat.toString();
+        str = str.concat(s);
+        let len = str.length;
+        for(let i=0;i<len;i++)
+            buf[i+4] = str.charCodeAt(i);
+        buf[len+4] = 0xef;
+        serial.writeBuffer(buf);
+        basic.pause(500);
+    }
+
     //% sn1.defl=RowEnum.row2
     //% sn2.defl=RowEnum.row8
     //% weight=60 block="清屏|第%sn1行至第%sn2行"
@@ -416,7 +437,7 @@ namespace hicbit {
 
     //% direct.defl=DirectEnum.direct1
     //% speed.min=-100 speed.max=100
-    //% weight=90 block="电机|接口%sn|速度%speed"
+    //% weight=90 block="电机|接口%sn|速度%speed启动"
     //% group="电机"
     //% color=#5E9B9D
     export function SetMotorSpeed(sn: MotorEnum, speed: number): void {
@@ -439,7 +460,7 @@ namespace hicbit {
 
     //% direct.defl=DirectEnum.direct1
     //% angle.min=-360 angle.max=360
-    //% weight=80 block="电机|接口%sn|角度%anelg"
+    //% weight=80 block="电机|接口%sn|转%anelg度"
     //% group="电机"
     //% color=#5E9B9D
     export function SetMotorAngle(sn: MotorEnum, angle: number): void {
@@ -459,6 +480,13 @@ namespace hicbit {
         buf[6] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
+    }
+
+    //% weight=70 block="电机|接口%sn|停止"
+    //% group="电机"
+    //% color=#5E9B9D
+    export function StopMotor(sn: MotorEnum): void {
+        SetMotorSpeed(sn, 0);
     }
 
     //% weight=90 block="光敏|接口%pin|值(0~255)"
