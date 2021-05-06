@@ -197,16 +197,16 @@ namespace hicbit {
     export function SetLCDString(sn: RowEnum, str: string): void {
         let i:number=0;
         let len:number=0;
-        let buf = pins.createBuffer(25);
+        len = str.length;
+        let buf = pins.createBuffer(len + 4);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = sn;
-        len = str.length;
         for(i=0;i<len;i++)
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(500);
+        basic.pause(100);
     }
 
     //% sn.defl=RowEnum.row2
@@ -216,18 +216,17 @@ namespace hicbit {
     export function SetLCDData(sn: RowEnum, dat: number): void {
         let i:number=0;
         let len:number=0;
-        let str:string='';
-        let buf = pins.createBuffer(10);
+        let str = dat.toString();
+        len = str.length;
+        let buf = pins.createBuffer(len+4);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = sn;
-        str = dat.toString();
-        len = str.length;
         for(i=0;i<len;i++)
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(500);
+        basic.pause(100);
     }
 
     //% row.min=2 row.max=8
@@ -239,19 +238,19 @@ namespace hicbit {
     //% group="主机"
     //% color=#7CCD7C
     export function SetLCD(row: number, col:number, str:string, dat: number): void {
-        let buf = pins.createBuffer(25);
+        let s = dat.toString();
+        str = str.concat(s);
+        let len = str.length;
+        let buf = pins.createBuffer(len+5);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row;
         buf[3] = col;
-        let s = dat.toString();
-        str = str.concat(s);
-        let len = str.length;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(500);
+        basic.pause(100);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -260,7 +259,7 @@ namespace hicbit {
     //% group="主机"
     //% color=#7CCD7C
     export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
-        let buf = pins.createBuffer(10);
+        let buf = pins.createBuffer(5);
         buf[0] = 0xfe;
         buf[1] = 0xd0;
         buf[2] = sn1;
@@ -445,7 +444,7 @@ namespace hicbit {
     //% color=#5E9B9D
     export function SetMotorSpeed(sn: MotorEnum, speed: number): void {
         let direct: number = 0;
-        let buf = pins.createBuffer(10);
+        let buf = pins.createBuffer(6);
         if (speed > 0) direct = 1;
         else if (speed < 0) {
             direct = 2;
@@ -468,7 +467,7 @@ namespace hicbit {
     //% color=#5E9B9D
     export function SetMotorAngle(sn: MotorEnum, angle: number): void {
         let direct: number = 0;
-        let buf = pins.createBuffer(10);
+        let buf = pins.createBuffer(7);
         if (angle > 0) direct = 1;
         else if (angle < 0) {
             direct = 2;
