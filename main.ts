@@ -698,41 +698,34 @@ namespace hicbit {
     //% group="超声波"
     //% color=#8470FF
     export function GetUltrasonicDistance(pin: SensorEnum): number {
-        let echoPin: DigitalPin;
         let trigPin: DigitalPin;
-        let distance = 0;
+        let echoPin: DigitalPin;
         switch (pin) {
             case SensorEnum.portA:
-                echoPin = DigitalPin.P1;
                 trigPin = DigitalPin.P15;
+                echoPin = DigitalPin.P1;
                 break;
             case SensorEnum.portB:
-                echoPin = DigitalPin.P2;
                 trigPin = DigitalPin.P13;
+                echoPin = DigitalPin.P2;
                 break;
             case SensorEnum.portC:
-                echoPin = DigitalPin.P3;
                 trigPin = DigitalPin.P14;
+                echoPin = DigitalPin.P3;
                 break;
             case SensorEnum.portD:
-                echoPin = DigitalPin.P4;
                 trigPin = DigitalPin.P10;
+                echoPin = DigitalPin.P4;
                 break;
         }
-        pins.setPull(echoPin, PinPullMode.PullNone);
         pins.setPull(trigPin, PinPullMode.PullNone);
-
         pins.digitalWritePin(trigPin, 0);
-        control.waitMicros(100);
+        control.waitMicros(2);
         pins.digitalWritePin(trigPin, 1);
-        control.waitMicros(20);
+        control.waitMicros(10);
         pins.digitalWritePin(trigPin, 0);
-        let time_echo_us = pins.pulseIn(echoPin, PulseValue.High, 60000);
-        if ((time_echo_us < 60000) && (time_echo_us > 1)) {
-            distance = time_echo_us * 17 / 100;//time_echo_us*340/2/1000(mm)
-            //distance = Math.idiv(time_echo_us, 58)
-        }
-        return Math.round(distance);
+        const plus = pins.pulseIn(echoPin, PulseValue.High, 500*58);
+        return Math.idiv(plus, 58);
     }
 
     export enum Dht11Result {
@@ -797,7 +790,115 @@ namespace hicbit {
             case Dht11Result.humidity: return humidity;
         }
     }
-  
+
+    export enum RockerdirectEnum {
+        //% blockId="Nostate" block="无"
+        nostate = 0,
+        //% blockId="Up" block="上"
+        Up = 1,
+        //% blockId="Down" block="下"
+        Down = 2,
+        //% blockId="Left" block="左"
+        Left = 3,
+        //% blockId="Right" block="右"
+        Right = 4,
+    }
+
+    //% weight=90 block="摇杆|接口%pin|方向%value)"
+    //% group="摇杆"
+    //% color=#0D69AB
+    export function ISRockerDirectPress(pin: SensorEnum, value: RockerdirectEnum): boolean {
+        let ADCPin1: AnalogPin;
+        let ADCPin2: AnalogPin;
+        let x;
+        let y;
+        let flag: boolean = false;
+        let now_state = RockerdirectEnum.nostate;
+        switch (pin) {         
+            case SensorEnum.portA:
+                ADCPin1 = AnalogPin.P15;
+                ADCPin2 = AnalogPin.P1;
+                break;
+            case SensorEnum.portB:
+                ADCPin1 = AnalogPin.P13;
+                ADCPin2 = AnalogPin.P2;
+                break;
+            case SensorEnum.portC:
+                ADCPin1 = AnalogPin.P14;
+                ADCPin2 = AnalogPin.P3;
+                break;
+            case SensorEnum.portD:
+                ADCPin1 = AnalogPin.P10;
+                ADCPin2 = AnalogPin.P4;
+                break;
+        }
+        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
+        y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
+        if (x < 100) now_state = RockerdirectEnum.Up;
+        else if (x > 800) now_state = RockerdirectEnum.Down;
+        else if (y < 100) now_state = RockerdirectEnum.Left;
+        else if (y > 800) now_state = RockerdirectEnum.Right;
+        if (now_state == value)
+            flag = true;
+        else
+            flag = false;
+        return flag;
+    }
+
+    //% weight=80 block="摇杆|当接口%pin|方向%value时"
+    //% group="摇杆"
+    //% color=#0D69AB
+    export function OnRockerDirectPress(pin: SensorEnum, value: RockerdirectEnum, body: () => void) {
+        control.inBackground(function () {
+            while(true){
+                if(ISRockerDirectPress(pin, value)){
+                    body();
+                }
+                basic.pause(100);
+            }
+        })
+    }
+
+    export enum RockerXYEnum {
+        //% block="X轴"
+        x = 1,
+        //% block="Y轴"
+        y = 2,
+    }
+
+    //% weight=70 block="摇杆|接口%pin|%xy|值(0~255)))"
+    //% group="摇杆"
+    //% color=#0D69AB
+    export function RockerValue(pin: SensorEnum, xy: RockerXYEnum): number {
+        let ADCPin1: AnalogPin;
+        let ADCPin2: AnalogPin;
+        let x;
+        let y;
+        switch (pin) {         
+            case SensorEnum.portA:
+                ADCPin1 = AnalogPin.P15;
+                ADCPin2 = AnalogPin.P1;
+                break;
+            case SensorEnum.portB:
+                ADCPin1 = AnalogPin.P13;
+                ADCPin2 = AnalogPin.P2;
+                break;
+            case SensorEnum.portC:
+                ADCPin1 = AnalogPin.P14;
+                ADCPin2 = AnalogPin.P3;
+                break;
+            case SensorEnum.portD:
+                ADCPin1 = AnalogPin.P10;
+                ADCPin2 = AnalogPin.P4;
+                break;
+        }
+        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
+        y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
+        if (xy == RockerXYEnum.x) return Math.round(x * 255 / 1023);
+        else if (xy == RockerXYEnum.y) return Math.round(y * 255 / 1023);
+        return 0;
+    }
+   
     //% weight=90 block="红外避障|接口%pin|值(0~1023)"
     //% group="红外避障"
     //% color=#DA8540
