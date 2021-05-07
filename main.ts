@@ -225,7 +225,7 @@ namespace hicbit {
     }
 
     //% sn.defl=RowEnum.row2
-    //% weight=80 block="LCD|第%sn行|文本%str"
+    //% weight=85 block="LCD|第%sn行|文本%str"
     //% group="主机"
     //% color=#7CCD7C
     export function SetLCDStringOld(sn: RowEnum, str: string): void {
@@ -244,7 +244,7 @@ namespace hicbit {
     }
 
     //% sn.defl=RowEnum.row2
-    //% weight=70 block="LCD|第%sn行|数值%dat"
+    //% weight=80 block="LCD|第%sn行|数值%dat"
     //% group="主机"
     //% color=#7CCD7C
     export function SetLCDData(sn: RowEnum, dat: number): void {
@@ -267,7 +267,7 @@ namespace hicbit {
     //% row.defl=2
     //% col.min=1 col.max=20
     //% col.defl=1
-    //% weight=10 block="LCD|第%row行|第%col列|内容%str|数值%dat（需升级驱动）"
+    //% weight=70 block="LCD|第%row行|第%col列|内容%str|数值%dat（需升级驱动）"
     //% inlineInputMode=inline
     //% group="主机"
     //% color=#7CCD7C
