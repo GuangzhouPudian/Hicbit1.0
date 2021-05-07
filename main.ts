@@ -171,7 +171,7 @@ namespace hicbit {
     /*
     * hicbit initialization, please execute at boot time
     */
-    //% weight=95 block="初始化Hicbit设备（需更新驱动）"
+    //% weight=95 block="初始化Hicbit设备（需升级驱动）"
     //% group="主机"
     //% color=#7CCD7C
     export function HicbitInit() {
@@ -267,7 +267,7 @@ namespace hicbit {
     //% row.defl=2
     //% col.min=1 col.max=20
     //% col.defl=1
-    //% weight=10 block="LCD|第%row行|第%col列|内容%str|数值%dat"
+    //% weight=10 block="LCD|第%row行|第%col列|内容%str|数值%dat（需升级驱动）"
     //% inlineInputMode=inline
     //% group="主机"
     //% color=#7CCD7C
