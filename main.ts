@@ -187,7 +187,7 @@ namespace hicbit {
         }
         ClearLCD(2, 8);
         SetLCDString(8, 1, "Loading Success!");
-        basic.pause(200);
+        basic.pause(1000);
         ClearLCD(8, 8);
     }
 
@@ -207,6 +207,7 @@ namespace hicbit {
         }
         ClearLCD(2, 8);
         SetLCDStringOld(8, "Loading Success!");
+        basic.pause(1000);
         ClearLCD(8, 8);
     }
 
