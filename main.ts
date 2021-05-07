@@ -694,7 +694,7 @@ namespace hicbit {
         return flag;
     }
 
-    //% weight=98 block="超声波|接口%pin|距离(mm)"
+    //% weight=98 block="超声波|接口%pin|距离(cm)"
     //% group="超声波"
     //% color=#8470FF
     export function GetUltrasonicDistance(pin: SensorEnum): number {
