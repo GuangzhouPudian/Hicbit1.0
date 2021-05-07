@@ -222,7 +222,7 @@ namespace hicbit {
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(300);
     }
 
     //% sn.defl=RowEnum.row2
@@ -241,7 +241,7 @@ namespace hicbit {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(300);
     }
 
     //% sn.defl=RowEnum.row2
@@ -261,7 +261,7 @@ namespace hicbit {
             buf[i+3] = str.charCodeAt(i);
         buf[len+3] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(300);
     }
 
     //% row.min=2 row.max=8
@@ -285,7 +285,7 @@ namespace hicbit {
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(300);
     }
 
     //% sn1.defl=RowEnum.row2
@@ -305,7 +305,7 @@ namespace hicbit {
         }
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(300);
     }
 
     //% weight=50 block="方向键|%directkey按下"
