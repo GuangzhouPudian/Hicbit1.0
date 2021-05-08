@@ -200,7 +200,7 @@ namespace hicbit {
     /*
     * hicbit initialization, please execute at boot time
     */
-    //% weight=95 block="初始化Hicbit设备（需升级驱动）"
+    //% weight=90 block="初始化Hicbit设备"
     //% group="主机"
     //% color=#7CCD7C
     export function HicbitInit() {
@@ -220,27 +220,14 @@ namespace hicbit {
         ClearLCD(8, 8);
     }
 
-    //% weight=90 block="初始化Hicbit设备"
+    //% row.min=2 row.max=8
+    //% row.defl=2
+    //% col.min=1 col.max=20
+    //% col.defl=1
+    //% weight=80 block="LCD|第%row行|第%col列|内容%dat"
     //% group="主机"
     //% color=#7CCD7C
-    export function HicbitInitOld() {
-        led.enable(false);
-        serial.redirect(
-            SerialPin.P8,
-            SerialPin.P12,
-            BaudRate.BaudRate115200);
-        basic.pause(2000);
-        let i: number;
-        for (i = 1; i <= 4; i++){
-            SetMotorSpeed(i, 0);
-        }
-        ClearLCD(2, 8);
-        SetLCDStringOld(8, "Loading Success!");
-        basic.pause(1000);
-        ClearLCD(8, 8);
-    }
-
-    function SetLCDString(row: number, col:number, str:string): void {
+    export function SetLCDString(row: number, col:number, str:string): void {
         let len = str.length;
         let buf = pins.createBuffer(len+5);
         buf[0] = 0xfe;
@@ -254,41 +241,24 @@ namespace hicbit {
         basic.pause(300);
     }
 
-    //% sn.defl=RowEnum.row2
-    //% weight=85 block="LCD|第%sn行|文本%str"
+    //% row.min=2 row.max=8
+    //% row.defl=2
+    //% col.min=1 col.max=20
+    //% col.defl=1
+    //% weight=70 block="LCD|第%row行|第%col列|数值%dat"
     //% group="主机"
     //% color=#7CCD7C
-    export function SetLCDStringOld(sn: RowEnum, str: string): void {
-        let i:number=0;
-        let len:number=0;
-        len = str.length;
-        let buf = pins.createBuffer(len + 4);
-        buf[0] = 0xfe;
-        buf[1] = 0xc0;
-        buf[2] = sn;
-        for(i=0;i<len;i++)
-            buf[i+3] = str.charCodeAt(i);
-        buf[len+3] = 0xef;
-        serial.writeBuffer(buf);
-        basic.pause(300);
-    }
-
-    //% sn.defl=RowEnum.row2
-    //% weight=80 block="LCD|第%sn行|数值%dat"
-    //% group="主机"
-    //% color=#7CCD7C
-    export function SetLCDData(sn: RowEnum, dat: number): void {
-        let i:number=0;
-        let len:number=0;
+    export function SetLCDData(row: RowEnum, col:number, dat: number): void {
         let str = dat.toString();
-        len = str.length;
-        let buf = pins.createBuffer(len+4);
+        let len = str.length;
+        let buf = pins.createBuffer(len+5);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
-        buf[2] = sn;
-        for(i=0;i<len;i++)
-            buf[i+3] = str.charCodeAt(i);
-        buf[len+3] = 0xef;
+        buf[2] = row;
+        buf[3] = col
+        for(let i=0;i<len;i++)
+            buf[i+4] = str.charCodeAt(i);
+        buf[len+4] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(300);
     }
@@ -297,7 +267,7 @@ namespace hicbit {
     //% row.defl=2
     //% col.min=1 col.max=20
     //% col.defl=1
-    //% weight=70 block="LCD|第%row行|第%col列|内容%str|数值%dat（需升级驱动）"
+    //% weight=60 block="LCD|第%row行|第%col列|内容%str|数值%dat（需升级驱动）"
     //% inlineInputMode=inline
     //% group="主机"
     //% color=#7CCD7C
@@ -319,7 +289,7 @@ namespace hicbit {
 
     //% sn1.defl=RowEnum.row2
     //% sn2.defl=RowEnum.row8
-    //% weight=60 block="清屏|第%sn1行至第%sn2行"
+    //% weight=50 block="清屏|第%sn1行至第%sn2行"
     //% group="主机"
     //% color=#7CCD7C
     export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
@@ -337,7 +307,7 @@ namespace hicbit {
         basic.pause(300);
     }
 
-    //% weight=50 block="方向键|%directkey按下"
+    //% weight=40 block="方向键|%directkey按下"
     //% group="主机"
     //% color=#7CCD7C
     export function IsDirectKeyPress(directkey: DirectKeyEnum): boolean {
@@ -383,7 +353,7 @@ namespace hicbit {
         return IsKeyPress;
     }
 
-    //% weight=40 block="当方向键|%directkey按下时"
+    //% weight=30 block="当方向键|%directkey按下时"
     //% group="主机"
     //% color=#7CCD7C
     export function OnDirectKeyPress(directkey: DirectKeyEnum, body: () => void) {
