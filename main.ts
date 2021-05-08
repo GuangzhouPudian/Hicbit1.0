@@ -103,6 +103,35 @@ enum LEDEnum {
     led3 = 2,
 }
 
+enum Dht11Result {
+    //% block="摄氏度"
+    Celsius,
+    //% block="华氏度"
+    Fahrenheit,
+    //% block="湿度"
+    humidity
+}
+
+enum RockerdirectEnum {
+    //% blockId="Nostate" block="无"
+    nostate = 0,
+    //% blockId="Up" block="上"
+    Up = 1,
+    //% blockId="Down" block="下"
+    Down = 2,
+    //% blockId="Left" block="左"
+    Left = 3,
+    //% blockId="Right" block="右"
+    Right = 4,
+}
+
+enum RockerXYEnum {
+    //% block="X轴"
+    x = 1,
+    //% block="Y轴"
+    y = 2,
+}
+
 enum IrButton {
     //% block="any"
     Any = -1,
@@ -698,7 +727,7 @@ namespace hicbit {
     //% weight=98 block="超声波|接口%pin|距离(cm)"
     //% group="超声波"
     //% color=#8470FF
-    export function GetUltrasonicDistance(pin: SensorEnum): number {
+    export function GetUltrasonicValue(pin: SensorEnum): number {
         let trigPin: DigitalPin;
         let echoPin: DigitalPin;
         switch (pin) {
@@ -729,19 +758,10 @@ namespace hicbit {
         return Math.idiv(plus, 58);
     }
 
-    export enum Dht11Result {
-        //% block="摄氏度"
-        Celsius,
-        //% block="华氏度"
-        Fahrenheit,
-        //% block="湿度"
-        humidity
-    }
-
     //% weight=90 block="温湿度|接口%pin|值%dhtResult"
     //% group="温湿度"
     //% color=#E29B3F
-    export function Get_DHT11_value(pin: SensorEnum, dhtResult: Dht11Result): number {
+    export function GetDHT11value(pin: SensorEnum, dhtResult: Dht11Result): number {
         let Dht11Pin: DigitalPin;
         switch (pin) {
             case SensorEnum.portA:
@@ -790,19 +810,6 @@ namespace hicbit {
             case Dht11Result.Fahrenheit: return fahrenheit;
             case Dht11Result.humidity: return humidity;
         }
-    }
-
-    export enum RockerdirectEnum {
-        //% blockId="Nostate" block="无"
-        nostate = 0,
-        //% blockId="Up" block="上"
-        Up = 1,
-        //% blockId="Down" block="下"
-        Down = 2,
-        //% blockId="Left" block="左"
-        Left = 3,
-        //% blockId="Right" block="右"
-        Right = 4,
     }
 
     //% weight=90 block="摇杆|接口%pin|方向%value)"
@@ -860,17 +867,10 @@ namespace hicbit {
         })
     }
 
-    export enum RockerXYEnum {
-        //% block="X轴"
-        x = 1,
-        //% block="Y轴"
-        y = 2,
-    }
-
     //% weight=70 block="摇杆|接口%pin|%xy|值(0~255)))"
     //% group="摇杆"
     //% color=#0D69AB
-    export function RockerValue(pin: SensorEnum, xy: RockerXYEnum): number {
+    export function GetRockerValue(pin: SensorEnum, xy: RockerXYEnum): number {
         let ADCPin1: AnalogPin;
         let ADCPin2: AnalogPin;
         let x;
@@ -944,7 +944,6 @@ namespace hicbit {
     }
 
     let irState: IrState;
-
     function appendBitToDatagram(bit: number): number {
         irState.bitsReceived += 1;
 
