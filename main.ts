@@ -503,7 +503,7 @@ namespace hicbit {
 
     //% direct.defl=DirectEnum.direct1
     //% speed.min=-100 speed.max=100
-    //% weight=90 block="电机|接口%sn|速度%speed启动"
+    //% weight=90 block="电机|接口%sn|速度%speed"
     //% group="电机"
     //% color=#5E9B9D
     export function SetMotorSpeed(sn: MotorEnum, speed: number): void {
