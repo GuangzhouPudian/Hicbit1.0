@@ -267,7 +267,7 @@ namespace hicbit {
     //% row.defl=2
     //% col.min=1 col.max=20
     //% col.defl=1
-    //% weight=60 block="LCD|第%row行|第%col列|内容%str|数值%dat（需升级驱动）"
+    //% weight=60 block="LCD|第%row行|第%col列|内容%str|数值%dat"
     //% inlineInputMode=inline
     //% group="主机"
     //% color=#7CCD7C
