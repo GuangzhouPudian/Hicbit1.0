@@ -496,7 +496,7 @@ namespace hicbit {
 
     //% direct.defl=DirectEnum.direct1
     //% angle.min=-360 angle.max=360
-    //% weight=80 block="电机|接口%sn|转%anelg度"
+    //% weight=80 block="电机|接口%sn|角度%anelg"
     //% group="电机"
     //% color=#5E9B9D
     export function SetMotorAngle(sn: MotorEnum, angle: number): void {
