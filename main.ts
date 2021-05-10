@@ -1113,7 +1113,27 @@ namespace hicbit {
         if (!irState) {
         return IrButton.Any;
         }
-        return irState.commandSectionBits >> 8;
+        //return irState.commandSectionBits >> 8;
+        switch (irState.commandSectionBits >> 8) {
+            case 162: return 1;
+            case 98: return 2;
+            case 226: return 3;
+            case 34: return 4;
+            case 2: return 5;
+            case 194: return 6;
+            case 224: return 7;
+            case 168: return 8;
+            case 144: return 9;
+            case 104: return 10;
+            case 152: return 0;
+            case 176: return 11;
+            case 24: return 12;
+            case 16: return 13;
+            case 56: return 14;
+            case 90: return 15;
+            case 74: return 16;
+            default: return 0;
+        }
     }
 
     /*//% block="on IR datagram received"
@@ -1147,7 +1167,7 @@ namespace hicbit {
     /*//% block="IR data was received"
     //% group="红外接收"
     //% weight=40*/
-    function wasIrDataReceived(): boolean {
+    function IsIrDataReceived(): boolean {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
         return false;
