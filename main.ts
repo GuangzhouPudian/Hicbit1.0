@@ -274,7 +274,7 @@ namespace hicbit {
     //% row1.defl=1
     //% row2.min=1 row2.max=7
     //% row2.defl=7
-    //% weight=50 block="清屏|第%sn1行至第%sn2行"
+    //% weight=50 block="清屏|第%row1行至第%row2行"
     //% group="主机"
     //% color=#7CCD7C
     export function ClearLCD(row1: number, row2: number): void {
