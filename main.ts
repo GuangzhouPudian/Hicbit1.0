@@ -216,7 +216,7 @@ namespace hicbit {
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = col * 6;
+        buf[3] = col * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -238,7 +238,7 @@ namespace hicbit {
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = col * 6;
+        buf[3] = col * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -262,7 +262,7 @@ namespace hicbit {
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = col * 6;
+        buf[3] = col * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
