@@ -41,23 +41,6 @@ enum AngleEnum {
     angle180 = 180,
 }
 
-enum RowEnum {
-    //% block="2"
-    row2 = 2,
-    //% block="3"
-    row3 = 3,
-    //% block="4"
-    row4 = 4,
-    //% block="5"
-    row5 = 5,
-    //% block="6"
-    row6 = 6,
-    //% block="7"
-    row7 = 7,
-    //% block="8"
-    row8 = 8,
-}
-
 enum SensorEnum {
     //% block="5"
     portA = 1,
@@ -220,8 +203,8 @@ namespace hicbit {
         ClearLCD(8, 8);
     }
 
-    //% row.min=2 row.max=8
-    //% row.defl=2
+    //% row.min=1 row.max=7
+    //% row.defl=1
     //% col.min=1 col.max=20
     //% col.defl=1
     //% weight=80 block="LCD|第%row行|第%col列|内容%dat"
@@ -232,8 +215,8 @@ namespace hicbit {
         let buf = pins.createBuffer(len+5);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
-        buf[2] = row;
-        buf[3] = col;
+        buf[2] = row + 1;
+        buf[3] = col * 6;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -241,21 +224,21 @@ namespace hicbit {
         basic.pause(300);
     }
 
-    //% row.min=2 row.max=8
-    //% row.defl=2
+    //% row.min=1 row.max=7
+    //% row.defl=1
     //% col.min=1 col.max=20
     //% col.defl=1
     //% weight=70 block="LCD|第%row行|第%col列|数值%dat"
     //% group="主机"
     //% color=#7CCD7C
-    export function SetLCDData(row: RowEnum, col:number, dat: number): void {
+    export function SetLCDData(row: number, col:number, dat: number): void {
         let str = dat.toString();
         let len = str.length;
         let buf = pins.createBuffer(len+5);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
-        buf[2] = row;
-        buf[3] = col
+        buf[2] = row + 1;
+        buf[3] = col * 6;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -263,8 +246,8 @@ namespace hicbit {
         basic.pause(300);
     }
 
-    //% row.min=2 row.max=8
-    //% row.defl=2
+    //% row.min=1 row.max=7
+    //% row.defl=1
     //% col.min=1 col.max=20
     //% col.defl=1
     //% weight=60 block="LCD|第%row行|第%col列|内容%str|数值%dat"
@@ -278,8 +261,8 @@ namespace hicbit {
         let buf = pins.createBuffer(len+5);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
-        buf[2] = row;
-        buf[3] = col;
+        buf[2] = row + 1;
+        buf[3] = col * 6;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -287,20 +270,24 @@ namespace hicbit {
         basic.pause(300);
     }
 
-    //% sn1.defl=RowEnum.row2
-    //% sn2.defl=RowEnum.row8
+    //% row1.min=1 row1.max=7
+    //% row1.defl=1
+    //% row2.min=1 row2.max=7
+    //% row2.defl=7
     //% weight=50 block="清屏|第%sn1行至第%sn2行"
     //% group="主机"
     //% color=#7CCD7C
-    export function ClearLCD(sn1: RowEnum, sn2: RowEnum): void {
+    export function ClearLCD(row1: number, row2: number): void {
         let buf = pins.createBuffer(5);
+        row1 = row1 + 1;
+        row2 = row2 + 1;
         buf[0] = 0xfe;
         buf[1] = 0xd0;
-        buf[2] = sn1;
-        buf[3] = sn2;
-        if (sn1 > sn2) {
-            buf[2] = sn2;
-            buf[3] = sn1;
+        buf[2] = row1;
+        buf[3] = row2;
+        if (row1 > row2) {
+            buf[2] = row2;
+            buf[3] = row1;
         }
         buf[4] = 0xef;
         serial.writeBuffer(buf);
