@@ -197,15 +197,15 @@ namespace hicbit {
         for (i = 1; i <= 4; i++){
             SetMotorSpeed(i, 0);
         }
-        ClearLCD(2, 8);
-        SetLCDString(8, 1, "Loading Success!");
+        ClearLCD(1, 7);
+        SetLCDString(7, 1, "Loading Success!");
         basic.pause(1000);
-        ClearLCD(8, 8);
+        ClearLCD(7, 7);
     }
 
     //% row.min=1 row.max=7
     //% row.defl=1
-    //% col.min=1 col.max=20
+    //% col.min=1 col.max=21
     //% col.defl=1
     //% weight=80 block="LCD|第%row行|第%col列|内容%dat"
     //% group="主机"
@@ -216,7 +216,7 @@ namespace hicbit {
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = col * 6 + 1;
+        buf[3] = (col-1) * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -226,7 +226,7 @@ namespace hicbit {
 
     //% row.min=1 row.max=7
     //% row.defl=1
-    //% col.min=1 col.max=20
+    //% col.min=1 col.max=21
     //% col.defl=1
     //% weight=70 block="LCD|第%row行|第%col列|数值%dat"
     //% group="主机"
@@ -238,7 +238,7 @@ namespace hicbit {
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = col * 6 + 1;
+        buf[3] = (col-1) * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
@@ -248,7 +248,7 @@ namespace hicbit {
 
     //% row.min=1 row.max=7
     //% row.defl=1
-    //% col.min=1 col.max=20
+    //% col.min=1 col.max=21
     //% col.defl=1
     //% weight=60 block="LCD|第%row行|第%col列|内容%str|数值%dat"
     //% inlineInputMode=inline
@@ -262,7 +262,7 @@ namespace hicbit {
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = col * 6 + 1;
+        buf[3] = (col-1) * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
         buf[len+4] = 0xef;
