@@ -362,11 +362,11 @@ namespace hicbit {
         switch(pin){
             case SensorEnum.portA:
                 if (presskey == KeyEnum.keya) {
-                    if (pins.digitalReadPin(DigitalPin.P15) == 0) {
+                    if (pins.digitalReadPin(DigitalPin.P0) == 0) {
                         control.waitMicros(200);
-                        if (pins.digitalReadPin(DigitalPin.P15) == 0) {
+                        if (pins.digitalReadPin(DigitalPin.P0) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P15) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P0) == 0);
                         }
                     }
                 }
@@ -422,11 +422,11 @@ namespace hicbit {
                 break;
             case SensorEnum.portD:
                 if (presskey == KeyEnum.keya) {
-                    if (pins.digitalReadPin(DigitalPin.P10) == 0) {
+                    if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                         control.waitMicros(200);
-                        if (pins.digitalReadPin(DigitalPin.P10) == 0) {
+                        if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P10) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P15) == 0);
                         }
                     }
                 }
@@ -590,7 +590,7 @@ namespace hicbit {
     export function StartBuzzer(pin: SensorEnum, act: OnOffEnum): void {
         switch (pin) {
             case SensorEnum.portA:
-                pins.digitalWritePin(DigitalPin.P15, act);
+                pins.digitalWritePin(DigitalPin.P0, act);
                 break;
             case SensorEnum.portB:
                 pins.digitalWritePin(DigitalPin.P13, act);
@@ -599,7 +599,7 @@ namespace hicbit {
                 pins.digitalWritePin(DigitalPin.P14, act);
                 break;
             case SensorEnum.portD:
-                pins.digitalWritePin(DigitalPin.P10, act);
+                pins.digitalWritePin(DigitalPin.P15, act);
                 break;
         }
     }
@@ -642,11 +642,11 @@ namespace hicbit {
         let flag: boolean = false;
         switch (pin) {
             case SensorEnum.portA:
-                pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P15);
+                pins.setPull(DigitalPin.P0, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P0);
                 if (status == 0) {
                     basic.pause(10);
-                    status = pins.digitalReadPin(DigitalPin.P15);
+                    status = pins.digitalReadPin(DigitalPin.P0);
                     if (status == 0) flag = true;
                 } 
                 break;
@@ -669,11 +669,11 @@ namespace hicbit {
                 } 
                 break;
             case SensorEnum.portD:
-                pins.setPull(DigitalPin.P10, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P10);
+                pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P15);
                 if (status == 0) {
                     basic.pause(10);
-                    status = pins.digitalReadPin(DigitalPin.P10);
+                    status = pins.digitalReadPin(DigitalPin.P15);
                     if (status == 0) flag = true;
                 } 
                 break;
@@ -689,7 +689,7 @@ namespace hicbit {
         let echoPin: DigitalPin;
         switch (pin) {
             case SensorEnum.portA:
-                trigPin = DigitalPin.P15;
+                trigPin = DigitalPin.P0;
                 echoPin = DigitalPin.P1;
                 break;
             case SensorEnum.portB:
@@ -701,7 +701,7 @@ namespace hicbit {
                 echoPin = DigitalPin.P3;
                 break;
             case SensorEnum.portD:
-                trigPin = DigitalPin.P10;
+                trigPin = DigitalPin.P15;
                 echoPin = DigitalPin.P4;
                 break;
         }
@@ -722,7 +722,7 @@ namespace hicbit {
         let Dht11Pin: DigitalPin;
         switch (pin) {
             case SensorEnum.portA:
-                Dht11Pin = DigitalPin.P15;
+                Dht11Pin = DigitalPin.P0;
                 break;
             case SensorEnum.portB:
                 Dht11Pin = DigitalPin.P13;
@@ -731,7 +731,7 @@ namespace hicbit {
                 Dht11Pin = DigitalPin.P14;
                 break;
             case SensorEnum.portD:0;
-                Dht11Pin = DigitalPin.P10;
+                Dht11Pin = DigitalPin.P15;
                 break;
         }
         let dataArray: boolean[] = []
@@ -781,7 +781,7 @@ namespace hicbit {
         let now_state = RockerdirectEnum.nostate;
         switch (pin) {         
             case SensorEnum.portA:
-                ADCPin1 = AnalogPin.P15;
+                ADCPin1 = AnalogPin.P0;
                 ADCPin2 = AnalogPin.P1;
                 break;
             case SensorEnum.portB:
@@ -793,7 +793,7 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P3;
                 break;
             case SensorEnum.portD:
-                ADCPin1 = AnalogPin.P10;
+                ADCPin1 = AnalogPin.P15;
                 ADCPin2 = AnalogPin.P4;
                 break;
         }
@@ -834,7 +834,7 @@ namespace hicbit {
         let y;
         switch (pin) {         
             case SensorEnum.portA:
-                ADCPin1 = AnalogPin.P15;
+                ADCPin1 = AnalogPin.P0;
                 ADCPin2 = AnalogPin.P1;
                 break;
             case SensorEnum.portB:
@@ -846,7 +846,7 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P3;
                 break;
             case SensorEnum.portD:
-                ADCPin1 = AnalogPin.P10;
+                ADCPin1 = AnalogPin.P15;
                 ADCPin2 = AnalogPin.P4;
                 break;
         }
@@ -985,7 +985,7 @@ namespace hicbit {
 
         switch(port){
             case SensorEnum.portA:
-                pin = DigitalPin.P15;
+                pin = DigitalPin.P0;
                 break;
             case SensorEnum.portB:
                 pin = DigitalPin.P13;
@@ -994,7 +994,7 @@ namespace hicbit {
                 pin = DigitalPin.P14;
             break;
             case SensorEnum.portD:
-                pin = DigitalPin.P10;
+                pin = DigitalPin.P15;
                 break;
         }
 
@@ -1204,7 +1204,7 @@ namespace hicbit {
         strip[light * 3 + 2] = blue;
         switch (pin) {
             case SensorEnum.portA:
-                sendBuffer(strip, DigitalPin.P15);
+                sendBuffer(strip, DigitalPin.P0);
                 break;
             case SensorEnum.portB:
                 sendBuffer(strip, DigitalPin.P13);
@@ -1213,7 +1213,7 @@ namespace hicbit {
                 sendBuffer(strip, DigitalPin.P14);
                 break;
             case SensorEnum.portD:
-                sendBuffer(strip, DigitalPin.P10);
+                sendBuffer(strip, DigitalPin.P15);
                 break;
         }
         basic.pause(100);
