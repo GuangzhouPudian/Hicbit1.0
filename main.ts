@@ -298,47 +298,50 @@ namespace hicbit {
     //% group="主机"
     //% color=#7CCD7C
     export function IsDirectKeyPress(directkey: DirectKeyEnum): boolean {
-        let status = 0;
-        let flag: boolean = false;
+        let IsDirectKey: boolean = false;
         switch (directkey) {
             case DirectKeyEnum.up:
                 pins.setPull(DigitalPin.P5, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P5);
-                if (status == 0) {
+                if (pins.digitalReadPin(DigitalPin.P5) == 0) {
                     basic.pause(10);
-                    status = pins.digitalReadPin(DigitalPin.P5);
-                    if (status == 0) flag = true;
-                } 
+                    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
+                        IsDirectKey = true;
+                        while (pins.digitalReadPin(DigitalPin.P5) == 0);
+                    }
+                }
                 break;
             case DirectKeyEnum.down:
                 pins.setPull(DigitalPin.P9, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P9);
-                if (status == 0) {
+                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
                     basic.pause(10);
-                    status = pins.digitalReadPin(DigitalPin.P9);
-                    if (status == 0) flag = true;
+                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
+                        IsDirectKey = true;
+                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
+                    }
                 } 
                 break;
             case DirectKeyEnum.left:
                 pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P11);
-                if (status == 0) {
+                if (pins.digitalReadPin(DigitalPin.P11) == 0) {
                     basic.pause(10);
-                    status = pins.digitalReadPin(DigitalPin.P11);
-                    if (status == 0) flag = true;
-                } 
+                    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
+                        IsDirectKey = true;
+                        while (pins.digitalReadPin(DigitalPin.P11) == 0);
+                    }
+                }
                 break;
             case DirectKeyEnum.right:
                 pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
-                status = pins.digitalReadPin(DigitalPin.P7);
-                if (status == 0) {
+                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
                     basic.pause(10);
-                    status = pins.digitalReadPin(DigitalPin.P7);
-                    if (status == 0) flag = true;
-                } 
+                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
+                        IsDirectKey = true;
+                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
+                    }
+                }
                 break;
         }
-        return flag;
+        return IsDirectKey;
     }
 
     //% weight=30 block="当方向键|%directkey按下时"
@@ -368,7 +371,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P0) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P0) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P0) == 0);
                         }
                     }
                 }
@@ -378,7 +381,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P1) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P1) == 0);
                         }
                     }
                 }
@@ -390,7 +393,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P13) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P13) == 0);
                         }
                     }
                 }
@@ -400,7 +403,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P2) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P2) == 0);
                         }
                     }
                 }
@@ -412,7 +415,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P14) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P14) == 0);
                         }
                     }
                 }
@@ -422,7 +425,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P3) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P3) == 0);
                         }
                     }
                 }
@@ -434,7 +437,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P15) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P15) == 0);
                         }
                     }
                 }
@@ -444,7 +447,7 @@ namespace hicbit {
                         basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P4) == 0) {
                             IsKeyPress = true;
-                            //while (pins.digitalReadPin(DigitalPin.P4) == 0);
+                            while (pins.digitalReadPin(DigitalPin.P4) == 0);
                         }
                     }
                 }
