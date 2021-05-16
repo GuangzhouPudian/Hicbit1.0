@@ -298,46 +298,47 @@ namespace hicbit {
     //% group="主机"
     //% color=#7CCD7C
     export function IsDirectKeyPress(directkey: DirectKeyEnum): boolean {
-        let IsKeyPress: boolean = false;
-        switch(directkey){
+        let status = 0;
+        let flag: boolean = false;
+        switch (directkey) {
             case DirectKeyEnum.up:
-                if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                        IsKeyPress = true;
-                        while (pins.digitalReadPin(DigitalPin.P5) == 0);
-                    }
-                }
+                pins.setPull(DigitalPin.P5, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P5);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P5);
+                    if (status == 0) flag = true;
+                } 
                 break;
             case DirectKeyEnum.down:
-                if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                        IsKeyPress = true;
-                        while (pins.digitalReadPin(DigitalPin.P9) == 0);
-                    }
-                }
+                pins.setPull(DigitalPin.P9, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P9);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P9);
+                    if (status == 0) flag = true;
+                } 
                 break;
             case DirectKeyEnum.left:
-                if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                        IsKeyPress = true;
-                        while (pins.digitalReadPin(DigitalPin.P11) == 0);
-                    }
-                }
+                pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P11);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P11);
+                    if (status == 0) flag = true;
+                } 
                 break;
             case DirectKeyEnum.right:
-                if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                    control.waitMicros(200);
-                    if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                        IsKeyPress = true;
-                        while (pins.digitalReadPin(DigitalPin.P7) == 0);
-                    }
-                }
+                pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+                status = pins.digitalReadPin(DigitalPin.P7);
+                if (status == 0) {
+                    basic.pause(10);
+                    status = pins.digitalReadPin(DigitalPin.P7);
+                    if (status == 0) flag = true;
+                } 
                 break;
         }
-        return IsKeyPress;
+        return flag;
     }
 
     //% weight=30 block="当方向键|%directkey按下时"
@@ -362,80 +363,88 @@ namespace hicbit {
         switch(pin){
             case SensorEnum.portA:
                 if (presskey == KeyEnum.keya) {
+                    pins.setPull(DigitalPin.P0, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P0) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P0) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P0) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P0) == 0);
                         }
                     }
                 }
                 else if (presskey == KeyEnum.keyb) {
+                    pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P1) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P1) == 0);
                         }
                     }
                 }
                 break;
             case SensorEnum.portB:
                 if (presskey == KeyEnum.keya) {
+                    pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P13) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P13) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P13) == 0);
                         }
                     }
                 }
                 else if (presskey == KeyEnum.keyb) {
+                    pins.setPull(DigitalPin.P2, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P2) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P2) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P2) == 0);
                         }
                     }
                 }
                 break;
             case SensorEnum.portC:
                 if (presskey == KeyEnum.keya) {
+                    pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P14) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P14) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P14) == 0);
                         }
                     }
                 }
                 else if (presskey == KeyEnum.keyb) {
+                    pins.setPull(DigitalPin.P3, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P3) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P3) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P3) == 0);
                         }
                     }
                 }
                 break;
             case SensorEnum.portD:
                 if (presskey == KeyEnum.keya) {
+                    pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P15) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P15) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P15) == 0);
                         }
                     }
                 }
                 else if (presskey == KeyEnum.keyb) {
+                    pins.setPull(DigitalPin.P4, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P4) == 0) {
-                        control.waitMicros(200);
+                        basic.pause(10);
                         if (pins.digitalReadPin(DigitalPin.P4) == 0) {
                             IsKeyPress = true;
-                            while (pins.digitalReadPin(DigitalPin.P4) == 0);
+                            //while (pins.digitalReadPin(DigitalPin.P4) == 0);
                         }
                     }
                 }
@@ -453,7 +462,7 @@ namespace hicbit {
                 if(IsKeyPress(pin, presskey)){
                     body();
                 }
-                basic.pause(100);
+                basic.pause(10);
             }
         })
     }
