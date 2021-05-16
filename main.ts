@@ -99,13 +99,13 @@ enum RockerdirectEnum {
     //% blockId="Nostate" block="无"
     nostate = 0,
     //% blockId="Up" block="上"
-    Up = 1,
+    Up = 2,
     //% blockId="Down" block="下"
-    Down = 2,
+    Down = 1,
     //% blockId="Left" block="左"
-    Left = 3,
+    Left = 4,
     //% blockId="Right" block="右"
-    Right = 4,
+    Right = 3,
 }
 
 enum RockerXYEnum {
