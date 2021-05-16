@@ -500,19 +500,21 @@ namespace hicbit {
     //% color=#5E9B9D
     export function SetMotorAngle(sn: MotorEnum, angle: number): void {
         let direct: number = 0;
-        let buf = pins.createBuffer(7);
+        let buf = pins.createBuffer(8);
         if (angle > 0) direct = 1;
         else if (angle < 0) {
             direct = 2;
             angle = Math.abs(angle);
-        } 
+        }
+        angle = angle * 2.6 - 12;
         buf[0] = 0xfe;
         buf[1] = 0xb0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = ((angle >> 8) & 0xff);
-        buf[5] = (angle & 0xff);
-        buf[6] = 0xef;
+        buf[4] = 20;
+        buf[5] = ((angle >> 8) & 0xff);
+        buf[6] = (angle & 0xff);
+        buf[7] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
     }
