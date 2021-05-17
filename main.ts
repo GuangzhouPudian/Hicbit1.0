@@ -506,7 +506,7 @@ namespace hicbit {
             direct = 2;
             angle = Math.abs(angle);
         }
-        angle = angle * 2.6 - 12;
+        angle = angle * 5.2 - 12;
         buf[0] = 0xfe;
         buf[1] = 0xb0;
         buf[2] = sn;
