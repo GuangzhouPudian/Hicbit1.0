@@ -695,39 +695,152 @@ namespace hicbit {
         return flag;
     }
 
+    const MICROBIT_MAKERBIT_ULTRASONIC_OBJECT_DETECTED_ID = 798;
+    const MAX_ULTRASONIC_TRAVEL_TIME = 300 * 58;
+    const ULTRASONIC_MEASUREMENTS = 3; 
+    interface UltrasonicRoundTrip {
+        ts: number;
+        rtt: number;
+    }
+    interface UltrasonicDevice {
+        trig: DigitalPin | undefined;
+        roundTrips: UltrasonicRoundTrip[];
+        medianRoundTrip: number;
+        travelTimeObservers: number[];
+    }
+    let ultrasonicState: UltrasonicDevice;
+          
     //% weight=98 block="超声波|接口%pin|距离(cm)"
     //% group="超声波"
     //% color=#8470FF
     export function GetUltrasonicValue(pin: SensorEnum): number {
-        let trigPin: DigitalPin;
-        let echoPin: DigitalPin;
+        let trig: DigitalPin;
+        let echo: DigitalPin;
         switch (pin) {
             case SensorEnum.portA:
-                trigPin = DigitalPin.P0;
-                echoPin = DigitalPin.P1;
+                trig = DigitalPin.P0;
+                echo = DigitalPin.P1;
                 break;
             case SensorEnum.portB:
-                trigPin = DigitalPin.P13;
-                echoPin = DigitalPin.P2;
+                trig = DigitalPin.P13;
+                echo = DigitalPin.P2;
                 break;
             case SensorEnum.portC:
-                trigPin = DigitalPin.P14;
-                echoPin = DigitalPin.P3;
+                trig = DigitalPin.P14;
+                echo = DigitalPin.P3;
                 break;
             case SensorEnum.portD:
-                trigPin = DigitalPin.P15;
-                echoPin = DigitalPin.P4;
+                trig = DigitalPin.P15;
+                echo = DigitalPin.P4;
                 break;
+        }                
+        connectUltrasonicDistanceSensor(trig, echo);
+              
+        if (!ultrasonicState) {
+        return -1;
         }
-        pins.setPull(trigPin, PinPullMode.PullNone);
-        pins.digitalWritePin(trigPin, 0);
-        control.waitMicros(2);
-        pins.digitalWritePin(trigPin, 1);
-        control.waitMicros(10);
-        pins.digitalWritePin(trigPin, 0);
-        const plus = pins.pulseIn(echoPin, PulseValue.High, 500*58);
-        return Math.idiv(plus, 58);
+        basic.pause(0); // yield to allow background processing when called in a tight loop
+        return Math.idiv(ultrasonicState.medianRoundTrip, 58);
     }
+    
+    function connectUltrasonicDistanceSensor(trig: DigitalPin, echo: DigitalPin): void {
+        if (ultrasonicState && ultrasonicState.trig) {
+        return;
+        }
+    
+        if (!ultrasonicState) {
+        ultrasonicState = {
+            trig: trig,
+            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
+            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+            travelTimeObservers: [],
+        };
+        } else {
+        ultrasonicState.trig = trig;
+        }
+    
+        pins.onPulsed(echo, PulseValue.High, () => {
+        if (
+            pins.pulseDuration() < MAX_ULTRASONIC_TRAVEL_TIME &&
+            ultrasonicState.roundTrips.length <= ULTRASONIC_MEASUREMENTS
+        ) {
+            ultrasonicState.roundTrips.push({
+            ts: input.runningTime(),
+            rtt: pins.pulseDuration(),
+            });
+        }
+        });  
+        control.inBackground(measureInBackground);
+    }
+      
+    function triggerPulse() {
+        // Reset trigger pin
+        pins.setPull(ultrasonicState.trig, PinPullMode.PullNone);
+        pins.digitalWritePin(ultrasonicState.trig, 0);
+        control.waitMicros(2);
+    
+        // Trigger pulse
+        pins.digitalWritePin(ultrasonicState.trig, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(ultrasonicState.trig, 0);
+    }
+      
+    function getMedianRRT(roundTrips: UltrasonicRoundTrip[]) {
+        const roundTripTimes = roundTrips.map((urt) => urt.rtt);
+        return median(roundTripTimes);
+    }
+    
+    // Returns median value of non-empty input
+    function median(values: number[]) {
+        values.sort((a, b) => {
+        return a - b;
+        });
+        return values[(values.length - 1) >> 1];
+    }
+      
+    function measureInBackground() {
+        const trips = ultrasonicState.roundTrips;
+        const TIME_BETWEEN_PULSE_MS = 145;
+    
+        while (true) {
+        const now = input.runningTime();
+    
+        if (trips[trips.length - 1].ts < now - TIME_BETWEEN_PULSE_MS - 10) {
+            ultrasonicState.roundTrips.push({
+            ts: now,
+            rtt: MAX_ULTRASONIC_TRAVEL_TIME,
+            });
+        }
+    
+        while (trips.length > ULTRASONIC_MEASUREMENTS) {
+            trips.shift();
+        }
+    
+        ultrasonicState.medianRoundTrip = getMedianRRT(
+            ultrasonicState.roundTrips
+        );
+    
+        for (let i = 0; i < ultrasonicState.travelTimeObservers.length; i++) {
+            const threshold = ultrasonicState.travelTimeObservers[i];
+            if (threshold > 0 && ultrasonicState.medianRoundTrip <= threshold) {
+            control.raiseEvent(
+                MICROBIT_MAKERBIT_ULTRASONIC_OBJECT_DETECTED_ID,
+                threshold
+            );
+            // use negative sign to indicate that we notified the event
+            ultrasonicState.travelTimeObservers[i] = -threshold;
+            } else if (
+            threshold < 0 &&
+            ultrasonicState.medianRoundTrip > -threshold
+            ) {
+            // object is outside the detection threshold -> re-activate observer
+            ultrasonicState.travelTimeObservers[i] = -threshold;
+            }
+        }    
+        triggerPulse();
+        basic.pause(TIME_BETWEEN_PULSE_MS);
+        }
+    }      
 
     //% weight=90 block="温湿度|接口%pin|值%dhtResult"
     //% group="温湿度"
