@@ -234,14 +234,16 @@ namespace hicbit {
     export function SetLCDData(row: number, col:number, dat: number): void {
         let str = dat.toString();
         let len = str.length;
-        let buf = pins.createBuffer(len+5);
+        let buf = pins.createBuffer(len+7);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
         buf[3] = (col-1) * 6 + 1;
         for(let i=0;i<len;i++)
             buf[i+4] = str.charCodeAt(i);
-        buf[len+4] = 0xef;
+        buf[len + 4] = 0x20;
+        buf[len + 5] = 0x20;
+        buf[len + 6] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(300);
     }
@@ -258,14 +260,16 @@ namespace hicbit {
         let s = dat.toString();
         str = str.concat(s);
         let len = str.length;
-        let buf = pins.createBuffer(len+5);
+        let buf = pins.createBuffer(len+7);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
         buf[3] = (col-1) * 6 + 1;
         for(let i=0;i<len;i++)
-            buf[i+4] = str.charCodeAt(i);
-        buf[len+4] = 0xef;
+            buf[i + 4] = str.charCodeAt(i);
+        buf[len + 4] = 0x20;
+        buf[len + 5] = 0x20;
+        buf[len + 6] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(300);
     }
@@ -924,8 +928,8 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P4;
                 break;
         }
-        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
-        y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
+        x = pins.analogReadPin(ADCPin2);//x轴模拟量获取
+        y = pins.analogReadPin(ADCPin1);//y轴模拟量获取
         if (x < 100) now_state = RockerdirectEnum.Up;
         else if (x > 800) now_state = RockerdirectEnum.Down;
         else if (y < 100) now_state = RockerdirectEnum.Left;
@@ -977,14 +981,14 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P4;
                 break;
         }
-        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
-        y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
+        x = pins.analogReadPin(ADCPin2);//x轴模拟量获取
+        y = pins.analogReadPin(ADCPin1);//y轴模拟量获取
         if (xy == RockerXYEnum.x) return Math.round(x * 255 / 1023);
         else if (xy == RockerXYEnum.y) return Math.round(y * 255 / 1023);
         return 0;
     }
    
-    //% weight=90 block="红外避障|接口%pin|值(0~1023)"
+    //% weight=90 block="红外避障|接口%pin|值(0~255)"
     //% group="红外避障"
     //% color=#DA8540
     export function GetIrValue(pin: SensorEnum): number {
@@ -1004,9 +1008,8 @@ namespace hicbit {
                 break;
         }
         let adValue = pins.analogReadPin(ADCPin);
-        //adValue = adValue * 255 / 1023;
-        //return Math.round(adValue);
-        return adValue;
+        adValue = adValue * 255 / 1023;
+        return Math.round(adValue);
     }
 
     const MICROBIT_MAKERBIT_IR_NEC = 777;
