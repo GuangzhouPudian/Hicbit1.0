@@ -307,7 +307,7 @@ namespace hicbit {
             case DirectKeyEnum.up:
                 pins.setPull(DigitalPin.P5, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P5) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(10);
                     if (pins.digitalReadPin(DigitalPin.P5) == 0) {
                         IsDirectKey = true;
                         while (pins.digitalReadPin(DigitalPin.P5) == 0);
@@ -317,7 +317,7 @@ namespace hicbit {
             case DirectKeyEnum.down:
                 pins.setPull(DigitalPin.P9, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P9) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(10);
                     if (pins.digitalReadPin(DigitalPin.P9) == 0) {
                         IsDirectKey = true;
                         while (pins.digitalReadPin(DigitalPin.P9) == 0);
@@ -327,7 +327,7 @@ namespace hicbit {
             case DirectKeyEnum.left:
                 pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P11) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(10);
                     if (pins.digitalReadPin(DigitalPin.P11) == 0) {
                         IsDirectKey = true;
                         while (pins.digitalReadPin(DigitalPin.P11) == 0);
@@ -337,7 +337,7 @@ namespace hicbit {
             case DirectKeyEnum.right:
                 pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P7) == 0) {
-                    basic.pause(10);
+                    control.waitMicros(10);
                     if (pins.digitalReadPin(DigitalPin.P7) == 0) {
                         IsDirectKey = true;
                         while (pins.digitalReadPin(DigitalPin.P7) == 0);
@@ -357,7 +357,7 @@ namespace hicbit {
                 if(IsDirectKeyPress(directkey)){
                     body();
                 }
-                basic.pause(100);
+                basic.pause(10);
             }
         })
     }
@@ -372,7 +372,7 @@ namespace hicbit {
                 if (presskey == KeyEnum.keya) {
                     pins.setPull(DigitalPin.P0, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P0) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P0) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P0) == 0);
@@ -382,7 +382,7 @@ namespace hicbit {
                 else if (presskey == KeyEnum.keyb) {
                     pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P1) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P1) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P1) == 0);
@@ -394,7 +394,7 @@ namespace hicbit {
                 if (presskey == KeyEnum.keya) {
                     pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P13) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P13) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P13) == 0);
@@ -404,7 +404,7 @@ namespace hicbit {
                 else if (presskey == KeyEnum.keyb) {
                     pins.setPull(DigitalPin.P2, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P2) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P2) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P2) == 0);
@@ -416,7 +416,7 @@ namespace hicbit {
                 if (presskey == KeyEnum.keya) {
                     pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P14) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P14) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P14) == 0);
@@ -426,7 +426,7 @@ namespace hicbit {
                 else if (presskey == KeyEnum.keyb) {
                     pins.setPull(DigitalPin.P3, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P3) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P3) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P3) == 0);
@@ -438,7 +438,7 @@ namespace hicbit {
                 if (presskey == KeyEnum.keya) {
                     pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P15) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P15) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P15) == 0);
@@ -448,7 +448,7 @@ namespace hicbit {
                 else if (presskey == KeyEnum.keyb) {
                     pins.setPull(DigitalPin.P4, PinPullMode.PullUp);
                     if (pins.digitalReadPin(DigitalPin.P4) == 0) {
-                        basic.pause(10);
+                        control.waitMicros(10);
                         if (pins.digitalReadPin(DigitalPin.P4) == 0) {
                             IsKeyPress = true;
                             while (pins.digitalReadPin(DigitalPin.P4) == 0);
@@ -874,9 +874,13 @@ namespace hicbit {
         pins.digitalReadPin(Dht11Pin); //pull up pin
         pins.setPull(Dht11Pin, PinPullMode.PullUp); //pull up data pin if needed
         control.waitMicros(40);
-        while (pins.digitalReadPin(Dht11Pin) == 1);
-        while (pins.digitalReadPin(Dht11Pin) == 0); //sensor response
-        while (pins.digitalReadPin(Dht11Pin) == 1); //sensor response
+        let currenttime = input.runningTimeMicros();
+        while (pins.digitalReadPin(Dht11Pin) == 1)
+        { //主机拉高等待从机响应
+            if ((input.runningTimeMicros() - currenttime) > 100) return 0.1;//未插入退出
+        }
+        while (pins.digitalReadPin(Dht11Pin) == 0); //从机拉低
+        while (pins.digitalReadPin(Dht11Pin) == 1); //从机拉高
 
         //read data (5 bytes)
         for (let i = 0; i < 40; i++) {
@@ -889,8 +893,8 @@ namespace hicbit {
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 8; j++)
                 if (dataArray[8 * i + j]) resultArray[i] += 2 ** (7 - j);
-        let humidity = resultArray[0] + resultArray[1] / 100;
-        let temperature = resultArray[2] + resultArray[3] / 100;
+        let humidity = resultArray[0] + resultArray[1] / 10;
+        let temperature = resultArray[2] + resultArray[3] / 10;
         let fahrenheit = temperature * 9 / 5 + 32;
         basic.pause(1000);
         switch (dhtResult) {
