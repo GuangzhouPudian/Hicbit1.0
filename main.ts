@@ -955,7 +955,7 @@ namespace hicbit {
         })
     }
 
-    //% weight=70 block="摇杆|接口%pin|%xy|值(0~255)))"
+    //% weight=70 block="摇杆|接口%pin|%xy|值(0~255)"
     //% group="摇杆"
     //% color=#0D69AB
     export function GetRockerValue(pin: SensorEnum, xy: RockerXYEnum): number {
