@@ -95,6 +95,11 @@ enum Dht11Result {
     humidity
 }
 
+enum RockerEnum {
+    //% block="5"
+    portA = 1,
+}
+
 enum RockerdirectEnum {
     //% blockId="Nostate" block="无"
     nostate = 0,
@@ -907,31 +912,33 @@ namespace hicbit {
     //% weight=90 block="摇杆|接口%pin|方向%value)"
     //% group="摇杆"
     //% color=#0D69AB
-    export function ISRockerDirectPress(pin: SensorEnum, value: RockerdirectEnum): boolean {
+    export function ISRockerDirectPress(pin: RockerEnum, value: RockerdirectEnum): boolean {
         let ADCPin1: AnalogPin;
         let ADCPin2: AnalogPin;
         let x;
         let y;
         let flag: boolean = false;
         let now_state = RockerdirectEnum.nostate;
-        switch (pin) {         
-            case SensorEnum.portA:
+        ADCPin1 = AnalogPin.P0;
+        ADCPin2 = AnalogPin.P1;
+        /*switch (pin) {         
+            case RockerEnum.portA:
                 ADCPin1 = AnalogPin.P0;
                 ADCPin2 = AnalogPin.P1;
                 break;
-            case SensorEnum.portB:
+            case RockerEnum.portB:
                 ADCPin1 = AnalogPin.P13;
                 ADCPin2 = AnalogPin.P2;
                 break;
-            case SensorEnum.portC:
+            case RockerEnum.portC:
                 ADCPin1 = AnalogPin.P14;
                 ADCPin2 = AnalogPin.P3;
                 break;
-            case SensorEnum.portD:
+            case RockerEnum.portD:
                 ADCPin1 = AnalogPin.P15;
                 ADCPin2 = AnalogPin.P4;
                 break;
-        }
+        }*/
         x = pins.analogReadPin(ADCPin2);//x轴模拟量获取
         y = pins.analogReadPin(ADCPin1);//y轴模拟量获取
         if (x < 100) now_state = RockerdirectEnum.Up;
@@ -948,7 +955,7 @@ namespace hicbit {
     //% weight=80 block="摇杆|当接口%pin|方向%value时"
     //% group="摇杆"
     //% color=#0D69AB
-    export function OnRockerDirectPress(pin: SensorEnum, value: RockerdirectEnum, body: () => void) {
+    export function OnRockerDirectPress(pin: RockerEnum, value: RockerdirectEnum, body: () => void) {
         control.inBackground(function () {
             while(true){
                 if(ISRockerDirectPress(pin, value)){
@@ -962,21 +969,23 @@ namespace hicbit {
     //% weight=70 block="摇杆|接口%pin|%xy|值(0~255)"
     //% group="摇杆"
     //% color=#0D69AB
-    export function GetRockerValue(pin: SensorEnum, xy: RockerXYEnum): number {
+    export function GetRockerValue(pin: RockerEnum, xy: RockerXYEnum): number {
         let ADCPin1: AnalogPin;
         let ADCPin2: AnalogPin;
         let x;
         let y;
-        switch (pin) {         
-            case SensorEnum.portA:
+        ADCPin1 = AnalogPin.P0;
+        ADCPin2 = AnalogPin.P1;
+        /*switch (pin) {         
+            case RockerEnum.portA:
                 ADCPin1 = AnalogPin.P0;
                 ADCPin2 = AnalogPin.P1;
                 break;
-            case SensorEnum.portB:
+            case RockerEnum.portB:
                 ADCPin1 = AnalogPin.P13;
                 ADCPin2 = AnalogPin.P2;
                 break;
-            case SensorEnum.portC:
+            case RockerEnum.portC:
                 ADCPin1 = AnalogPin.P14;
                 ADCPin2 = AnalogPin.P3;
                 break;
@@ -984,7 +993,7 @@ namespace hicbit {
                 ADCPin1 = AnalogPin.P15;
                 ADCPin2 = AnalogPin.P4;
                 break;
-        }
+        }*/
         x = pins.analogReadPin(ADCPin2);//x轴模拟量获取
         y = pins.analogReadPin(ADCPin1);//y轴模拟量获取
         if (xy == RockerXYEnum.x) return Math.round(x * 255 / 1023);
