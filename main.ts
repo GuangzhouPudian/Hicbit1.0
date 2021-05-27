@@ -104,13 +104,13 @@ enum RockerdirectEnum {
     //% blockId="Nostate" block="无"
     nostate = 0,
     //% blockId="Up" block="上"
-    Up = 2,
+    Up = 1,
     //% blockId="Down" block="下"
-    Down = 1,
+    Down = 2,
     //% blockId="Left" block="左"
-    Left = 4,
+    Left = 3,
     //% blockId="Right" block="右"
-    Right = 3,
+    Right = 4,
 }
 
 enum RockerXYEnum {
@@ -939,12 +939,12 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P4;
                 break;
         }*/
-        x = pins.analogReadPin(ADCPin2);//x轴模拟量获取
-        y = pins.analogReadPin(ADCPin1);//y轴模拟量获取
-        if (x < 100) now_state = RockerdirectEnum.Up;
-        else if (x > 800) now_state = RockerdirectEnum.Down;
-        else if (y < 100) now_state = RockerdirectEnum.Left;
-        else if (y > 800) now_state = RockerdirectEnum.Right;
+        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
+        y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
+        if (x < 100) now_state = RockerdirectEnum.Down;
+        else if (x > 800) now_state = RockerdirectEnum.Up;
+        else if (y < 100) now_state = RockerdirectEnum.Right;
+        else if (y > 800) now_state = RockerdirectEnum.Left;
         if (now_state == value)
             flag = true;
         else
@@ -994,8 +994,8 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P4;
                 break;
         }*/
-        x = pins.analogReadPin(ADCPin2);//x轴模拟量获取
-        y = pins.analogReadPin(ADCPin1);//y轴模拟量获取
+        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
+        y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
         if (xy == RockerXYEnum.x) return Math.round(x * 255 / 1023);
         else if (xy == RockerXYEnum.y) return Math.round(y * 255 / 1023);
         return 0;
