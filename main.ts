@@ -1022,7 +1022,10 @@ namespace hicbit {
         }
         let adValue = pins.analogReadPin(ADCPin);
         adValue = adValue * 255 / 1023;
-        return Math.round(adValue);
+        if (Math.round(adValue) == 0)
+            return 255;
+        else
+            return Math.round(adValue);
     }
 
     const MICROBIT_MAKERBIT_IR_NEC = 777;
