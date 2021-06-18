@@ -515,6 +515,7 @@ namespace hicbit {
             direct = 2;
             angle = Math.abs(angle);
         }
+        else direct = 0;
         angle = angle * 5.2 - 12;
         buf[0] = 0xfe;
         buf[1] = 0xb0;
@@ -523,6 +524,8 @@ namespace hicbit {
         buf[4] = 20;
         buf[5] = ((angle >> 8) & 0xff);
         buf[6] = (angle & 0xff);
+        if (buf[6] == 0xef) buf[6] = 0xee;
+        if (buf[6] == 0xfe) buf[6] = 0xff;
         buf[7] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
