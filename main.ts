@@ -745,7 +745,13 @@ namespace hicbit {
                 trig = DigitalPin.P15;
                 echo = DigitalPin.P4;
                 break;
-        }                
+        }
+        ultrasonicState = {
+            trig: trig,
+            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
+            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+            travelTimeObservers: [],
+        };
         connectUltrasonicDistanceSensor(trig, echo);
               
         if (!ultrasonicState) {
