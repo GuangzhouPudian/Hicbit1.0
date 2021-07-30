@@ -746,14 +746,29 @@ namespace hicbit {
                 echo = DigitalPin.P4;
                 break;
         }
+        let dist: number[];
+        for (let i = 0; i < 10; i++) {
+            // send pulse
+            pins.setPull(trig, PinPullMode.PullNone);
+            pins.digitalWritePin(trig, 0);
+            control.waitMicros(2);
+            pins.digitalWritePin(trig, 1);
+            control.waitMicros(10);
+            pins.digitalWritePin(trig, 0);
+            // read pulse
+            dist[i] = pins.pulseIn(echo, PulseValue.High, 300 * 58);
+            dist[i] = Math.idiv(dist[i], 58);
+            control.waitMicros(50);
+        }
+        return median(dist);
 
-        connectUltrasonicDistanceSensor(trig, echo);
+        /*connectUltrasonicDistanceSensor(trig, echo);
 
         if (!ultrasonicState) {
             return -1;
         }
         basic.pause(0); // yield to allow background processing when called in a tight loop
-        return Math.idiv(ultrasonicState.medianRoundTrip, 58);
+        return Math.idiv(ultrasonicState.medianRoundTrip, 58);*/
     }
 
     function connectUltrasonicDistanceSensor(trig: DigitalPin, echo: DigitalPin): void {
@@ -912,7 +927,7 @@ namespace hicbit {
         }
     }
 
-    //% weight=90 block="摇杆|接口%pin|方向%value)"
+    //% weight=90 block="摇杆|接口%pin|方向%value"
     //% group="摇杆"
     //% color=#0D69AB
     export function ISRockerDirectPress(pin: RockerEnum, value: RockerdirectEnum): boolean {
