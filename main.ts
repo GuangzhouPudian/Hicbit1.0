@@ -2,7 +2,7 @@
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
  */
- enum MotorEnum {
+enum MotorEnum {
     //% block="1"
     portA = 3,
     //% block="2"
@@ -163,15 +163,15 @@ enum IrButton {
     Number_0 = 152,
     //% block="#"
     Hash = 176,
-    }
-    
- enum IrButtonAction {
+}
+
+enum IrButtonAction {
     //% block="按下"
     Pressed = 0,
     //% block="松开"
     Released = 1,
 }
-    
+
 enum IrProtocol {
     //% block="Keyestudio"
     Keyestudio = 0,
@@ -199,7 +199,7 @@ namespace hicbit {
             BaudRate.BaudRate115200);
         basic.pause(2000);
         let i: number;
-        for (i = 1; i <= 4; i++){
+        for (i = 1; i <= 4; i++) {
             SetMotorSpeed(i, 0);
         }
         ClearLCD(1, 7);
@@ -215,16 +215,16 @@ namespace hicbit {
     //% weight=80 block="LCD|第%row行|第%col列|内容%dat"
     //% group="主机"
     //% color=#7CCD7C
-    export function SetLCDString(row: number, col:number, str:string): void {
+    export function SetLCDString(row: number, col: number, str: string): void {
         let len = str.length;
-        let buf = pins.createBuffer(len+5);
+        let buf = pins.createBuffer(len + 5);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = (col-1) * 6 + 1;
-        for(let i=0;i<len;i++)
-            buf[i+4] = str.charCodeAt(i);
-        buf[len+4] = 0xef;
+        buf[3] = (col - 1) * 6 + 1;
+        for (let i = 0; i < len; i++)
+            buf[i + 4] = str.charCodeAt(i);
+        buf[len + 4] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(300);
     }
@@ -236,16 +236,16 @@ namespace hicbit {
     //% weight=70 block="LCD|第%row行|第%col列|数值%dat"
     //% group="主机"
     //% color=#7CCD7C
-    export function SetLCDData(row: number, col:number, dat: number): void {
+    export function SetLCDData(row: number, col: number, dat: number): void {
         let str = dat.toString();
         let len = str.length;
-        let buf = pins.createBuffer(len+7);
+        let buf = pins.createBuffer(len + 7);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = (col-1) * 6 + 1;
-        for(let i=0;i<len;i++)
-            buf[i+4] = str.charCodeAt(i);
+        buf[3] = (col - 1) * 6 + 1;
+        for (let i = 0; i < len; i++)
+            buf[i + 4] = str.charCodeAt(i);
         buf[len + 4] = 0x20;
         buf[len + 5] = 0x20;
         buf[len + 6] = 0xef;
@@ -261,16 +261,16 @@ namespace hicbit {
     //% inlineInputMode=inline
     //% group="主机"
     //% color=#7CCD7C
-    export function SetLCD(row: number, col:number, str:string, dat: number): void {
+    export function SetLCD(row: number, col: number, str: string, dat: number): void {
         let s = dat.toString();
         str = str.concat(s);
         let len = str.length;
-        let buf = pins.createBuffer(len+7);
+        let buf = pins.createBuffer(len + 7);
         buf[0] = 0xfe;
         buf[1] = 0xc0;
         buf[2] = row + 1;
-        buf[3] = (col-1) * 6 + 1;
-        for(let i=0;i<len;i++)
+        buf[3] = (col - 1) * 6 + 1;
+        for (let i = 0; i < len; i++)
             buf[i + 4] = str.charCodeAt(i);
         buf[len + 4] = 0x20;
         buf[len + 5] = 0x20;
@@ -327,7 +327,7 @@ namespace hicbit {
                         IsDirectKey = true;
                         while (pins.digitalReadPin(DigitalPin.P9) == 0);
                     }
-                } 
+                }
                 break;
             case DirectKeyEnum.left:
                 pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
@@ -358,8 +358,8 @@ namespace hicbit {
     //% color=#7CCD7C
     export function OnDirectKeyPress(directkey: DirectKeyEnum, body: () => void) {
         control.inBackground(function () {
-            while(true){
-                if(IsDirectKeyPress(directkey)){
+            while (true) {
+                if (IsDirectKeyPress(directkey)) {
                     body();
                 }
                 basic.pause(10);
@@ -372,7 +372,7 @@ namespace hicbit {
     //% color=#C4281B     
     export function IsKeyPress(pin: SensorEnum, presskey: KeyEnum): boolean {
         let IsKeyPress: boolean = false;
-        switch(pin){
+        switch (pin) {
             case SensorEnum.portA:
                 if (presskey == KeyEnum.keya) {
                     pins.setPull(DigitalPin.P0, PinPullMode.PullUp);
@@ -464,14 +464,14 @@ namespace hicbit {
         }
         return IsKeyPress;
     }
-    
+
     //% weight=90 block="按键|当接口%pin|%keypress按下时"
     //% group="按键"
     //% color=#C4281B  
     export function OnKeyPress(pin: SensorEnum, presskey: KeyEnum, body: () => void) {
         control.inBackground(function () {
-            while(true){
-                if(IsKeyPress(pin, presskey)){
+            while (true) {
+                if (IsKeyPress(pin, presskey)) {
                     body();
                 }
                 basic.pause(10);
@@ -652,7 +652,7 @@ namespace hicbit {
         let n = 100;
         let max = 0;
         let adValue = 0;
-        for (let i = 0; i < n; i++){
+        for (let i = 0; i < n; i++) {
             let adValue = pins.analogReadPin(ADCPin);
             if (adValue > max) max = adValue;
         }
@@ -674,7 +674,7 @@ namespace hicbit {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P0);
                     if (status == 0) flag = true;
-                } 
+                }
                 break;
             case SensorEnum.portB:
                 pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
@@ -683,7 +683,7 @@ namespace hicbit {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P13);
                     if (status == 0) flag = true;
-                } 
+                }
                 break;
             case SensorEnum.portC:
                 pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
@@ -692,7 +692,7 @@ namespace hicbit {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P14);
                     if (status == 0) flag = true;
-                } 
+                }
                 break;
             case SensorEnum.portD:
                 pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
@@ -701,7 +701,7 @@ namespace hicbit {
                     basic.pause(10);
                     status = pins.digitalReadPin(DigitalPin.P15);
                     if (status == 0) flag = true;
-                } 
+                }
                 break;
         }
         return flag;
@@ -709,7 +709,7 @@ namespace hicbit {
 
     const MICROBIT_MAKERBIT_ULTRASONIC_OBJECT_DETECTED_ID = 798;
     const MAX_ULTRASONIC_TRAVEL_TIME = 300 * 58;
-    const ULTRASONIC_MEASUREMENTS = 3; 
+    const ULTRASONIC_MEASUREMENTS = 3;
     interface UltrasonicRoundTrip {
         ts: number;
         rtt: number;
@@ -721,7 +721,7 @@ namespace hicbit {
         travelTimeObservers: number[];
     }
     let ultrasonicState: UltrasonicDevice;
-          
+
     //% weight=98 block="超声波|接口%pin|距离(cm)"
     //% group="超声波"
     //% color=#8470FF
@@ -746,119 +746,114 @@ namespace hicbit {
                 echo = DigitalPin.P4;
                 break;
         }
-        ultrasonicState = {
-            trig: trig,
-            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
-            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
-            travelTimeObservers: [],
-        };
+
         connectUltrasonicDistanceSensor(trig, echo);
-              
+
         if (!ultrasonicState) {
-        return -1;
+            return -1;
         }
         basic.pause(0); // yield to allow background processing when called in a tight loop
         return Math.idiv(ultrasonicState.medianRoundTrip, 58);
     }
-    
+
     function connectUltrasonicDistanceSensor(trig: DigitalPin, echo: DigitalPin): void {
         if (ultrasonicState && ultrasonicState.trig) {
-        return;
+            return;
         }
-    
+
         if (!ultrasonicState) {
-        ultrasonicState = {
-            trig: trig,
-            roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
-            medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
-            travelTimeObservers: [],
-        };
+            ultrasonicState = {
+                trig: trig,
+                roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
+                medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
+                travelTimeObservers: [],
+            };
         } else {
-        ultrasonicState.trig = trig;
+            ultrasonicState.trig = trig;
         }
-    
+
         pins.onPulsed(echo, PulseValue.High, () => {
-        if (
-            pins.pulseDuration() < MAX_ULTRASONIC_TRAVEL_TIME &&
-            ultrasonicState.roundTrips.length <= ULTRASONIC_MEASUREMENTS
-        ) {
-            ultrasonicState.roundTrips.push({
-            ts: input.runningTime(),
-            rtt: pins.pulseDuration(),
-            });
-        }
-        });  
+            if (
+                pins.pulseDuration() < MAX_ULTRASONIC_TRAVEL_TIME &&
+                ultrasonicState.roundTrips.length <= ULTRASONIC_MEASUREMENTS
+            ) {
+                ultrasonicState.roundTrips.push({
+                    ts: input.runningTime(),
+                    rtt: pins.pulseDuration(),
+                });
+            }
+        });
         control.inBackground(measureInBackground);
     }
-      
+
     function triggerPulse() {
         // Reset trigger pin
         pins.setPull(ultrasonicState.trig, PinPullMode.PullNone);
         pins.digitalWritePin(ultrasonicState.trig, 0);
         control.waitMicros(2);
-    
+
         // Trigger pulse
         pins.digitalWritePin(ultrasonicState.trig, 1);
         control.waitMicros(10);
         pins.digitalWritePin(ultrasonicState.trig, 0);
     }
-      
+
     function getMedianRRT(roundTrips: UltrasonicRoundTrip[]) {
         const roundTripTimes = roundTrips.map((urt) => urt.rtt);
         return median(roundTripTimes);
     }
-    
+
     // Returns median value of non-empty input
     function median(values: number[]) {
         values.sort((a, b) => {
-        return a - b;
+            return a - b;
         });
         return values[(values.length - 1) >> 1];
     }
-      
+
     function measureInBackground() {
         const trips = ultrasonicState.roundTrips;
         const TIME_BETWEEN_PULSE_MS = 145;
-    
+
         while (true) {
-        const now = input.runningTime();
-    
-        if (trips[trips.length - 1].ts < now - TIME_BETWEEN_PULSE_MS - 10) {
-            ultrasonicState.roundTrips.push({
-            ts: now,
-            rtt: MAX_ULTRASONIC_TRAVEL_TIME,
-            });
-        }
-    
-        while (trips.length > ULTRASONIC_MEASUREMENTS) {
-            trips.shift();
-        }
-    
-        ultrasonicState.medianRoundTrip = getMedianRRT(
-            ultrasonicState.roundTrips
-        );
-    
-        for (let i = 0; i < ultrasonicState.travelTimeObservers.length; i++) {
-            const threshold = ultrasonicState.travelTimeObservers[i];
-            if (threshold > 0 && ultrasonicState.medianRoundTrip <= threshold) {
-            control.raiseEvent(
-                MICROBIT_MAKERBIT_ULTRASONIC_OBJECT_DETECTED_ID,
-                threshold
-            );
-            // use negative sign to indicate that we notified the event
-            ultrasonicState.travelTimeObservers[i] = -threshold;
-            } else if (
-            threshold < 0 &&
-            ultrasonicState.medianRoundTrip > -threshold
-            ) {
-            // object is outside the detection threshold -> re-activate observer
-            ultrasonicState.travelTimeObservers[i] = -threshold;
+            const now = input.runningTime();
+
+            if (trips[trips.length - 1].ts < now - TIME_BETWEEN_PULSE_MS - 10) {
+                ultrasonicState.roundTrips.push({
+                    ts: now,
+                    rtt: MAX_ULTRASONIC_TRAVEL_TIME,
+                });
             }
-        }    
-        triggerPulse();
-        basic.pause(TIME_BETWEEN_PULSE_MS);
+
+            while (trips.length > ULTRASONIC_MEASUREMENTS) {
+                trips.shift();
+            }
+
+            ultrasonicState.medianRoundTrip = getMedianRRT(
+                ultrasonicState.roundTrips
+            );
+
+            for (let i = 0; i < ultrasonicState.travelTimeObservers.length; i++) {
+                const threshold = ultrasonicState.travelTimeObservers[i];
+                if (threshold > 0 && ultrasonicState.medianRoundTrip <= threshold) {
+                    control.raiseEvent(
+                        MICROBIT_MAKERBIT_ULTRASONIC_OBJECT_DETECTED_ID,
+                        threshold
+                    );
+                    // use negative sign to indicate that we notified the event
+                    ultrasonicState.travelTimeObservers[i] = -threshold;
+                } else if (
+                    threshold < 0 &&
+                    ultrasonicState.medianRoundTrip > -threshold
+                ) {
+                    // object is outside the detection threshold -> re-activate observer
+                    ultrasonicState.travelTimeObservers[i] = -threshold;
+                }
+            }
+            triggerPulse();
+            basic.pause(TIME_BETWEEN_PULSE_MS);
         }
-    }      
+    }
 
     //% weight=90 block="温湿度|接口%pin|值%dhtResult"
     //% group="温湿度"
@@ -875,7 +870,7 @@ namespace hicbit {
             case SensorEnum.portC:
                 Dht11Pin = DigitalPin.P14;
                 break;
-            case SensorEnum.portD:0;
+            case SensorEnum.portD: 0;
                 Dht11Pin = DigitalPin.P15;
                 break;
         }
@@ -889,8 +884,7 @@ namespace hicbit {
         pins.setPull(Dht11Pin, PinPullMode.PullUp); //pull up data pin if needed
         control.waitMicros(40);
         let currenttime = input.runningTimeMicros();
-        while (pins.digitalReadPin(Dht11Pin) == 1)
-        { //主机拉高等待从机响应
+        while (pins.digitalReadPin(Dht11Pin) == 1) { //主机拉高等待从机响应
             if ((input.runningTimeMicros() - currenttime) > 100) return 0.1;//未插入退出
         }
         while (pins.digitalReadPin(Dht11Pin) == 0); //从机拉低
@@ -966,8 +960,8 @@ namespace hicbit {
     //% color=#0D69AB
     export function OnRockerDirectPress(pin: RockerEnum, value: RockerdirectEnum, body: () => void) {
         control.inBackground(function () {
-            while(true){
-                if(ISRockerDirectPress(pin, value)){
+            while (true) {
+                if (ISRockerDirectPress(pin, value)) {
                     body();
                 }
                 basic.pause(100);
@@ -1009,7 +1003,7 @@ namespace hicbit {
         else if (xy == RockerXYEnum.y) return Math.round(y * 255 / 1023);
         return 0;
     }
-   
+
     //% weight=90 block="红外避障|接口%pin|值(0~255)"
     //% group="红外避障"
     //% color=#DA8540
@@ -1057,48 +1051,48 @@ namespace hicbit {
         irState.bitsReceived += 1;
 
         if (irState.bitsReceived <= 8) {
-        irState.hiword = (irState.hiword << 1) + bit;
-        if (irState.protocol === IrProtocol.Keyestudio && bit === 1) {
-            // recover from missing message bits at the beginning
-            // Keyestudio address is 0 and thus missing bits can be detected
-            // by checking for the first inverse address bit (which is a 1)
-            irState.bitsReceived = 9;
-            irState.hiword = 1;
-        }
+            irState.hiword = (irState.hiword << 1) + bit;
+            if (irState.protocol === IrProtocol.Keyestudio && bit === 1) {
+                // recover from missing message bits at the beginning
+                // Keyestudio address is 0 and thus missing bits can be detected
+                // by checking for the first inverse address bit (which is a 1)
+                irState.bitsReceived = 9;
+                irState.hiword = 1;
+            }
         } else if (irState.bitsReceived <= 16) {
-        irState.hiword = (irState.hiword << 1) + bit;
+            irState.hiword = (irState.hiword << 1) + bit;
         } else if (irState.bitsReceived <= 32) {
-        irState.loword = (irState.loword << 1) + bit;
+            irState.loword = (irState.loword << 1) + bit;
         }
 
         if (irState.bitsReceived === 32) {
-        irState.addressSectionBits = irState.hiword & 0xffff;
-        irState.commandSectionBits = irState.loword & 0xffff;
-        return IR_DATAGRAM;
+            irState.addressSectionBits = irState.hiword & 0xffff;
+            irState.commandSectionBits = irState.loword & 0xffff;
+            return IR_DATAGRAM;
         } else {
-        return IR_INCOMPLETE;
+            return IR_INCOMPLETE;
         }
     }
 
     function decode(markAndSpace: number): number {
         if (markAndSpace < 1600) {
-        // low bit
-        return appendBitToDatagram(0);
+            // low bit
+            return appendBitToDatagram(0);
         } else if (markAndSpace < 2700) {
-        // high bit
-        return appendBitToDatagram(1);
+            // high bit
+            return appendBitToDatagram(1);
         }
 
         irState.bitsReceived = 0;
 
         if (markAndSpace < 12500) {
-        // Repeat detected
-        return IR_REPEAT;
+            // Repeat detected
+            return IR_REPEAT;
         } else if (markAndSpace < 14500) {
-        // Start detected
-        return IR_INCOMPLETE;
+            // Start detected
+            return IR_INCOMPLETE;
         } else {
-        return IR_INCOMPLETE;
+            return IR_INCOMPLETE;
         }
     }
 
@@ -1109,17 +1103,17 @@ namespace hicbit {
         let space = 0;
 
         pins.onPulsed(pin, PulseValue.Low, () => {
-        mark = pins.pulseDuration();
+            mark = pins.pulseDuration();
         });
 
         pins.onPulsed(pin, PulseValue.High, () => {
-        // LOW
-        space = pins.pulseDuration();
-        const status = decode(mark + space);
+            // LOW
+            space = pins.pulseDuration();
+            const status = decode(mark + space);
 
-        if (status !== IR_INCOMPLETE) {
-            control.raiseEvent(MICROBIT_MAKERBIT_IR_NEC, status);
-        }
+            if (status !== IR_INCOMPLETE) {
+                control.raiseEvent(MICROBIT_MAKERBIT_IR_NEC, status);
+            }
         });
     }
 
@@ -1132,10 +1126,10 @@ namespace hicbit {
     ): void {
         let pin: DigitalPin;
         if (irState) {
-        return;
+            return;
         }
 
-        switch(port){
+        switch (port) {
             case SensorEnum.portA:
                 pin = DigitalPin.P0;
                 break;
@@ -1144,20 +1138,20 @@ namespace hicbit {
                 break;
             case SensorEnum.portC:
                 pin = DigitalPin.P14;
-            break;
+                break;
             case SensorEnum.portD:
                 pin = DigitalPin.P15;
                 break;
         }
 
         irState = {
-        protocol: protocol,
-        bitsReceived: 0,
-        hasNewDatagram: false,
-        addressSectionBits: 0,
-        commandSectionBits: 0,
-        hiword: 0, // TODO replace with uint32
-        loword: 0,
+            protocol: protocol,
+            bitsReceived: 0,
+            hasNewDatagram: false,
+            addressSectionBits: 0,
+            commandSectionBits: 0,
+            hiword: 0, // TODO replace with uint32
+            loword: 0,
         };
 
         enableIrMarkSpaceDetection(pin);
@@ -1167,60 +1161,60 @@ namespace hicbit {
         const REPEAT_TIMEOUT_MS = 120;
 
         control.onEvent(
-        MICROBIT_MAKERBIT_IR_NEC,
-        EventBusValue.MICROBIT_EVT_ANY,
-        () => {
-            const irEvent = control.eventValue();
+            MICROBIT_MAKERBIT_IR_NEC,
+            EventBusValue.MICROBIT_EVT_ANY,
+            () => {
+                const irEvent = control.eventValue();
 
-            // Refresh repeat timer
-            if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
-            repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
-            }
-
-            if (irEvent === IR_DATAGRAM) {
-            irState.hasNewDatagram = true;
-            control.raiseEvent(MICROBIT_MAKERBIT_IR_DATAGRAM, 0);
-
-            const newCommand = irState.commandSectionBits >> 8;
-
-            // Process a new command
-            if (newCommand !== activeCommand) {
-                if (activeCommand >= 0) {
-                control.raiseEvent(
-                    MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
-                    activeCommand
-                );
+                // Refresh repeat timer
+                if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
+                    repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
                 }
 
-                activeCommand = newCommand;
-                control.raiseEvent(
-                MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID,
-                newCommand
-                );
+                if (irEvent === IR_DATAGRAM) {
+                    irState.hasNewDatagram = true;
+                    control.raiseEvent(MICROBIT_MAKERBIT_IR_DATAGRAM, 0);
+
+                    const newCommand = irState.commandSectionBits >> 8;
+
+                    // Process a new command
+                    if (newCommand !== activeCommand) {
+                        if (activeCommand >= 0) {
+                            control.raiseEvent(
+                                MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
+                                activeCommand
+                            );
+                        }
+
+                        activeCommand = newCommand;
+                        control.raiseEvent(
+                            MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID,
+                            newCommand
+                        );
+                    }
+                }
             }
-            }
-        }
         );
 
         control.inBackground(() => {
-        while (true) {
-            if (activeCommand === -1) {
-            // sleep to save CPU cylces
-            basic.pause(2 * REPEAT_TIMEOUT_MS);
-            } else {
-            const now = input.runningTime();
-            if (now > repeatTimeout) {
-                // repeat timed out
-                control.raiseEvent(
-                MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
-                activeCommand
-                );
-                activeCommand = -1;
-            } else {
-                basic.pause(REPEAT_TIMEOUT_MS);
+            while (true) {
+                if (activeCommand === -1) {
+                    // sleep to save CPU cylces
+                    basic.pause(2 * REPEAT_TIMEOUT_MS);
+                } else {
+                    const now = input.runningTime();
+                    if (now > repeatTimeout) {
+                        // repeat timed out
+                        control.raiseEvent(
+                            MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
+                            activeCommand
+                        );
+                        activeCommand = -1;
+                    } else {
+                        basic.pause(REPEAT_TIMEOUT_MS);
+                    }
+                }
             }
-            }
-        }
         });
     }
 
@@ -1233,13 +1227,13 @@ namespace hicbit {
         handler: () => void
     ) {
         control.onEvent(
-        action === IrButtonAction.Pressed
-            ? MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID
-            : MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
-        button === IrButton.Any ? EventBusValue.MICROBIT_EVT_ANY : button,
-        () => {
-            handler();
-        }
+            action === IrButtonAction.Pressed
+                ? MICROBIT_MAKERBIT_IR_BUTTON_PRESSED_ID
+                : MICROBIT_MAKERBIT_IR_BUTTON_RELEASED_ID,
+            button === IrButton.Any ? EventBusValue.MICROBIT_EVT_ANY : button,
+            () => {
+                handler();
+            }
         );
     }
 
@@ -1250,7 +1244,7 @@ namespace hicbit {
     export function irButton(): number {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
-        return IrButton.Any;
+            return IrButton.Any;
         }
         //return irState.commandSectionBits >> 8;
         switch (irState.commandSectionBits >> 8) {
@@ -1280,11 +1274,11 @@ namespace hicbit {
     //% weight=60*/
     function onIrDatagram(handler: () => void) {
         control.onEvent(
-        MICROBIT_MAKERBIT_IR_DATAGRAM,
-        EventBusValue.MICROBIT_EVT_ANY,
-        () => {
-            handler();
-        }
+            MICROBIT_MAKERBIT_IR_DATAGRAM,
+            EventBusValue.MICROBIT_EVT_ANY,
+            () => {
+                handler();
+            }
         );
     }
 
@@ -1294,12 +1288,12 @@ namespace hicbit {
     function irDatagram(): string {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
-        return "0x00000000";
+            return "0x00000000";
         }
         return (
-        "0x" +
-        ir_rec_to16BitHex(irState.addressSectionBits) +
-        ir_rec_to16BitHex(irState.commandSectionBits)
+            "0x" +
+            ir_rec_to16BitHex(irState.addressSectionBits) +
+            ir_rec_to16BitHex(irState.commandSectionBits)
         );
     }
 
@@ -1309,13 +1303,13 @@ namespace hicbit {
     function IsIrDataReceived(): boolean {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
-        return false;
+            return false;
         }
         if (irState.hasNewDatagram) {
-        irState.hasNewDatagram = false;
-        return true;
+            irState.hasNewDatagram = false;
+            return true;
         } else {
-        return false;
+            return false;
         }
     }
 
@@ -1330,13 +1324,13 @@ namespace hicbit {
     function ir_rec_to16BitHex(value: number): string {
         let hex = "";
         for (let pos = 0; pos < 4; pos++) {
-        let remainder = value % 16;
-        if (remainder < 10) {
-            hex = remainder.toString() + hex;
-        } else {
-            hex = String.fromCharCode(55 + remainder) + hex;
-        }
-        value = Math.idiv(value, 16);
+            let remainder = value % 16;
+            if (remainder < 10) {
+                hex = remainder.toString() + hex;
+            } else {
+                hex = String.fromCharCode(55 + remainder) + hex;
+            }
+            value = Math.idiv(value, 16);
         }
         return hex;
     }
