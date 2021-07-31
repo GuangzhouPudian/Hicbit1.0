@@ -747,7 +747,7 @@ namespace hicbit {
                 break;
         }
         let dist: number[];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 9; i++) {
             // send pulse
             pins.setPull(trig, PinPullMode.PullNone);
             pins.digitalWritePin(trig, 0);
