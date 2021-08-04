@@ -728,6 +728,8 @@ namespace hicbit {
     export function GetUltrasonicValue(pin: SensorEnum): number {
         let trig: DigitalPin;
         let echo: DigitalPin;
+        let dist: number;
+        let sumdist: number;
         switch (pin) {
             case SensorEnum.portA:
                 trig = DigitalPin.P0;
@@ -746,7 +748,7 @@ namespace hicbit {
                 echo = DigitalPin.P4;
                 break;
         }
-        let dist: number[];
+        sumdist = 0;
         for (let i = 0; i < 9; i++) {
             // send pulse
             pins.setPull(trig, PinPullMode.PullNone);
@@ -756,11 +758,11 @@ namespace hicbit {
             control.waitMicros(10);
             pins.digitalWritePin(trig, 0);
             // read pulse
-            dist[i] = pins.pulseIn(echo, PulseValue.High, 300 * 58);
-            dist[i] = Math.idiv(dist[i], 58);
+            dist = pins.pulseIn(echo, PulseValue.High, 300 * 58);
+            sumdist = sumdist + dist;
             control.waitMicros(50);
         }
-        return median(dist);
+        return Math.idiv(sumdist/9, 58);;
 
         /*connectUltrasonicDistanceSensor(trig, echo);
 
