@@ -509,7 +509,7 @@ namespace hicbit {
         buf[4] = Math.floor(speed / 4);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(50);
+        basic.pause(100);
         /*第二档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
