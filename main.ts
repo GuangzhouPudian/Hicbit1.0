@@ -729,7 +729,6 @@ namespace hicbit {
         let trig: DigitalPin;
         let echo: DigitalPin;
         let dist: number;
-        let sumdist: number;
         switch (pin) {
             case SensorEnum.portA:
                 trig = DigitalPin.P0;
@@ -748,24 +747,35 @@ namespace hicbit {
                 echo = DigitalPin.P4;
                 break;
         }
-        sumdist = 0;
-        for (let i = 0; i < 9; i++) {
-            // send pulse
-            pins.setPull(trig, PinPullMode.PullNone);
-            pins.digitalWritePin(trig, 0);
-            control.waitMicros(2);
-            pins.digitalWritePin(trig, 1);
-            control.waitMicros(10);
-            pins.digitalWritePin(trig, 0);
-            // read pulse
-            dist = pins.pulseIn(echo, PulseValue.High, 300 * 58);
-            sumdist = sumdist + dist;
-            control.waitMicros(50);
+        //第一次用来检测传感器是否插入
+        pins.setPull(trig, PinPullMode.PullNone);
+        pins.digitalWritePin(trig, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(trig, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(trig, 0);
+        //dist = pins.pulseIn(echo, PulseValue.High, 300 * 58); //read pulse该方法准确性不高
+        let begintime = input.runningTimeMicros();
+        while (pins.digitalReadPin(echo) == 0){
+            if ((input.runningTimeMicros() - begintime) > 500) return 300; //未检测到传感器
         }
-        return Math.idiv(sumdist / 9, 58);;
+        basic.pause(100);
+        //第二次测距
+        pins.setPull(trig, PinPullMode.PullNone);
+        pins.digitalWritePin(trig, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(trig, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(trig, 0);
+        while (pins.digitalReadPin(echo) == 0);
+        let starttime = input.runningTimeMicros();
+        while (pins.digitalReadPin(echo) == 1);
+        let endtime = input.runningTimeMicros();
+        dist = Math.idiv((endtime - starttime), 58);
+        if(dist > 300)  dist = 0;
+        return dist;
 
         /*connectUltrasonicDistanceSensor(trig, echo);
-
         if (!ultrasonicState) {
             return -1;
         }
@@ -801,6 +811,7 @@ namespace hicbit {
             }
         });
         control.inBackground(measureInBackground);
+        control
     }
 
     function triggerPulse() {
