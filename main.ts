@@ -500,7 +500,7 @@ namespace hicbit {
         buf[4] = 0;
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(50);
+        basic.pause(100);
         /*第一档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
@@ -509,7 +509,7 @@ namespace hicbit {
         buf[4] = Math.floor(speed / 4);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(10);
+        basic.pause(50);
         /*第二档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
@@ -518,7 +518,7 @@ namespace hicbit {
         buf[4] = Math.floor(speed / 2);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(10);
+        basic.pause(50);
         /*第三档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
@@ -527,7 +527,7 @@ namespace hicbit {
         buf[4] = Math.floor(speed / 4 * 3);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(10);
+        basic.pause(50);
         /*第四档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
@@ -536,7 +536,7 @@ namespace hicbit {
         buf[4] = Math.floor(speed);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(50);
+        basic.pause(100);
     }
 
     //% direct.defl=DirectEnum.direct1
