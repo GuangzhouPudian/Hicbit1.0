@@ -492,14 +492,42 @@ namespace hicbit {
             direct = 2;
             speed = Math.abs(speed);
         }
+        /*第一档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = Math.floor(speed / 100 * 70);
+        buf[4] = Math.floor(speed / 4);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(150);
+        /*第二档*/
+        buf[0] = 0xfe;
+        buf[1] = 0xa0;
+        buf[2] = sn;
+        buf[3] = direct;
+        buf[4] = Math.floor(speed / 2);
+        buf[5] = 0xef;
+        serial.writeBuffer(buf);
+        basic.pause(150);
+        /*第三档*/
+        buf[0] = 0xfe;
+        buf[1] = 0xa0;
+        buf[2] = sn;
+        buf[3] = direct;
+        buf[4] = Math.floor(speed / 4 * 3);
+        buf[5] = 0xef;
+        serial.writeBuffer(buf);
+        basic.pause(150);
+        /*第四档*/
+        buf[0] = 0xfe;
+        buf[1] = 0xa0;
+        buf[2] = sn;
+        buf[3] = direct;
+        buf[4] = Math.floor(speed);
+        buf[5] = 0xef;
+        serial.writeBuffer(buf);
+        basic.pause(150);
     }
 
     //% direct.defl=DirectEnum.direct1
