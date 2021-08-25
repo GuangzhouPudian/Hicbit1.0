@@ -492,48 +492,11 @@ namespace hicbit {
             direct = 2;
             speed = Math.abs(speed);
         }
-        /*第0档*/
         buf[0] = 0xfe;
         buf[1] = 0xa0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = 0;
-        buf[5] = 0xef;
-        serial.writeBuffer(buf);
-        basic.pause(100);
-        /*第一档*/
-        buf[0] = 0xfe;
-        buf[1] = 0xa0;
-        buf[2] = sn;
-        buf[3] = direct;
-        buf[4] = Math.floor(speed / 4);
-        buf[5] = 0xef;
-        serial.writeBuffer(buf);
-        basic.pause(100);
-        /*第二档*/
-        buf[0] = 0xfe;
-        buf[1] = 0xa0;
-        buf[2] = sn;
-        buf[3] = direct;
-        buf[4] = Math.floor(speed / 2);
-        buf[5] = 0xef;
-        serial.writeBuffer(buf);
-        basic.pause(50);
-        /*第三档*/
-        buf[0] = 0xfe;
-        buf[1] = 0xa0;
-        buf[2] = sn;
-        buf[3] = direct;
-        buf[4] = Math.floor(speed / 4 * 3);
-        buf[5] = 0xef;
-        serial.writeBuffer(buf);
-        basic.pause(50);
-        /*第四档*/
-        buf[0] = 0xfe;
-        buf[1] = 0xa0;
-        buf[2] = sn;
-        buf[3] = direct;
-        buf[4] = Math.floor(speed);
+        buf[4] = speed;
         buf[5] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
@@ -811,113 +774,6 @@ namespace hicbit {
         dist = Math.idiv((endtime - starttime), 58);
         if(dist > 300)  dist = 0;
         return dist;
-
-        /*connectUltrasonicDistanceSensor(trig, echo);
-        if (!ultrasonicState) {
-            return -1;
-        }
-        basic.pause(0); // yield to allow background processing when called in a tight loop
-        return Math.idiv(ultrasonicState.medianRoundTrip, 58);*/
-    }
-
-    function connectUltrasonicDistanceSensor(trig: DigitalPin, echo: DigitalPin): void {
-        if (ultrasonicState && ultrasonicState.trig) {
-            return;
-        }
-
-        if (!ultrasonicState) {
-            ultrasonicState = {
-                trig: trig,
-                roundTrips: [{ ts: 0, rtt: MAX_ULTRASONIC_TRAVEL_TIME }],
-                medianRoundTrip: MAX_ULTRASONIC_TRAVEL_TIME,
-                travelTimeObservers: [],
-            };
-        } else {
-            ultrasonicState.trig = trig;
-        }
-
-        pins.onPulsed(echo, PulseValue.High, () => {
-            if (
-                pins.pulseDuration() < MAX_ULTRASONIC_TRAVEL_TIME &&
-                ultrasonicState.roundTrips.length <= ULTRASONIC_MEASUREMENTS
-            ) {
-                ultrasonicState.roundTrips.push({
-                    ts: input.runningTime(),
-                    rtt: pins.pulseDuration(),
-                });
-            }
-        });
-        control.inBackground(measureInBackground);
-        control
-    }
-
-    function triggerPulse() {
-        // Reset trigger pin
-        pins.setPull(ultrasonicState.trig, PinPullMode.PullNone);
-        pins.digitalWritePin(ultrasonicState.trig, 0);
-        control.waitMicros(2);
-
-        // Trigger pulse
-        pins.digitalWritePin(ultrasonicState.trig, 1);
-        control.waitMicros(10);
-        pins.digitalWritePin(ultrasonicState.trig, 0);
-    }
-
-    function getMedianRRT(roundTrips: UltrasonicRoundTrip[]) {
-        const roundTripTimes = roundTrips.map((urt) => urt.rtt);
-        return median(roundTripTimes);
-    }
-
-    // Returns median value of non-empty input
-    function median(values: number[]) {
-        values.sort((a, b) => {
-            return a - b;
-        });
-        return values[(values.length - 1) >> 1];
-    }
-
-    function measureInBackground() {
-        const trips = ultrasonicState.roundTrips;
-        const TIME_BETWEEN_PULSE_MS = 145;
-
-        while (true) {
-            const now = input.runningTime();
-
-            if (trips[trips.length - 1].ts < now - TIME_BETWEEN_PULSE_MS - 10) {
-                ultrasonicState.roundTrips.push({
-                    ts: now,
-                    rtt: MAX_ULTRASONIC_TRAVEL_TIME,
-                });
-            }
-
-            while (trips.length > ULTRASONIC_MEASUREMENTS) {
-                trips.shift();
-            }
-
-            ultrasonicState.medianRoundTrip = getMedianRRT(
-                ultrasonicState.roundTrips
-            );
-
-            for (let i = 0; i < ultrasonicState.travelTimeObservers.length; i++) {
-                const threshold = ultrasonicState.travelTimeObservers[i];
-                if (threshold > 0 && ultrasonicState.medianRoundTrip <= threshold) {
-                    control.raiseEvent(
-                        MICROBIT_MAKERBIT_ULTRASONIC_OBJECT_DETECTED_ID,
-                        threshold
-                    );
-                    // use negative sign to indicate that we notified the event
-                    ultrasonicState.travelTimeObservers[i] = -threshold;
-                } else if (
-                    threshold < 0 &&
-                    ultrasonicState.medianRoundTrip > -threshold
-                ) {
-                    // object is outside the detection threshold -> re-activate observer
-                    ultrasonicState.travelTimeObservers[i] = -threshold;
-                }
-            }
-            triggerPulse();
-            basic.pause(TIME_BETWEEN_PULSE_MS);
-        }
     }
 
     //% weight=90 block="温湿度|接口%pin|值%dhtResult"
