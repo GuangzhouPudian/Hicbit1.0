@@ -496,7 +496,7 @@ namespace hicbit {
         buf[1] = 0xa0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = speed;
+        buf[4] = 20 + Math.floor(speed*0.65);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
