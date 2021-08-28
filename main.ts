@@ -650,14 +650,15 @@ namespace hicbit {
                 ADCPin = AnalogPin.P4;
                 break;
         }
-        let n = 1000;
+        let n = 100;
         let max = 0;
         let adValue = 0;
         for (let i = 0; i < n; i++) {
-            let adValue = pins.analogReadPin(ADCPin);
+            let adValue = (pins.analogReadPin(ADCPin)-30) / 2;
             if (adValue > max) max = adValue;
         }
-        max = max / 4;
+        if (max < 0) max = 0;
+        if (max > 255) max = 255;
         return Math.round(max);
     }
 
