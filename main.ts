@@ -182,7 +182,7 @@ enum IrProtocol {
 /**
  * Custom blocks
  */
-//% weight=100 color=#7CCD7C icon="" block="海客智能套件"
+//% weight=100 color=#00CCFF icon="\uf2c5" block="海客智能套件"
 //% groups='["主机", "电机", "蜂鸣器", "RGB彩灯", "超声波", "红外避障", "光敏", "温湿度", "旋钮", "声音", "碰撞", "循迹", "按键", "摇杆", "红外接收"]'
 namespace hicbit {
     /*
@@ -497,7 +497,7 @@ namespace hicbit {
         buf[2] = sn;
         buf[3] = direct;
         if (speed == 0) buf[4] = 0;
-        else buf[4] = 20 + Math.floor(speed*0.65);
+        else buf[4] = 20 + Math.floor(speed * 0.65);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
         basic.pause(100);
@@ -522,7 +522,7 @@ namespace hicbit {
         buf[1] = 0xb0;
         buf[2] = sn;
         buf[3] = direct;
-        buf[4] = 20;
+        buf[4] = 35;
         buf[5] = ((angle >> 8) & 0xff);
         buf[6] = (angle & 0xff);
         if (buf[6] == 0xef) buf[6] = 0xee;
@@ -654,12 +654,10 @@ namespace hicbit {
         let max = 0;
         let adValue = 0;
         for (let i = 0; i < n; i++) {
-            let adValue = (pins.analogReadPin(ADCPin)-30) / 2;
+            let adValue = pins.analogReadPin(ADCPin);
             if (adValue > max) max = adValue;
         }
-        if (max < 0) max = 0;
-        if (max > 255) max = 255;
-        return Math.round(max);
+        return Math.round(max * 255 / 1023);
     }
 
     //% weight=90 block="碰撞|接口%pin|触发" 
@@ -758,7 +756,7 @@ namespace hicbit {
         pins.digitalWritePin(trig, 0);
         //dist = pins.pulseIn(echo, PulseValue.High, 300 * 58); //read pulse该方法准确性不高
         let begintime = input.runningTimeMicros();
-        while (pins.digitalReadPin(echo) == 0){
+        while (pins.digitalReadPin(echo) == 0) {
             if ((input.runningTimeMicros() - begintime) > 500) return 300; //未检测到传感器
         }
         basic.pause(100);
@@ -774,7 +772,7 @@ namespace hicbit {
         while (pins.digitalReadPin(echo) == 1);
         let endtime = input.runningTimeMicros();
         dist = Math.idiv((endtime - starttime), 58);
-        if(dist > 300)  dist = 0;
+        if (dist > 300) dist = 0;
         return dist;
     }
 
