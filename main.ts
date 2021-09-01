@@ -276,7 +276,7 @@ namespace hicbit {
         buf[len + 5] = 0x20;
         buf[len + 6] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(300);
+        basic.pause(100);
     }
 
     //% row1.min=1 row1.max=7
@@ -300,7 +300,7 @@ namespace hicbit {
         }
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(300);
+        basic.pause(100);
     }
 
     //% weight=40 block="方向键|%directkey按下"
@@ -650,7 +650,7 @@ namespace hicbit {
                 ADCPin = AnalogPin.P4;
                 break;
         }
-        let n = 1;
+        let n = 10;
         let max = 0;
         let adValue = 0;
         for (let i = 0; i < n; i++) {
