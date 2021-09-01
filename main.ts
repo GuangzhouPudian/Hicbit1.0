@@ -650,7 +650,7 @@ namespace hicbit {
                 ADCPin = AnalogPin.P4;
                 break;
         }
-        let n = 10;
+        let n = 1;
         let max = 0;
         let adValue = 0;
         for (let i = 0; i < n; i++) {
