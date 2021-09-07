@@ -300,7 +300,7 @@ namespace hicbit {
         }
         buf[4] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(20);
     }
 
     //% weight=40 block="方向键|%directkey按下"
@@ -500,7 +500,7 @@ namespace hicbit {
         else buf[4] = 20 + Math.floor(speed * 0.65);
         buf[5] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(20);
     }
 
     //% direct.defl=DirectEnum.direct1
@@ -529,7 +529,7 @@ namespace hicbit {
         if (buf[6] == 0xfe) buf[6] = 0xff;
         buf[7] = 0xef;
         serial.writeBuffer(buf);
-        basic.pause(100);
+        basic.pause(20);
     }
 
     //% weight=70 block="电机|接口%sn|停止"
@@ -825,7 +825,7 @@ namespace hicbit {
         let humidity = resultArray[0] + resultArray[1] / 10;
         let temperature = resultArray[2] + resultArray[3] / 10;
         let fahrenheit = temperature * 9 / 5 + 32;
-        basic.pause(1000);
+        basic.pause(100);
         switch (dhtResult) {
             case Dht11Result.Celsius: return temperature;
             case Dht11Result.Fahrenheit: return fahrenheit;
@@ -885,7 +885,7 @@ namespace hicbit {
                 if (ISRockerDirectPress(pin, value)) {
                     body();
                 }
-                basic.pause(100);
+                basic.pause(20);
             }
         })
     }
@@ -1283,7 +1283,7 @@ namespace hicbit {
                 sendBuffer(strip, DigitalPin.P15);
                 break;
         }
-        basic.pause(100);
+        basic.pause(20);
     }
 
     //% shim=sendBufferAsm
