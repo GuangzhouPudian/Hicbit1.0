@@ -767,9 +767,19 @@ namespace hicbit {
         pins.digitalWritePin(trig, 1);
         control.waitMicros(10);
         pins.digitalWritePin(trig, 0);
-        while (pins.digitalReadPin(echo) == 0);
+
+        begintime = input.runningTimeMicros();
+        while (pins.digitalReadPin(echo) == 0) {
+            if ((input.runningTimeMicros() - begintime) > 500) return 300; //未检测到传感器
+        }
+        //while (pins.digitalReadPin(echo) == 0);
         let starttime = input.runningTimeMicros();
-        while (pins.digitalReadPin(echo) == 1);
+
+        begintime = input.runningTimeMicros();
+        while (pins.digitalReadPin(echo) == 1) {
+            if ((input.runningTimeMicros() - begintime) > 500) return 300; //未检测到传感器
+        }
+        //while (pins.digitalReadPin(echo) == 1);
         let endtime = input.runningTimeMicros();
         dist = Math.idiv((endtime - starttime), 58);
         if (dist > 300) dist = 0;
