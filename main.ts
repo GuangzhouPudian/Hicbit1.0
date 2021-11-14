@@ -608,6 +608,7 @@ namespace hicbit {
         }
         let adValue = pins.analogReadPin(ADCPin);
         adValue = adValue * 255 / 1023;
+        if (adValue < 1) adValue = 0;
         return Math.round(adValue);
     }
 
