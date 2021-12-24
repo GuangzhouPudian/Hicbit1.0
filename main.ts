@@ -909,8 +909,8 @@ namespace hicbit {
         let ADCPin2: AnalogPin;
         let x;
         let y;
-        ADCPin1 = AnalogPin.P0;
-        ADCPin2 = AnalogPin.P1;
+        ADCPin1 = AnalogPin.P1;
+        ADCPin2 = AnalogPin.P0;
         /*switch (pin) {         
             case RockerEnum.portA:
                 ADCPin1 = AnalogPin.P0;
@@ -929,7 +929,7 @@ namespace hicbit {
                 ADCPin2 = AnalogPin.P4;
                 break;
         }*/
-        x = pins.analogReadPin(ADCPin1);//x轴模拟量获取
+        x = 1023 - pins.analogReadPin(ADCPin1);//x轴模拟量获取
         y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
         if (xy == RockerXYEnum.x) return Math.round(x * 255 / 1023);
         else if (xy == RockerXYEnum.y) return Math.round(y * 255 / 1023);
