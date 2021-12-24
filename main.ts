@@ -931,8 +931,16 @@ namespace hicbit {
         }*/
         x = 1023 - pins.analogReadPin(ADCPin1);//x轴模拟量获取
         y = pins.analogReadPin(ADCPin2);//y轴模拟量获取
-        if (xy == RockerXYEnum.x) return Math.round(x * 255 / 1023);
-        else if (xy == RockerXYEnum.y) return Math.round(y * 255 / 1023);
+        if (xy == RockerXYEnum.x) {
+            let adValue = x * 255 / 1023;
+            if (adValue < 1) adValue = 0;
+            return Math.round(adValue);
+        }
+        else if (xy == RockerXYEnum.y) {
+            let adValue = y * 255 / 1023;
+            if (adValue < 1) adValue = 0;
+            return Math.round(adValue);
+        }
         return 0;
     }
 
