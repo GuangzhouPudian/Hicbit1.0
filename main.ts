@@ -609,6 +609,7 @@ namespace hicbit {
         let adValue = pins.analogReadPin(ADCPin);
         adValue = adValue * 255 / 1023;
         if (adValue < 1) adValue = 0;
+        if (adValue > 254) adValue = 255;
         return Math.round(adValue);
     }
 
@@ -934,11 +935,13 @@ namespace hicbit {
         if (xy == RockerXYEnum.x) {
             let adValue = x * 255 / 1023;
             if (adValue < 1) adValue = 0;
+            if (adValue > 254) adValue = 255;
             return Math.round(adValue);
         }
         else if (xy == RockerXYEnum.y) {
             let adValue = y * 255 / 1023;
             if (adValue < 1) adValue = 0;
+            if (adValue > 254) adValue = 255;
             return Math.round(adValue);
         }
         return 0;
