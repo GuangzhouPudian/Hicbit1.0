@@ -633,6 +633,35 @@ namespace hicbit {
         }
     }
 
+    /**
+     * Play a melody from the melody editor.
+     * @param melody - string of up to eight notes [C D E F G A B C5] or rests [-] separated by spaces, which will be played one at a time, ex: "E D G F B A C5 B "
+     * @param tempo - number in beats per minute (bpm), dictating how long each note will play for
+     */
+    //% weight=80 block="蜂鸣器|接口%pin|播放旋律$melody|以速度$tempo拍速"
+    //% group="蜂鸣器"
+    //% color=#B22222
+    //% melody.shadow="melody_editor"
+    //% tempo.min=40 tempo.max=500
+    //% tempo.defl=120
+    export function PlayMusic(pin: SensorEnum, melody: string, tempo: number): void {
+        switch (pin) {
+            case SensorEnum.portA:
+                pins.analogSetPitchPin(AnalogPin.P0);;
+                break;
+            case SensorEnum.portB:
+                pins.analogSetPitchPin(AnalogPin.P13);;
+                break;
+            case SensorEnum.portC:
+                pins.analogSetPitchPin(AnalogPin.P14);;
+                break;
+            case SensorEnum.portD:
+                pins.analogSetPitchPin(AnalogPin.P15);;
+                break;
+        }
+        music.playMelody(melody, tempo);
+    }
+
     //% weight=90 block="声音|接口%pin|值(0~255)"
     //% group="声音"
     //% color=#F5CD2F
